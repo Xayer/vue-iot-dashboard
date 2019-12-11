@@ -1,29 +1,64 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+	<div id="app">
+		<nav>
+			<router-link
+				v-for="navItem in items"
+				:key="navItem.name"
+				:to="navItem"
+				v-text="navItem.name"
+			></router-link>
+		</nav>
+		<router-view></router-view>
+	</div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import HelloWorld from './components/HelloWorld.vue';
 
-@Component({
-  components: {
-    HelloWorld,
-  },
-})
-export default class App extends Vue {}
+@Component({})
+export default class App extends Vue {
+	items: Array<{name: string, path: string}> = [];
+
+	get currentRoute() {
+		return this.$router.currentRoute;
+	}
+
+	created() {
+		(this.$router as any).options.routes.forEach((route: {name: string, path: string}) => {
+			this.items.push({
+				name: route.name,
+				path: route.path,
+			});
+		});
+	}
+}
 </script>
 
 <style lang="scss">
+body, html { padding: 0; margin: 0; background-color: #263238; color: #bbbbbb; }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	nav {
+		display: flex;
+		background-color: #2d3b42;
+		padding-inline-start: 15px;
+		padding-inline-end: 15px;
+		a {
+			&.router-link-active {
+				border-bottom: 3px #ff7300 solid;
+			}
+			text-transform: capitalize;
+			color: #eee;
+			text-decoration: none;
+			padding-block-start: 0.5rem;
+			padding-block-end: 0.5rem;
+			padding-inline-start: 0.5rem;
+			padding-inline-end: 0.5rem;
+		}
+	}
 }
 </style>

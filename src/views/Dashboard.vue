@@ -1,0 +1,99 @@
+<template>
+  <div>
+    <GridLayout
+	:layout.sync="dashboardSettings.items"
+	:cols="dashboardSettings.columns"
+	:row-height="dashboardSettings.columnHeight"
+	:is-draggable="true"
+	:is-resizable="true"
+	:margin="dashboardSettings.margin"
+	:use-css-transforms="false"
+	:responsive="true"
+	>
+		<GridItem
+			v-for="item in dashboardSettings.items"
+			:key="item.i"
+			:i="item.i"
+			:w="item.w"
+			:h="item.h"
+			:x="item.x"
+			:y="item.y"
+			class="widget"
+		>
+			<text-widget :text="item.message"></text-widget>
+		</GridItem>
+	</GridLayout>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import VueGridLayout from 'vue-grid-layout';
+import { Dictionary } from '@/types/dictionary';
+import TextWidget from '@/components/widgets/text.vue';
+
+@Component({
+	components: {
+		GridItem: VueGridLayout.GridItem,
+		GridLayout: VueGridLayout.GridLayout,
+		TextWidget,
+	},
+})
+export default class Dashboard extends Vue {
+	dashboardSettings: any = {
+		columns: {
+			lg: 12,
+			md: 10,
+			sm: 6,
+			xs: 4,
+			xxs: 2,
+		},
+		columnHeight: 100,
+		margin: [15, 15],
+		items: [
+			{
+				message: 'Foo',
+				w: 6,
+				h: 1,
+				y: 1,
+				x: 0,
+				i: 0,
+			},
+			{
+				message: 'Bar',
+				w: 6,
+				h: 1,
+				y: 1,
+				x: 6,
+				i: 1,
+			},
+		],
+	}
+}
+</script>
+<style lang="scss">
+	.vue-grid-item>.vue-resizable-handle {
+		background: none;
+		width: 15px;
+		height: 15px;
+		padding: 0;
+		margin: {
+			block-end: 0.35rem;
+			inline-end: 0.35rem;
+		};
+		border: {
+			block-end: 0.125rem;
+			block-start: 0;
+			inline-start: 0;
+			inline-end: 0.125rem;
+			color: #eee;
+			style: solid;
+		}
+	}
+
+	.vue-grid-item {
+		background-color: #2d3b42;
+		padding: 15px;
+		box-sizing: border-box;
+	}
+</style>
