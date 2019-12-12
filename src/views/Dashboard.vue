@@ -31,12 +31,14 @@ import { Component, Vue } from 'vue-property-decorator';
 import VueGridLayout from 'vue-grid-layout';
 import { Dictionary } from '@/types/dictionary';
 import TextWidget from '@/components/widgets/text.vue';
+import HueBridges from '@/components/widgets/hue/bridges.vue';
 
 @Component({
 	components: {
 		GridItem: VueGridLayout.GridItem,
 		GridLayout: VueGridLayout.GridLayout,
 		TextWidget,
+		HueBridges,
 	},
 })
 export default class Dashboard extends Vue {
@@ -62,7 +64,7 @@ export default class Dashboard extends Vue {
 			},
 			{
 				message: 'Bar',
-				type: 'TextWidget',
+				type: 'HueBridges',
 				w: 6,
 				h: 1,
 				y: 1,
