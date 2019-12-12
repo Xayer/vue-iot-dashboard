@@ -20,7 +20,7 @@
 			:y="item.y"
 			class="widget"
 		>
-			<text-widget :text="item.message"></text-widget>
+			<component :is="item.type" :settings="item"></component>
 		</GridItem>
 	</GridLayout>
   </div>
@@ -53,6 +53,7 @@ export default class Dashboard extends Vue {
 		items: [
 			{
 				message: 'Foo',
+				type: 'TextWidget',
 				w: 6,
 				h: 1,
 				y: 1,
@@ -61,6 +62,7 @@ export default class Dashboard extends Vue {
 			},
 			{
 				message: 'Bar',
+				type: 'TextWidget',
 				w: 6,
 				h: 1,
 				y: 1,
