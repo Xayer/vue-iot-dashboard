@@ -83,13 +83,21 @@ export default class Dashboard extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	getDashboardWidgets() {
-		return localStorage.widgets ? JSON.parse(localStorage.widgets) : this.defaultSettings.items;
+		let widgets;
+		if (localStorage.widgets) {
+			const parsedWidgets = JSON.parse(localStorage.widgets);
+			if (typeof parsedWidgets === 'object') {
+				widgets = parsedWidgets;
+			}
+		} else {
+			widgets = this.defaultSettings.items;
+		}
+		return widgets;
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	saveWidgetLayout(layout) {
+	saveWidgetLayout(layout: Array<Object>) {
 		localStorage.widgets = JSON.stringify(layout);
-		console.log(layout);
 	}
 }
 </script>
