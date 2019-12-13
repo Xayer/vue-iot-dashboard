@@ -1,17 +1,18 @@
 <template>
   <div>
-    <GridLayout
-	:layout.sync="dashboardSettings.items"
-	:cols="dashboardSettings.columns"
-	:row-height="dashboardSettings.columnHeight"
+    <GridLayout v-if="getDashboardWidgets"
+	:layout.sync="DashboardWidgets"
+	:cols="defaultSettings.columns"
+	:row-height="defaultSettings.columnHeight"
 	:is-draggable="true"
 	:is-resizable="true"
-	:margin="dashboardSettings.margin"
+	:margin="defaultSettings.margin"
 	:use-css-transforms="false"
 	:responsive="true"
+	@layout-updated="saveWidgetLayout"
 	>
 		<GridItem
-			v-for="item in dashboardSettings.items"
+			v-for="item in DashboardWidgets"
 			:key="item.i"
 			:i="item.i"
 			:w="item.w"
@@ -42,7 +43,7 @@ import HueBridges from '@/components/widgets/hue/bridges.vue';
 	},
 })
 export default class Dashboard extends Vue {
-	dashboardSettings: any = {
+	defaultSettings: any = {
 		columns: {
 			lg: 12,
 			md: 10,
@@ -72,6 +73,23 @@ export default class Dashboard extends Vue {
 				i: 1,
 			},
 		],
+	}
+
+	DashboardWidgets: any = null;
+
+	created() {
+		this.DashboardWidgets = this.getDashboardWidgets();
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	getDashboardWidgets() {
+		return localStorage.widgets ? JSON.parse(localStorage.widgets) : this.defaultSettings.items;
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	saveWidgetLayout(layout) {
+		localStorage.widgets = JSON.stringify(layout);
+		console.log(layout);
 	}
 }
 </script>
