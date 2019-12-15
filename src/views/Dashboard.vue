@@ -33,6 +33,7 @@ import VueGridLayout from 'vue-grid-layout';
 import { Dictionary } from '@/types/dictionary';
 import TextWidget from '@/components/widgets/text.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
+import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
 
 @Component({
 	components: {
@@ -40,6 +41,7 @@ import HueBridges from '@/components/widgets/hue/bridges.vue';
 		GridLayout: VueGridLayout.GridLayout,
 		TextWidget,
 		HueBridges,
+		RejseplanenDeparture,
 	},
 })
 export default class Dashboard extends Vue {
@@ -71,6 +73,32 @@ export default class Dashboard extends Vue {
 				y: 1,
 				x: 6,
 				i: 1,
+			},
+			{
+				message: 'Departures',
+				type: 'RejseplanenDeparture',
+				title: 'Work',
+				parameters: {
+					stationId: '461682600',
+				},
+				w: 6,
+				h: 1,
+				y: 2,
+				x: 6,
+				i: 2,
+			},
+			{
+				message: 'Departures',
+				title: 'Home',
+				type: 'RejseplanenDeparture',
+				parameters: {
+					stationId: '461097000',
+				},
+				w: 6,
+				h: 3,
+				y: 3,
+				x: 6,
+				i: 3,
 			},
 		],
 	}
