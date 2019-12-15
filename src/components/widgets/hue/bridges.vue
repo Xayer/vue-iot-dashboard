@@ -1,11 +1,14 @@
 <template>
 	<section v-if="devices">
-		<hue-light
-			:light="light"
-			:hue-id="lightid"
-			v-for="(light, lightid) in devices.lights"
-			:key="lightid"
-		/>
+		<article v-for="(group, index) in devices.groups" :key="index">
+			<h2 v-text="group.name"></h2>
+			<hue-light
+				:light="devices.lights[light]"
+				:hue-id="lightid"
+				v-for="(light, lightid) in group.lights"
+				:key="lightid"
+			/>
+		</article>
 	</section>
 	<p v-else>No Hue Light connection</p>
 </template>
@@ -37,7 +40,13 @@ export default class HueBridges extends Vue {
 		display: grid;
 		height: 100%;
 		width: 100%;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
+		grid-gap: 5px;
+	}
+
+	article {
+		background-color: #263238;
+		border-radius: 4px;
 	}
 
 	.error {
