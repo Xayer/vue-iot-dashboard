@@ -37,9 +37,14 @@ export default {
 		}),
 		toggleLight: (
 			{ commit, dispatch }: { commit: any, dispatch: any },
-			{ uniqueId, on }: { uniqueId: string, on: boolean },
+			{ uniqueId, on, colour }: { uniqueId: string, on: boolean, colour?: Array<number> },
 		) => new Promise(async (resolve, reject) => {
-			await API.toggleLight(uniqueId, on).then(() => {
+			await API.toggleLight(uniqueId, on, colour).then(() => {
+				dispatch('getDevices').then(() => {
+					resolve();
+				}).catch((error: Error) => {
+					reject(error);
+				});
 				resolve();
 			}).catch((error: Error) => {
 				reject(error);

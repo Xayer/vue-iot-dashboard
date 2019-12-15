@@ -64,14 +64,23 @@ export default class HueAPI extends API {
 		});
 	}
 
-	toggleLight(uniqueid: string, on: boolean) {
+	toggleLight(uniqueid: string, on: boolean, colour?: Array<number>) {
 		return new Promise(async (resolve, reject) => {
 			setTimeout(() => {
 				if (!this.findExistingToken()) {
 					reject(Error('token missing'));
 				}
 			}, 2000);
-			await this.put(`${this.token}/lights/${uniqueid}`, 'state', { on }).then((response: AxiosResponse<Devices>) => {
+
+			const toggleData : { on: boolean, colour?: Array<number> } = {
+				on,
+			};
+
+			if (colour) {
+				toggleData.colour = colour;
+			}
+
+			await this.put(`${this.token}/lights/${uniqueid}`, 'state', toggleData).then((response: AxiosResponse<Devices>) => {
 				resolve(response.data);
 			}).catch((error: Error) => {
 				reject(error);

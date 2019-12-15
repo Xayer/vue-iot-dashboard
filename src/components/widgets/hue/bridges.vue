@@ -1,12 +1,12 @@
 <template>
-	<div v-if="devices">
+	<section v-if="devices">
 		<hue-light
 			:light="light"
 			:hue-id="lightid"
 			v-for="(light, lightid) in devices.lights"
 			:key="lightid"
 		/>
-	</div>
+	</section>
 	<p v-else>No Hue Light connection</p>
 </template>
 <script lang="ts">
@@ -33,11 +33,11 @@ export default class HueBridges extends Vue {
 </script>
 
 <style lang="scss" scoped>
-	div {
-		display: inline-grid;
+	section {
+		display: grid;
 		height: 100%;
 		width: 100%;
-		flex-direction: column;
+		grid-template-columns: repeat(2, 1fr);
 	}
 
 	.error {
