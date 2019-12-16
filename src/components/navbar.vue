@@ -7,15 +7,22 @@
 			v-text="navItem.name"
 		></router-link>
 		<hue></hue>
+		<internet></internet>
 	</nav>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Hue from '@/components/integrations/hue.vue';
+import Internet from '@/components/integrations/internet.vue';
 
-@Component({ components: { Hue } })
-export default class App extends Vue {
+@Component({
+	components: {
+		Hue,
+		Internet,
+	},
+})
+export default class Navbar extends Vue {
 	items: Array<{name: string, path: string}> = [];
 
 	get currentRoute() {

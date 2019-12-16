@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<span><i :class="token ? 'on': 'off'">&#9679;</i> Hue</span>
+		<span><i :class="token && online ? 'on': 'off'">&#9679;</i> Hue</span>
 		<section v-if="token">
 			<span v-if="devices && devices.lights">{{ lightLabel }} Lights</span>
 		</section>
@@ -18,6 +18,7 @@ import HueAPI from '@/modules/apis/hue';
 		...mapGetters({
 			devices: 'hue/devices',
 			token: 'hue/token',
+			online: 'internet/online',
 		}),
 	},
 })
