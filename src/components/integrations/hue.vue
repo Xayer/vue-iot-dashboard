@@ -1,10 +1,10 @@
 <template>
 	<div>
-		<span><i :class="token && online ? 'on': 'off'">&#9679;</i> Hue</span>
-		<section v-if="token">
+		<span><i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i> Hue</span>
+		<section v-if="hueAvailable && token">
 			<span v-if="devices && devices.lights">{{ lightLabel }} Lights</span>
 		</section>
-		<button v-else @click="registerToken()">Request Access</button>
+		<button v-if="!token" @click="registerToken()">Request Access</button>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
 </template>
@@ -18,12 +18,15 @@ import HueAPI from '@/modules/apis/hue';
 		...mapGetters({
 			devices: 'hue/devices',
 			token: 'hue/token',
+			hueAvailable: 'hue/available',
 			online: 'internet/online',
 		}),
 	},
 })
 export default class HueIntegration extends Vue {
 	token!: string;
+
+	hueAvailable!: boolean;
 
 	devices!: {
 		lights: Object,
@@ -33,7 +36,11 @@ export default class HueIntegration extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	created() {
-		this.$store.dispatch('hue/getDevices');
+		setInterval(() => {
+			this.$store.dispatch('hue/getDevices').catch((error: any) => {
+				this.errorMessage = error.description;
+			});
+		}, 60000);
 	}
 
 	registerToken() {

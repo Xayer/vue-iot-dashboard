@@ -46,6 +46,7 @@ export default class Navbar extends Vue {
 		background-color: #2d3b42;
 		padding-inline-start: 15px;
 		padding-inline-end: 15px;
+		align-items: center;
 		a {
 			&.router-link-active {
 				border-bottom: 3px #ff7300 solid;

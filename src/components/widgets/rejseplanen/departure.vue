@@ -1,12 +1,20 @@
 <template>
 	<div>
-		<iframe :src="departureBoardUrl" frameborder="0"></iframe>
+		<iframe v-if="online" :src="departureBoardUrl" frameborder="0"></iframe>
+		<span v-else>Departure widget could not display data. Are you offline?</span>
 	</div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
 
-@Component
+@Component({
+	computed: {
+		...mapGetters({
+			online: 'internet/online',
+		}),
+	},
+})
 export default class RejseplanenDeparture extends Vue {
 	@Prop() private settings!: {
 		parameters: {
