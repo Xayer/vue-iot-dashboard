@@ -6,24 +6,34 @@ const API = new HueAPI();
 export default {
 	state: {
 		devices: {},
+		available: false,
 	},
 
 	getters: {
 		devices: (state:any) => state.devices,
 		token: (state: any) => API.findExistingToken(),
+		available: (state: any) => state.available,
 	},
 
 	actions: {
 		getDevices: (
 			{ commit, dispatch }: { commit: any, dispatch: any },
 		) => new Promise(async (resolve, reject) => {
-			await API.getDevices().then((value: unknown) => {
-				commit('SET_DEVICES', value);
-				resolve();
-			}).catch((error: Error) => {
+			try {
+				await API.getDevices().then((value: unknown) => {
+					commit('SET_AVAILABILITY', true);
+					commit('SET_DEVICES', value);
+					resolve();
+				}).catch((error: Error) => {
+					if (error.message === 'Network Error') {
+						commit('SET_AVAILABILITY', false);
+						commit('SET_DEVICES', []);
+					}
+					reject(error);
+				});
+			} catch (error) {
 				reject(error);
-			});
-			reject();
+			}
 		}),
 		registerToken: (
 			{ commit, dispatch }: { commit: any, dispatch: any },
@@ -78,6 +88,9 @@ export default {
 		},
 		REFRESH_TOKEN: (state: any) => {
 			state.token = API.findExistingToken();
+		},
+		SET_AVAILABILITY: (state: any, available: boolean) => {
+			state.available = available;
 		},
 	},
 };

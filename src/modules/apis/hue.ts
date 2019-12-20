@@ -56,11 +56,15 @@ export default class HueAPI extends API {
 					reject(Error('token missing'));
 				}
 			}, 3000);
-			await this.get(`${localStorage.hue}`).then((response: AxiosResponse<Devices>) => {
-				resolve(response.data);
-			}).catch((error: Error) => {
+			try {
+				await this.get(`${localStorage.hue}`).then((response: AxiosResponse<Devices>) => {
+					resolve(response.data);
+				}).catch((error: Error) => {
+					reject(error);
+				});
+			} catch (error) {
 				reject(error);
-			});
+			}
 		});
 	}
 

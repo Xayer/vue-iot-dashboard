@@ -1,5 +1,5 @@
 <template>
-	<section v-if="devices">
+	<section v-if="hueAvailable && devices">
 		<article v-for="(group, index) in devices.groups" :key="index">
 			<h2 v-text="group.name"></h2>
 			<hue-light
@@ -10,7 +10,7 @@
 			/>
 		</article>
 	</section>
-	<p v-else>No Hue Light connection</p>
+	<p v-else>no active connection to Hue Bridge</p>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -22,6 +22,7 @@ import HueLight from '@/components/widgets/hue/HueLight.vue';
 	computed: {
 		...mapGetters({
 			devices: 'hue/devices',
+			hueAvailable: 'hue/available',
 		}),
 	},
 })
