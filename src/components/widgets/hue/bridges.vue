@@ -1,0 +1,59 @@
+<template>
+	<section v-if="hueAvailable && devices">
+		<article v-for="(group, index) in devices.groups" :key="index">
+			<h2 v-text="group.name"></h2>
+			<hue-light
+				:light="devices.lights[light]"
+				:hue-id="lightid"
+				v-for="(light, lightid) in group.lights"
+				:key="lightid"
+			/>
+		</article>
+	</section>
+	<p v-else>no active connection to Hue Bridge</p>
+</template>
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { AxiosResponse } from 'axios';
+import { mapGetters } from 'vuex';
+import HueLight from '@/components/widgets/hue/HueLight.vue';
+@Component({
+	components: { HueLight },
+	computed: {
+		...mapGetters({
+			devices: 'hue/devices',
+			hueAvailable: 'hue/available',
+		}),
+	},
+})
+export default class HueBridges extends Vue {
+	@Prop() private settings!: string;
+
+	// eslint-disable-next-line class-methods-use-this
+	created() {
+		this.$store.dispatch('hue/getDevices');
+	}
+}
+</script>
+
+<style lang="scss" scoped>
+	section {
+		display: grid;
+		height: 100%;
+		width: 100%;
+		grid-template-columns: repeat(3, 1fr);
+		grid-gap: 5px;
+	}
+
+	article {
+		background-color: #263238;
+		border-radius: 4px;
+	}
+
+	.error {
+		padding: 5px 7px;
+		margin: 0;
+		background-color: darken(#853838, 25);
+		color: #853838;
+	}
+</style>

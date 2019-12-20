@@ -1,14 +1,22 @@
 <template>
 	<div>
-		<h1 v-text="settings.message"></h1>
+		Weather
 	</div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import WeatherAPI from '@/modules/apis/weather';
 
 @Component
 export default class TextWidget extends Vue {
 	@Prop() private settings!: string;
+
+	weatherApiInstance!: WeatherAPI;
+
+	created() {
+		this.weatherApiInstance = new WeatherAPI();
+		console.log(this.weatherApiInstance.currentWeather('Odense'));
+	}
 }
 </script>
 <style lang="scss" scoped>

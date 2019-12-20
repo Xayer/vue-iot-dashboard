@@ -1,37 +1,21 @@
 <template>
 	<div id="app">
-		<nav>
-			<router-link
-				v-for="navItem in items"
-				:key="navItem.name"
-				:to="navItem"
-				v-text="navItem.name"
-			></router-link>
-		</nav>
+		<navigation></navigation>
 		<router-view></router-view>
 	</div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import Navigation from '@/components/navbar.vue';
 
-@Component({})
+@Component({
+	components: {
+		Navigation,
+	},
+})
 export default class App extends Vue {
-	items: Array<{name: string, path: string}> = [];
 
-	get currentRoute() {
-		return this.$router.currentRoute;
-	}
-
-	created() {
-		(this.$router as any).options.routes.forEach((route: {name: string, path: string}) => {
-			this.items.push({
-				name: route.name,
-				path: route.path,
-			});
-		});
-	}
 }
 </script>
 
@@ -42,23 +26,5 @@ body, html { padding: 0; margin: 0; background-color: #263238; color: #bbbbbb; }
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
-	nav {
-		display: flex;
-		background-color: #2d3b42;
-		padding-inline-start: 15px;
-		padding-inline-end: 15px;
-		a {
-			&.router-link-active {
-				border-bottom: 3px #ff7300 solid;
-			}
-			text-transform: capitalize;
-			color: #eee;
-			text-decoration: none;
-			padding-block-start: 0.5rem;
-			padding-block-end: 0.5rem;
-			padding-inline-start: 0.5rem;
-			padding-inline-end: 0.5rem;
-		}
-	}
 }
 </style>
