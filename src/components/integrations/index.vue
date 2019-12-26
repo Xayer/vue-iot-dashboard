@@ -1,13 +1,11 @@
 <template>
-	<nav>
-		<slot></slot>
-		<router-link
-			v-for="navItem in items"
-			:key="navItem.name"
-			:to="navItem"
-			v-text="navItem.name"
-		></router-link>
-	</nav>
+	<aside>
+		<h2>Integrations</h2>
+		<nav>
+			<hue></hue>
+			<internet></internet>
+		</nav>
+	</aside>
 </template>
 
 <script lang="ts">
@@ -23,6 +21,8 @@ import Internet from '@/components/integrations/internet.vue';
 })
 export default class Navbar extends Vue {
 	items: Array<{name: string, path: string}> = [];
+
+	menuActive: boolean = false;
 
 	get currentRoute() {
 		return this.$router.currentRoute;
@@ -40,28 +40,26 @@ export default class Navbar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-	nav {
-		background-color: #2d3b42;
-		width: 100%;
+	aside {
+		background-color: darken(#2d3b42,1.25);
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
 		display: flex;
-		justify-content: center;
+		min-width: 15vw;
+		flex-direction: column;
+		height: 100vh;
+		z-index: 1;
 		align-items: center;
-		a {
-			&:hover {
-				background-color: rgba(invert($color: #ff7300), .125);
+		nav { align-items: flex-start; text-align: left; }
+		div {
+			padding: {
+				block-start: 0.5rem;
+				inline-start: 2rem;
+				inline-end: 2rem;
+				block-end: 0.5rem;
 			}
-			&.router-link-exact-active {
-				border-bottom: 3px #ff7300 solid;
-				background-color: rgba(#ff7300, 0.25);
-			}
-			border-bottom: 3px transparent solid;
-			text-transform: capitalize;
-			color: #eee;
-			text-decoration: none;
-			padding-block-start: 0.5rem;
-			padding-block-end: 0.5rem;
-			padding-inline-start: 0.5rem;
-			padding-inline-end: 0.5rem;
 		}
 	}
 </style>

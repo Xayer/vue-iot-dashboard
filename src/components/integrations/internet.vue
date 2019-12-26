@@ -1,7 +1,7 @@
 <template>
 	<div class="connection">
 		<i class="icon" :class="online ? 'on': 'off'">&#9679;</i>
-		<pre v-text="connection"></pre>
+		<span v-text="connection"></span>
 	</div>
 </template>
 <script>
@@ -30,19 +30,17 @@ export default class Internet extends Vue {
 }
 </script>
 <style lang="scss">
-	pre {
-		text-transform: uppercase;
+	span {
+		text-transform: capitalize;
 		display: inline-block;
-		margin-inline-start: 0.5rem;
-	}
-	.connection {
-		padding: {
-			inline-start: 0.5rem;
-			inline-end: 0.5rem;
+		margin: {
+			block-start: 0;
+			block-end: 0;
 		}
 	}
 	i {
 		display: inline-block;
+		margin-inline-end: 0.5rem;
 	}
 	.on {
 		color: green;
