@@ -4,7 +4,7 @@
 		<section v-if="hueAvailable && token">
 			<span v-if="devices && devices.lights">{{ lightLabel }} Lights</span>
 		</section>
-		<button v-if="!token" @click="registerToken()">Request Access</button>
+		<button class="btn btn-danger" v-if="!token" @click="registerToken()">!</button>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
 </template>
@@ -66,14 +66,11 @@ export default class HueIntegration extends Vue {
 
 <style lang="scss" scoped>
 	div {
-		display: inline-flex;
-		background-color: darken(#2d3b42,1.25);
+		display: flow-root;
 		padding: 0.5rem;
 		flex-direction: row;
+		text-align: center;
 		align-items: center;
-		span {
-			margin-inline-start: 0.25rem;
-		}
 		section {
 			margin-block: {
 				start: 0.125rem / 2;
