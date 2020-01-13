@@ -3,7 +3,6 @@ import API from './client';
 import { Devices } from '@/types/hue';
 
 const protocol: string = 'http://';
-const host = process.env.VUE_APP_HUE_BRIDGE_IP;
 const baseUrl: string = '/api';
 const version: string = '';
 const appName = 'iot-dashboard';
@@ -12,10 +11,10 @@ const device = 'dashboard';
 export default class HueAPI extends API {
 	private token!: string;
 
-	constructor() {
+	constructor(bridgeAddress: string) {
 		super({
 			protocol,
-			host,
+			host: bridgeAddress,
 			baseURL: baseUrl,
 			version,
 		});

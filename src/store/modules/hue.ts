@@ -1,26 +1,26 @@
 import HueAPI from '@/modules/apis/hue';
 import { Devices } from '@/types/hue';
 
-const API = new HueAPI();
-
 export default {
 	state: {
 		devices: {},
 		available: false,
+		api: false,
 	},
 
 	getters: {
 		devices: (state:any) => state.devices,
-		token: (state: any) => API.findExistingToken(),
+		token: (state: any) => { return state.api ? state.api.findExistingToken() : ''; },
 		available: (state: any) => state.available,
+		instance: (state: any) => state.api,
 	},
 
 	actions: {
 		getDevices: (
-			{ commit, dispatch }: { commit: any, dispatch: any },
+			{ commit, dispatch, rootGetters }: { commit: any, dispatch: any, rootGetters: any },
 		) => new Promise(async (resolve, reject) => {
 			try {
-				await API.getDevices().then((value: unknown) => {
+				await rootGetters.instance.getDevices().then((value: unknown) => {
 					commit('SET_AVAILABILITY', true);
 					commit('SET_DEVICES', value);
 					resolve();
@@ -36,9 +36,9 @@ export default {
 			}
 		}),
 		registerToken: (
-			{ commit, dispatch }: { commit: any, dispatch: any },
+			{ commit, dispatch, rootGetters }: { commit: any, dispatch: any, rootGetters: any },
 		) => new Promise(async (resolve, reject) => {
-			await API.registerToken().then(() => {
+			await rootGetters.instance.registerToken().then(() => {
 				commit('REFRESH_TOKEN');
 				resolve();
 			}).catch((error: Error) => {
@@ -46,10 +46,10 @@ export default {
 			});
 		}),
 		toggleLight: (
-			{ commit, dispatch }: { commit: any, dispatch: any },
+			{ commit, dispatch, rootGetters }: { commit: any, dispatch: any, rootGetters: any },
 			{ uniqueId, on, colour }: { uniqueId: string, on: boolean, colour?: Array<number> },
 		) => new Promise(async (resolve, reject) => {
-			await API.toggleLight(uniqueId, on, colour).then(() => {
+			await rootGetters.instance.toggleLight(uniqueId, on, colour).then(() => {
 				dispatch('getDevices').then(() => {
 					resolve();
 				}).catch((error: Error) => {
@@ -61,20 +61,20 @@ export default {
 			});
 		}),
 		turnLightOn: (
-			{ commit, dispatch }: { commit: any, dispatch: any },
+			{ commit, dispatch, rootGetters }: { commit: any, dispatch: any, rootGetters: any },
 			uniqueId: string,
 		) => new Promise(async (resolve, reject) => {
-			await API.lightOn(uniqueId).then(() => {
+			await rootGetters.instance.lightOn(uniqueId).then(() => {
 				resolve();
 			}).catch((error: Error) => {
 				reject(error);
 			});
 		}),
 		turnLightOff: (
-			{ commit, dispatch }: { commit: any, dispatch: any },
+			{ commit, dispatch, rootGetters }: { commit: any, dispatch: any, rootGetters: any },
 			uniqueId: string,
 		) => new Promise(async (resolve, reject) => {
-			await API.lightOff(uniqueId).then(() => {
+			await rootGetters.instance.lightOff(uniqueId).then(() => {
 				resolve();
 			}).catch((error: Error) => {
 				reject(error);
@@ -83,11 +83,15 @@ export default {
 	},
 
 	mutations: {
+		SET_BRIDGE_ADDRESS: (state: any, address: string) => {
+			state.api = new HueAPI(address);
+			localStorage.bridge_address = address;
+		},
 		SET_DEVICES: (state: any, devices: any) => {
 			state.devices = devices;
 		},
 		REFRESH_TOKEN: (state: any) => {
-			state.token = API.findExistingToken();
+			state.token = state.api.findExistingToken();
 		},
 		SET_AVAILABILITY: (state: any, available: boolean) => {
 			state.available = available;

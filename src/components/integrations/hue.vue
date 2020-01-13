@@ -1,5 +1,7 @@
 <template>
 	<div>
+		<span><input type="text" v-model="bridgeAddress"></span>
+		<br>
 		<span><i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i> Hue</span>
 		<section v-if="hueAvailable && token">
 			<span v-if="devices && devices.lights">{{ lightLabel }} Lights</span>
@@ -9,7 +11,9 @@
 	</div>
 </template>
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+	Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
 import HueAPI from '@/modules/apis/hue';
@@ -28,6 +32,8 @@ export default class HueIntegration extends Vue {
 
 	hueAvailable!: boolean;
 
+	bridgeAddress!: string;
+
 	devices!: {
 		lights: Object,
 	};
@@ -36,11 +42,19 @@ export default class HueIntegration extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	created() {
+		if (localStorage.bridge_address) {
+			this.bridgeAddress = localStorage.bridge_address;
+		}
 		setInterval(() => {
 			this.$store.dispatch('hue/getDevices').catch((error: any) => {
 				this.errorMessage = error.description;
 			});
 		}, 60000);
+	}
+
+	@Watch('bridgeAddress')
+	commitBridgeAddress(address: string) {
+		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
 	}
 
 	registerToken() {
