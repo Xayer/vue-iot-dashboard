@@ -42,21 +42,20 @@ export default class HueAPI extends API {
 	}
 
 	findExistingToken() {
-		if (!this.token || (localStorage && localStorage.hue !== 'undefined')) {
+		if (!this.token && (localStorage && typeof localStorage.hue !== 'undefined')) {
 			this.token = localStorage.hue;
 		}
-		return this.token || false;
+		// eslint-disable-next-line no-extra-boolean-cast
+		return !!(this.token && typeof this.token !== 'undefined' && this.token !== 'undefined') ? this.token : false;
 	}
 
 	getDevices() {
 		return new Promise(async (resolve, reject) => {
-			setTimeout(() => {
-				if (!this.findExistingToken()) {
-					reject(Error('token missing'));
-				}
-			}, 3000);
+			if (!this.findExistingToken()) {
+				reject(Error('token missing'));
+			}
 			try {
-				await this.get(`${localStorage.hue}`).then((response: AxiosResponse<Devices>) => {
+				await this.get(`${this.token}`).then((response: AxiosResponse<Devices>) => {
 					resolve(response.data);
 				}).catch((error: Error) => {
 					reject(error);

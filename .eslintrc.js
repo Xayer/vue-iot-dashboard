@@ -13,6 +13,7 @@ module.exports = {
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		indent: ['error', 'tab'],
 		'no-tabs': 'off',
+		"no-confusing-arrow": 'off',
 	},
 	parserOptions: {
 		parser: '@typescript-eslint/parser',

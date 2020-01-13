@@ -2,11 +2,18 @@
 	<div>
 		<span><input type="text" v-model="bridgeAddress"></span>
 		<br>
+		<ul>
+			<li>{{ hueAvailable }}</li>
+			<li>{{ online }}</li>
+		</ul>
 		<span><i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i> Hue</span>
 		<section v-if="hueAvailable && token">
 			<span v-if="devices && devices.lights">{{ lightLabel }} Lights</span>
 		</section>
-		<button class="btn btn-danger" v-if="!token" @click="registerToken()">!</button>
+		<button class="btn btn-danger"
+			v-if="!hueAvailable || !token"
+			@click="registerToken()"
+		>!</button>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
 </template>
@@ -32,7 +39,7 @@ export default class HueIntegration extends Vue {
 
 	hueAvailable!: boolean;
 
-	bridgeAddress!: string;
+	bridgeAddress: string = '';
 
 	devices!: {
 		lights: Object,
@@ -44,17 +51,23 @@ export default class HueIntegration extends Vue {
 	created() {
 		if (localStorage.bridge_address) {
 			this.bridgeAddress = localStorage.bridge_address;
+			this.detectDevices();
 		}
 		setInterval(() => {
-			this.$store.dispatch('hue/getDevices').catch((error: any) => {
-				this.errorMessage = error.description;
-			});
-		}, 60000);
+			this.detectDevices();
+		}, 2500);
+	}
+
+	detectDevices() {
+		this.$store.dispatch('hue/getDevices').catch((error: any) => {
+			this.errorMessage = error.description;
+		});
 	}
 
 	@Watch('bridgeAddress')
 	commitBridgeAddress(address: string) {
 		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
+		this.detectDevices();
 	}
 
 	registerToken() {
