@@ -4756,11 +4756,6 @@ get-own-enumerable-property-symbols@^3.0.0:
   resolved "https://registry.yarnpkg.com/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-3.0.2.tgz#b5fde77f22cbe35f390b4e089922c50bce6ef664"
   integrity sha512-I0UBV/XOz1XkIJHEUDMZAbzCThU/H8DxmSfmdGcKPnVhu2VfFqr34jr9777IyaTYvxjedWhqVIilEDsCdP5G6g==
 
-get-ssl-certificate@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/get-ssl-certificate/-/get-ssl-certificate-2.3.3.tgz#c8a43da1c77969b2a1dabe8f8356a7d60cf0c4b5"
-  integrity sha512-aKYXS1S5+2IYw4W5+lKC/M+lvaNYPe0PhnQ144NWARcBg35H3ZvyVZ6y0LNGtiAxggFBHeO7LaVGO4bgHK4g1Q==
-
 get-stdin@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-4.0.1.tgz#b968c6b0a04384324902e8bf1a5df32579a450fe"
@@ -7169,14 +7164,6 @@ node-gyp@^3.8.0:
     semver "~5.3.0"
     tar "^2.0.0"
     which "1"
-
-node-hue-api@^3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/node-hue-api/-/node-hue-api-3.4.3.tgz#202d64d40f9635ba27a6e5ef9d0bd25ac1282ef8"
-  integrity sha512-K1OqYYGKHsMejfnYvihS5QA6br58CO1F3TVde6p5Jm36K9zEthqv2zG/7Uw7mKtxydyDmuc7OM/efGU4WlfZWw==
-  dependencies:
-    axios "^0.19.0"
-    get-ssl-certificate "^2.3.3"
 
 node-int64@^0.4.0:
   version "0.4.0"

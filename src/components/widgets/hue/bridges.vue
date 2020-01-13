@@ -1,16 +1,18 @@
 <template>
-	<section v-if="hueAvailable && devices">
-		<article v-for="(group, index) in devices.groups" :key="index">
-			<h2 v-text="group.name"></h2>
-			<hue-light
-				:light="devices.lights[light]"
-				:hue-id="lightid"
-				v-for="(light, lightid) in group.lights"
-				:key="lightid"
-			/>
-		</article>
-	</section>
-	<p v-else>no active connection to Hue Bridge</p>
+	<div>
+		<section v-if="hueAvailable && devices">
+			<article v-for="(group, index) in devices.groups" :key="index">
+				<h2 v-text="group.name"></h2>
+				<hue-light
+					:light="devices.lights[light]"
+					:hue-id="light"
+					v-for="(light, lightid) in group.lights"
+					:key="lightid"
+				/>
+			</article>
+		</section>
+		<p v-else>no active connection to Hue Bridge</p>
+	</div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -31,7 +33,7 @@ export default class HueBridges extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	created() {
-		this.$store.dispatch('hue/getDevices');
+
 	}
 }
 </script>

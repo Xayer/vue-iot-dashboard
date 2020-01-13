@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<navigation>
-			<button class="btn" @click="toggleIntegrations">=</button>
+			<button class="btn toggle" @click="toggleIntegrations">=</button>
 		</navigation>
 		<transition name="slide-fade">
 			<integrations v-if="integrationsShown"></integrations>
@@ -70,6 +70,9 @@ body, html { padding: 0; margin: 0; background-color: #263238; color: #bbbbbb; }
 }
 
 .btn {
+	.toggle {
+		z-index: 9999;
+	}
 	margin: {
 		inline-start: 0.5rem;
 		inline-end: 0.5rem;

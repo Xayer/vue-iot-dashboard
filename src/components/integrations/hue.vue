@@ -1,15 +1,26 @@
 <template>
 	<div>
-		<span><i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i> Hue</span>
-		<section v-if="hueAvailable && token">
-			<span v-if="devices && devices.lights">{{ lightLabel }} Lights</span>
-		</section>
-		<button class="btn btn-danger" v-if="!token" @click="registerToken()">!</button>
+		<span v-if="!bridgeAddress"><input type="text" v-model="bridgeAddress"></span>
+		<span>
+			<i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i>Hue
+			<section
+				v-if="hueAvailable
+				&& token
+				&& devices
+				&& devices.lights"
+			>{{ lightLabel }} Lights</section></span>
+		<button class="btn btn-danger"
+			v-if="!hueAvailable || !token"
+			@click="registerToken()"
+		>!</button>
+		<span class="loading" v-if="loading">Loading</span>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
 </template>
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+	Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
 import HueAPI from '@/modules/apis/hue';
@@ -28,6 +39,10 @@ export default class HueIntegration extends Vue {
 
 	hueAvailable!: boolean;
 
+	loading: boolean = false;
+
+	bridgeAddress: string = '';
+
 	devices!: {
 		lights: Object,
 	};
@@ -36,25 +51,41 @@ export default class HueIntegration extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	created() {
+		if (localStorage.bridge_address) {
+			this.bridgeAddress = localStorage.bridge_address;
+			this.detectDevices();
+		}
 		setInterval(() => {
-			this.$store.dispatch('hue/getDevices').catch((error: any) => {
-				this.errorMessage = error.description;
-			});
-		}, 60000);
+			this.detectDevices();
+		}, 3000);
+	}
+
+	detectDevices() {
+		this.$store.dispatch('hue/getDevices').catch((error: any) => {
+			this.errorMessage = error.description;
+		});
+	}
+
+	@Watch('bridgeAddress')
+	commitBridgeAddress(address: string) {
+		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
+		this.detectDevices();
 	}
 
 	registerToken() {
 		if (this.token) {
 			return;
 		}
-
+		this.loading = true;
 		// eslint-disable-next-line no-alert
 		alert('go to your Hue Bridge and click the link button (circle). When you have done that, click okay.');
 		this.$store.dispatch('hue/registerToken').then(() => {
 			this.errorMessage = '';
 			this.$forceUpdate();
+			this.loading = false;
 		}).catch((error: any) => {
 			this.errorMessage = error.description;
+			this.loading = false;
 		});
 	}
 
@@ -69,14 +100,13 @@ export default class HueIntegration extends Vue {
 		display: flow-root;
 		padding: 0.5rem;
 		flex-direction: row;
-		text-align: center;
+		text-align: left;
 		align-items: center;
 		section {
 			margin-block: {
-				start: 0.125rem / 2;
-				end: 0.125rem / 2;
+				start: 0.25rem;
 			}
-			margin-inline-start: 0.5rem;
+			display: inline-block;
 			padding: 0.125rem 0.5rem;
 			background-color: lighten(#2d3b42, 2.5);
 			border-radius: 4px;
@@ -92,4 +122,8 @@ export default class HueIntegration extends Vue {
 
 	.on { color: green; }
 	.off { color: red; }
+
+	input {
+		display: block;
+	}
 </style>
