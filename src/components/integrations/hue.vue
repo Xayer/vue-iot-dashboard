@@ -1,19 +1,19 @@
 <template>
 	<div>
-		<span><input type="text" v-model="bridgeAddress"></span>
-		<br>
-		<ul>
-			<li>{{ hueAvailable }}</li>
-			<li>{{ online }}</li>
-		</ul>
-		<span><i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i> Hue</span>
-		<section v-if="hueAvailable && token">
-			<span v-if="devices && devices.lights">{{ lightLabel }} Lights</span>
-		</section>
+		<span v-if="!bridgeAddress"><input type="text" v-model="bridgeAddress"></span>
+		<span>
+			<i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i>Hue
+			<section
+				v-if="hueAvailable
+				&& token
+				&& devices
+				&& devices.lights"
+			>{{ lightLabel }} Lights</section></span>
 		<button class="btn btn-danger"
 			v-if="!hueAvailable || !token"
 			@click="registerToken()"
 		>!</button>
+		<span class="loading" v-if="loading">Loading</span>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
 </template>
@@ -38,6 +38,8 @@ export default class HueIntegration extends Vue {
 	token!: string;
 
 	hueAvailable!: boolean;
+
+	loading: boolean = false;
 
 	bridgeAddress: string = '';
 
@@ -74,14 +76,16 @@ export default class HueIntegration extends Vue {
 		if (this.token) {
 			return;
 		}
-
+		this.loading = true;
 		// eslint-disable-next-line no-alert
 		alert('go to your Hue Bridge and click the link button (circle). When you have done that, click okay.');
 		this.$store.dispatch('hue/registerToken').then(() => {
 			this.errorMessage = '';
 			this.$forceUpdate();
+			this.loading = false;
 		}).catch((error: any) => {
 			this.errorMessage = error.description;
+			this.loading = false;
 		});
 	}
 
@@ -96,14 +100,13 @@ export default class HueIntegration extends Vue {
 		display: flow-root;
 		padding: 0.5rem;
 		flex-direction: row;
-		text-align: center;
+		text-align: left;
 		align-items: center;
 		section {
 			margin-block: {
-				start: 0.125rem / 2;
-				end: 0.125rem / 2;
+				start: 0.25rem;
 			}
-			margin-inline-start: 0.5rem;
+			display: inline-block;
 			padding: 0.125rem 0.5rem;
 			background-color: lighten(#2d3b42, 2.5);
 			border-radius: 4px;
@@ -119,4 +122,8 @@ export default class HueIntegration extends Vue {
 
 	.on { color: green; }
 	.off { color: red; }
+
+	input {
+		display: block;
+	}
 </style>

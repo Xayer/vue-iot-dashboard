@@ -6,21 +6,13 @@ export default {
 		devices: {},
 		available: false,
 		instance: false,
+		token: null,
 	},
 
 	getters: {
 		hueAdress: () => localStorage.bridge_address,
 		devices: (state:any) => state.devices,
-		token: (state:any) => {
-			if (state.instance) {
-				const token = state.instance.findExistingToken();
-				if (token) {
-					return token;
-				}
-			}
-			debugger;
-			return null;
-		},
+		token: (state:any) => state.token,
 		available: (state: any) => state.available,
 		instance: (state: any) => state.instance,
 	},
@@ -38,10 +30,12 @@ export default {
 				await rootGetters['hue/instance'].getDevices().then((value: unknown) => {
 					commit('SET_AVAILABILITY', true);
 					commit('SET_DEVICES', value);
+					commit('REFRESH_TOKEN');
 					resolve();
 				}).catch((error: Error) => {
 					if (error.message === 'Network Error') {
 						commit('SET_AVAILABILITY', false);
+						commit('REFRESH_TOKEN');
 						commit('SET_DEVICES', []);
 					}
 					reject(error);
@@ -106,7 +100,14 @@ export default {
 			state.devices = devices;
 		},
 		REFRESH_TOKEN: (state: any) => {
-			state.token = state.instance.findExistingToken();
+			let token = null;
+			if (state.instance) {
+				const tempToken = state.instance.findExistingToken();
+				if (tempToken) {
+					token = tempToken;
+				}
+			}
+			state.token = token;
 		},
 		SET_AVAILABILITY: (state: any, available: boolean) => {
 			state.available = available;
