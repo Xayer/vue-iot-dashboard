@@ -57,7 +57,7 @@ export default class HueIntegration extends Vue {
 		}
 		setInterval(() => {
 			this.detectDevices();
-		}, 2500);
+		}, 3000);
 	}
 
 	detectDevices() {

@@ -5,7 +5,7 @@
 				<h2 v-text="group.name"></h2>
 				<hue-light
 					:light="devices.lights[light]"
-					:hue-id="lightid"
+					:hue-id="light"
 					v-for="(light, lightid) in group.lights"
 					:key="lightid"
 				/>

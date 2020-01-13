@@ -68,11 +68,9 @@ export default class HueAPI extends API {
 
 	toggleLight(uniqueid: string, on: boolean, colour?: Array<number>) {
 		return new Promise(async (resolve, reject) => {
-			setTimeout(() => {
-				if (!this.findExistingToken()) {
-					reject(Error('token missing'));
-				}
-			}, 2000);
+			if (!this.findExistingToken()) {
+				reject(Error('token missing'));
+			}
 
 			const toggleData : { on: boolean, colour?: Array<number> } = {
 				on,

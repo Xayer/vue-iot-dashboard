@@ -43,6 +43,7 @@ export default class Navbar extends Vue {
 	nav {
 		background-color: #2d3b42;
 		width: 100%;
+		z-index: 1;
 		display: flex;
 		justify-content: center;
 		align-items: center;
