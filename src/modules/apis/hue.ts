@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import API from './client';
 import { Devices } from '@/types/hue';
 
-const protocol: string = 'https://';
+const protocol: string = 'http://';
 const baseUrl: string = '/api';
 const version: string = '';
 const appName = 'iot-dashboard';
