@@ -23,7 +23,7 @@ export default class RejseplanenDeparture extends Vue {
 	};
 
 	get departureBoardUrl() {
-		return `http://www.rejseplanen.dk/bin/help.exe/mn?L=vs_tus.vs_new&tpl=monitor&station=${this.settings.parameters.stationId}&display=horizontal`;
+		return `//www.rejseplanen.dk/bin/help.exe/mn?L=vs_tus.vs_new&tpl=monitor&station=${this.settings.parameters.stationId}&display=horizontal`;
 	}
 }
 </script>
