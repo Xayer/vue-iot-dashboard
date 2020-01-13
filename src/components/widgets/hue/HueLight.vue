@@ -33,7 +33,6 @@ export default class HueBridges extends Vue {
 	@Prop() private hueId!: { type: Object };
 
 	toggle(on: boolean) {
-		console.log(this.hueId);
 		this.$store.dispatch('hue/toggleLight', { uniqueId: this.hueId, on });
 	}
 
