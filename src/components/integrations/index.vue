@@ -3,7 +3,6 @@
 		<h2>Integrations</h2>
 		<nav>
 			<hue></hue>
-			<internet></internet>
 		</nav>
 	</aside>
 </template>
@@ -11,31 +10,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Hue from '@/components/integrations/hue.vue';
-import Internet from '@/components/integrations/internet.vue';
 
 @Component({
 	components: {
 		Hue,
-		Internet,
 	},
 })
-export default class Navbar extends Vue {
-	items: Array<{name: string, path: string}> = [];
-
-	menuActive: boolean = false;
-
-	get currentRoute() {
-		return this.$router.currentRoute;
-	}
-
-	created() {
-		(this.$router as any).options.routes.forEach((route: {name: string, path: string}) => {
-			this.items.push({
-				name: route.name,
-				path: route.path,
-			});
-		});
-	}
+export default class Integrations extends Vue {
 }
 </script>
 

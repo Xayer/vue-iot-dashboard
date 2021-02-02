@@ -1,14 +1,20 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
+import EditDashboard from '../views/EditDashboard.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
 	{
-		path: '/',
+		path: '/:slug',
 		name: 'dashboard',
 		component: Dashboard,
+	},
+	{
+		path: '/:slug/edit',
+		name: 'dashboard-edit',
+		component: EditDashboard,
 	},
 	{
 		path: '/about',

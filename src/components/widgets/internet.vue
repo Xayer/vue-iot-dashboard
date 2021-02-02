@@ -14,7 +14,7 @@ import { mapGetters } from 'vuex';
 		}),
 	},
 })
-export default class Internet extends Vue {
+export default class InternetWidget extends Vue {
 	created() {
 		window.addEventListener('offline', () => {
 			this.$store.commit('internet/SET_CONNECTION_STATUS', false);

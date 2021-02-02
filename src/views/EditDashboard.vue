@@ -1,15 +1,19 @@
 <template>
   <div>
-    <GridLayout v-if="getDashboardWidgets"
-	:layout.sync="DashboardWidgets"
-	:cols="defaultSettings.columns"
-	:row-height="defaultSettings.columnHeight"
-	:is-draggable="false"
-	:is-resizable="false"
-	:margin="defaultSettings.margin"
-	:use-css-transforms="false"
-	:responsive="true"
-	@layout-updated="saveWidgetLayout"
+	<Button @click.native="saveWidgetLayout">Save Dashboard</Button>
+	<span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+	<Select :options="widgetOptions" v-model="selectedWidget" />
+	<Button @click.native="addWidget">Add Widget</Button>
+    <GridLayout v-if="DashboardWidgets"
+		:layout.sync="DashboardWidgets"
+		:cols="defaultSettings.columns"
+		:row-height="defaultSettings.columnHeight"
+		:is-draggable="true"
+		:is-resizable="true"
+		:margin="defaultSettings.margin"
+		:use-css-transforms="false"
+		:responsive="true"
+		@layout-updated="saveWidgetLayout"
 	>
 		<GridItem
 			v-for="item in DashboardWidgets"
@@ -24,16 +28,18 @@
 			<component :is="item.type" :settings="item.settings"></component>
 		</GridItem>
 	</GridLayout>
+	<p v-else>No Widgets added yet. Select a widget from the dropdown and click "Add Widget".</p>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import VueGridLayout from 'vue-grid-layout';
-import { Dictionary } from '@/types/dictionary';
+import { Select, Button } from '@/components/atoms';
 import TextWidget from '@/components/widgets/text.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
+import { WidgetDefaultSettings, WidgetsAvailable, WidgetTitles } from '@/constants/widgets';
 
 @Component({
 	components: {
@@ -42,9 +48,11 @@ import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue
 		TextWidget,
 		HueBridges,
 		RejseplanenDeparture,
+		Select,
+		Button,
 	},
 })
-export default class Dashboard extends Vue {
+export default class EditableDashboard extends Vue {
 	defaultSettings: any = {
 		columns: {
 			lg: 12,
@@ -55,57 +63,18 @@ export default class Dashboard extends Vue {
 		},
 		columnHeight: 100,
 		margin: [15, 15],
-		items: [
-			{
-				type: 'TextWidget',
-				settings: {
-					message: 'Foo',
-				},
-				w: 6,
-				h: 1,
-				y: 1,
-				x: 0,
-				i: 0,
-			},
-			{
-				type: 'HueBridges',
-				settings: {
-
-				},
-				w: 6,
-				h: 1,
-				y: 1,
-				x: 6,
-				i: 1,
-			},
-			{
-				type: 'RejseplanenDeparture',
-				settings: {
-					title: 'Work',
-					stationId: '461682600',
-				},
-				w: 6,
-				h: 1,
-				y: 2,
-				x: 6,
-				i: 2,
-			},
-			{
-				type: 'RejseplanenDeparture',
-				settings: {
-					title: 'Home',
-					stationId: '461097000',
-				},
-				w: 6,
-				h: 3,
-				y: 3,
-				x: 6,
-				i: 3,
-			},
-		],
 	}
 
+	errorMessage = '';
+
+	selectedWidget: string = WidgetsAvailable.TextWidget.toString();
+
 	DashboardWidgets: any = null;
+
+	widgetOptions = Object.values(WidgetsAvailable).map(widget => ({
+		text: widget,
+		value: widget,
+	}));
 
 	created() {
 		this.DashboardWidgets = this.getDashboardWidgets();
@@ -125,6 +94,16 @@ export default class Dashboard extends Vue {
 		return widgets;
 	}
 
+	addWidget() {
+		if (!WidgetDefaultSettings[this.selectedWidget]) {
+			this.errorMessage = 'Widget doesn\'t have any default settings';
+			return;
+		}
+		const widgetSettings = WidgetDefaultSettings[this.selectedWidget];
+		widgetSettings.i = this.DashboardWidgets.length;
+		this.DashboardWidgets.push(widgetSettings);
+	}
+
 	// eslint-disable-next-line class-methods-use-this
 	saveWidgetLayout(layout: Array<Object>) {
 		localStorage.widgets = JSON.stringify(layout);
@@ -132,6 +111,9 @@ export default class Dashboard extends Vue {
 }
 </script>
 <style lang="scss">
+	.error {
+		color: red;
+	}
 	.vue-grid-item>.vue-resizable-handle {
 		background: none;
 		width: 15px;

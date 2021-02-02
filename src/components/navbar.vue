@@ -1,26 +1,19 @@
 <template>
 	<nav>
-		<slot></slot>
 		<router-link
 			v-for="navItem in items"
 			:key="navItem.name"
 			:to="navItem"
 			v-text="navItem.name"
 		></router-link>
+		<slot></slot>
 	</nav>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Hue from '@/components/integrations/hue.vue';
-import Internet from '@/components/integrations/internet.vue';
 
-@Component({
-	components: {
-		Hue,
-		Internet,
-	},
-})
+@Component({})
 export default class Navbar extends Vue {
 	items: Array<{name: string, path: string}> = [];
 
