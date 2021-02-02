@@ -1,10 +1,21 @@
 <template>
-	<div></div>
+	<div>
+		<Form :settings="settings" />
+		<FormInput />
+	</div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-@Component({})
+import {
+	Component, Vue, Model,
+} from 'vue-property-decorator';
+import { Form, FormInput } from '@/components/molecules';
+@Component({
+	components: {
+		Form,
+		FormInput,
+	},
+})
 export default class WidgetSettingEditor extends Vue {
-	@Prop() private settings!: WidgetSetting[];
+	@Model('input') readonly settings!: WidgetSetting[];
 }
 </script>

@@ -14,6 +14,8 @@ module.exports = {
 		indent: ['error', 'tab'],
 		'no-tabs': 'off',
 		"no-confusing-arrow": 'off',
+		'prefer-default-export': 'off',
+		"import/prefer-default-export": ["off"],
 	},
 	parserOptions: {
 		parser: '@typescript-eslint/parser',

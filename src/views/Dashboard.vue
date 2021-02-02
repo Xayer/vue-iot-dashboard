@@ -9,7 +9,6 @@
 	:margin="defaultSettings.margin"
 	:use-css-transforms="false"
 	:responsive="true"
-	@layout-updated="saveWidgetLayout"
 	>
 		<GridItem
 			v-for="item in DashboardWidgets"
@@ -34,7 +33,7 @@ import { Dictionary } from '@/types/dictionary';
 import TextWidget from '@/components/widgets/text.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
-
+import { defaultSettings } from '@/constants/dashboard';
 @Component({
 	components: {
 		GridItem: VueGridLayout.GridItem,
@@ -45,65 +44,7 @@ import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue
 	},
 })
 export default class Dashboard extends Vue {
-	defaultSettings: any = {
-		columns: {
-			lg: 12,
-			md: 10,
-			sm: 6,
-			xs: 4,
-			xxs: 2,
-		},
-		columnHeight: 100,
-		margin: [15, 15],
-		items: [
-			{
-				type: 'TextWidget',
-				settings: {
-					message: 'Foo',
-				},
-				w: 6,
-				h: 1,
-				y: 1,
-				x: 0,
-				i: 0,
-			},
-			{
-				type: 'HueBridges',
-				settings: {
-
-				},
-				w: 6,
-				h: 1,
-				y: 1,
-				x: 6,
-				i: 1,
-			},
-			{
-				type: 'RejseplanenDeparture',
-				settings: {
-					title: 'Work',
-					stationId: '461682600',
-				},
-				w: 6,
-				h: 1,
-				y: 2,
-				x: 6,
-				i: 2,
-			},
-			{
-				type: 'RejseplanenDeparture',
-				settings: {
-					title: 'Home',
-					stationId: '461097000',
-				},
-				w: 6,
-				h: 3,
-				y: 3,
-				x: 6,
-				i: 3,
-			},
-		],
-	}
+	defaultSettings = defaultSettings;
 
 	DashboardWidgets: any = null;
 
@@ -113,14 +54,12 @@ export default class Dashboard extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	getDashboardWidgets() {
-		let widgets;
+		let widgets = [];
 		if (localStorage.widgets) {
 			const parsedWidgets = JSON.parse(localStorage.widgets);
 			if (typeof parsedWidgets === 'object') {
 				widgets = parsedWidgets;
 			}
-		} else {
-			widgets = this.defaultSettings.items;
 		}
 		return widgets;
 	}

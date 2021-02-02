@@ -13,7 +13,6 @@
 		:margin="defaultSettings.margin"
 		:use-css-transforms="false"
 		:responsive="true"
-		@layout-updated="saveWidgetLayout"
 	>
 		<GridItem
 			v-for="item in DashboardWidgets"
@@ -23,9 +22,8 @@
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
-			class="widget"
 		>
-			<component :is="item.type" :settings="item.settings"></component>
+			<WidgetSettings v-model="item.settings"></WidgetSettings>
 		</GridItem>
 	</GridLayout>
 	<p v-else>No Widgets added yet. Select a widget from the dropdown and click "Add Widget".</p>
@@ -36,34 +34,21 @@
 import { Component, Vue } from 'vue-property-decorator';
 import VueGridLayout from 'vue-grid-layout';
 import { Select, Button } from '@/components/atoms';
-import TextWidget from '@/components/widgets/text.vue';
-import HueBridges from '@/components/widgets/hue/bridges.vue';
-import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
-import { WidgetDefaultSettings, WidgetsAvailable, WidgetTitles } from '@/constants/widgets';
+import WidgetSettings from '@/components/widgets/settings.vue';
+import { WidgetDefaultSettings, WidgetsAvailable } from '@/constants/widgets';
+import { defaultSettings } from '@/constants/dashboard';
 
 @Component({
 	components: {
 		GridItem: VueGridLayout.GridItem,
 		GridLayout: VueGridLayout.GridLayout,
-		TextWidget,
-		HueBridges,
-		RejseplanenDeparture,
+		WidgetSettings,
 		Select,
 		Button,
 	},
 })
 export default class EditableDashboard extends Vue {
-	defaultSettings: any = {
-		columns: {
-			lg: 12,
-			md: 10,
-			sm: 6,
-			xs: 4,
-			xxs: 2,
-		},
-		columnHeight: 100,
-		margin: [15, 15],
-	}
+	defaultSettings = defaultSettings;
 
 	errorMessage = '';
 
@@ -82,14 +67,12 @@ export default class EditableDashboard extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	getDashboardWidgets() {
-		let widgets;
+		let widgets = [];
 		if (localStorage.widgets) {
 			const parsedWidgets = JSON.parse(localStorage.widgets);
 			if (typeof parsedWidgets === 'object') {
 				widgets = parsedWidgets;
 			}
-		} else {
-			widgets = this.defaultSettings.items;
 		}
 		return widgets;
 	}
