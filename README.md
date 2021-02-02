@@ -1,5 +1,11 @@
 # vue-iot-dashboard
 
+## Todo:
+
+- missing saving of individual fields on widgets
+- creation of new dashboards
+- more widgets?
+
 ## Project setup
 ```
 yarn install
