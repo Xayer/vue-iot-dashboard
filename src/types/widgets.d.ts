@@ -1,7 +1,7 @@
 type Widget = {
 	type: string;
 	title: string;
-	settings: WidgetSetting[];
+	settings: { [key: string]: any | null };
 	w: number;
 	h: number;
 	x: number;

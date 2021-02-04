@@ -11,11 +11,11 @@
 		:is-draggable="true"
 		:is-resizable="true"
 		:margin="defaultSettings.margin"
-		:use-css-transforms="false"
+		:use-css-transforms="true"
 		:responsive="true"
 	>
 		<GridItem
-			v-for="item in DashboardWidgets"
+			v-for="(item, itemIndex) in DashboardWidgets"
 			:key="item.i"
 			:i="item.i"
 			:w="item.w"
@@ -23,7 +23,11 @@
 			:x="item.x"
 			:y="item.y"
 		>
-			<WidgetSettings v-model="item.settings"></WidgetSettings>
+			<WidgetSettings
+				:title="item.type"
+				v-model="DashboardWidgets[itemIndex].settings"
+				@removeWidget="removeWidget(itemIndex)"
+			/>
 		</GridItem>
 	</GridLayout>
 	<p v-else>No Widgets added yet. Select a widget from the dropdown and click "Add Widget".</p>
@@ -70,7 +74,7 @@ export default class EditableDashboard extends Vue {
 		let widgets = [];
 		if (localStorage.widgets) {
 			const parsedWidgets = JSON.parse(localStorage.widgets);
-			if (typeof parsedWidgets === 'object') {
+			if (parsedWidgets && typeof parsedWidgets === 'object') {
 				widgets = parsedWidgets;
 			}
 		}
@@ -88,8 +92,12 @@ export default class EditableDashboard extends Vue {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	saveWidgetLayout(layout: Array<Object>) {
-		localStorage.widgets = JSON.stringify(layout);
+	saveWidgetLayout() {
+		localStorage.widgets = JSON.stringify(this.DashboardWidgets);
+	}
+
+	removeWidget(widgetIndex: number) {
+		this.DashboardWidgets.splice(widgetIndex, 1);
 	}
 }
 </script>
@@ -97,22 +105,27 @@ export default class EditableDashboard extends Vue {
 	.error {
 		color: red;
 	}
-	.vue-grid-item>.vue-resizable-handle {
-		background: none;
-		width: 15px;
-		height: 15px;
-		padding: 0;
-		margin: {
-			block-end: 0.35rem;
-			inline-end: 0.35rem;
-		};
-		border: {
-			block-end: 0.125rem;
-			block-start: 0;
-			inline-start: 0;
-			inline-end: 0.125rem;
-			color: #eee;
-			style: solid;
+	.vue-grid-item{
+		background-color: #2d3b42;
+		padding: 15px;
+		box-sizing: border-box;
+		& > .vue-resizable-handle {
+			background: none;
+			width: 15px;
+			height: 15px;
+			padding: 0;
+			margin: {
+				block-end: 0.35rem;
+				inline-end: 0.35rem;
+			};
+			border: {
+				block-end: 0.125rem;
+				block-start: 0;
+				inline-start: 0;
+				inline-end: 0.125rem;
+				color: #eee;
+				style: solid;
+			}
 		}
 	}
 

@@ -7,7 +7,7 @@
 	:is-draggable="false"
 	:is-resizable="false"
 	:margin="defaultSettings.margin"
-	:use-css-transforms="false"
+	:use-css-transforms="true"
 	:responsive="true"
 	>
 		<GridItem

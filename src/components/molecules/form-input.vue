@@ -1,10 +1,13 @@
 <template>
 	<div>
-		<component :is="settingType" v-model="value" />
+		<component
+			:is="settingType"
+			v-model="setting"
+		/>
 	</div>
 </template>
 <script lang="ts">
-import { Vue, Component, Model } from 'vue-property-decorator';
+import { Vue, Component, VModel } from 'vue-property-decorator';
 import { Input, Select } from '@/components/atoms';
 @Component({
 	components: {
@@ -13,10 +16,11 @@ import { Input, Select } from '@/components/atoms';
 	},
 })
 export default class FormInput extends Vue {
-	@Model('input') readonly value!: WidgetSetting[];
+	@VModel() readonly setting!: WidgetSetting;
 
+	// eslint-disable-next-line class-methods-use-this
 	get settingType() {
-		if (typeof this.value === 'object') {
+		if (typeof this.setting === 'object') {
 			return 'Select';
 		}
 		return 'Input';

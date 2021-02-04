@@ -14,11 +14,9 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 	[WidgetsAvailable.TextWidget]: {
 		type: WidgetsAvailable.TextWidget,
 		title: WidgetTitles[WidgetsAvailable.TextWidget],
-		settings: [
-			{
-				message: 'Foo',
-			},
-		],
+		settings: {
+			message: 'Foo',
+		},
 		w: 6,
 		h: 1,
 		y: 1,
@@ -28,7 +26,7 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 	[WidgetsAvailable.HueBridges]: {
 		type: WidgetsAvailable.HueBridges,
 		title: WidgetTitles[WidgetsAvailable.HueBridges],
-		settings: [],
+		settings: {},
 		w: 6,
 		h: 1,
 		y: 1,
@@ -38,14 +36,10 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 	[WidgetsAvailable.RejseplanenDeparture]: {
 		type: WidgetsAvailable.RejseplanenDeparture,
 		title: WidgetTitles[WidgetsAvailable.RejseplanenDeparture],
-		settings: [
-			{
-				title: 'Departures',
-			},
-			{
-				stationId: '461682600',
-			},
-		],
+		settings: {
+			title: 'Departures',
+			stationId: '461682600',
+		},
 		w: 6,
 		h: 1,
 		y: 2,

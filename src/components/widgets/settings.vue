@@ -1,21 +1,32 @@
 <template>
 	<div>
-		<Form :settings="settings" />
-		<FormInput />
+		<Button class="remove" @click="$emit('removeWidget')">X</Button>
+		{{ title }}
+		<div v-for="(settingValue, settingName) in settings" :key="`${settingName}:${settingValue}`">
+			{{ settingName }}:
+			<!-- <FormInput v-model="settings[settingName]" /> -->
+			<FormInput :value="settings[settingName]"
+				@input="updateValue(settingName, $event.target.value)" />
+		</div>
 	</div>
 </template>
 <script lang="ts">
 import {
-	Component, Vue, Model,
+	Component, Vue, VModel, Prop,
 } from 'vue-property-decorator';
-import { Form, FormInput } from '@/components/molecules';
+import { FormInput } from '@/components/molecules';
 @Component({
 	components: {
-		Form,
 		FormInput,
 	},
 })
 export default class WidgetSettingEditor extends Vue {
-	@Model('input') readonly settings!: WidgetSetting[];
+	@VModel() readonly settings!: WidgetSetting[];
+
+	@Prop() title!: string;
+
+	updateValue(key: string, value: string) {
+		this.$emit('input', { ...this.settings, [key]: value });
+	}
 }
 </script>

@@ -1,13 +1,13 @@
 <template>
-	<input v-model="value" />
+	<input v-model="name" />
 </template>
 <script lang="ts">
 import {
-	Vue, Component, Model,
+	Vue, Component, VModel,
 } from 'vue-property-decorator';
 @Component({
 })
 export default class Input extends Vue {
-	@Model('input') readonly value!: string;
+	@VModel({ type: String }) name!: string;
 }
 </script>
