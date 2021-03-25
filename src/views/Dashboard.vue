@@ -59,6 +59,13 @@ export default class Dashboard extends Vue {
 			const parsedWidgets = JSON.parse(localStorage.widgets);
 			if (typeof parsedWidgets === 'object') {
 				widgets = parsedWidgets;
+				widgets.map((widget: Widget) => {
+					const widgetData = { ...widget };
+					if (!widget.guid) {
+						widgetData.guid = new Date().toUTCString();
+					}
+					return widgetData;
+				});
 			}
 		}
 		return widgets;
@@ -94,5 +101,6 @@ export default class Dashboard extends Vue {
 		background-color: #2d3b42;
 		padding: 15px;
 		box-sizing: border-box;
+		overflow: hidden;
 	}
 </style>

@@ -7,6 +7,16 @@ Vue.use(VueRouter);
 
 const routes = [
 	{
+		path: '/',
+		name: 'dashboard',
+		component: Dashboard,
+	},
+	{
+		path: '/edit',
+		name: 'dashboard-edit',
+		component: EditDashboard,
+	},
+	/* {
 		path: '/:slug',
 		name: 'dashboard',
 		component: Dashboard,
@@ -15,7 +25,7 @@ const routes = [
 		path: '/:slug/edit',
 		name: 'dashboard-edit',
 		component: EditDashboard,
-	},
+	}, */
 	{
 		path: '/about',
 		name: 'about',

@@ -16,13 +16,15 @@
 	>
 		<GridItem
 			v-for="(item, itemIndex) in DashboardWidgets"
-			:key="item.i"
+			:key="`${item.i}${item.guid}`"
 			:i="item.i"
 			:w="item.w"
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
 		>
+			x: {{ item.x }}
+			y: {{ item.y }}
 			<WidgetSettings
 				:title="item.type"
 				v-model="DashboardWidgets[itemIndex].settings"
@@ -87,12 +89,22 @@ export default class EditableDashboard extends Vue {
 			return;
 		}
 		const widgetSettings = WidgetDefaultSettings[this.selectedWidget];
+		const maxXCoords = Math.max(
+			...this.DashboardWidgets.map((widget: Widget) => widget.x),
+			0,
+		);
+		const maxYCoords = Math.max(
+			...this.DashboardWidgets.map((widget: Widget) => widget.y),
+			0,
+		);
+
+		console.log(maxXCoords, maxYCoords);
 		this.DashboardWidgets.push({
 			...widgetSettings,
 			i: this.DashboardWidgets.length,
-			x: (this.DashboardWidgets.length * 2) % (this.defaultSettings.columns.lg || 12),
-			y: this.DashboardWidgets.length
-				+ (this.defaultSettings.columns.lg || 12), // puts it at the bottom
+			guid: new Date().toUTCString,
+			x: 0,
+			y: maxYCoords ? maxYCoords + 1 : 0,
 		});
 	}
 

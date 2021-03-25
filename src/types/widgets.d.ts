@@ -7,6 +7,7 @@ type Widget = {
 	x: number;
 	y: number;
 	i: number;
+	guid: string;
 }
 
 type WidgetSetting = {
