@@ -87,8 +87,13 @@ export default class EditableDashboard extends Vue {
 			return;
 		}
 		const widgetSettings = WidgetDefaultSettings[this.selectedWidget];
-		widgetSettings.i = this.DashboardWidgets.length;
-		this.DashboardWidgets.push(widgetSettings);
+		this.DashboardWidgets.push({
+			...widgetSettings,
+			i: this.DashboardWidgets.length,
+			x: (this.DashboardWidgets.length * 2) % (this.defaultSettings.columns.lg || 12),
+			y: this.DashboardWidgets.length
+				+ (this.defaultSettings.columns.lg || 12), // puts it at the bottom
+		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this

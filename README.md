@@ -2,7 +2,7 @@
 
 ## Todo:
 
-- missing saving of individual fields on widgets
+- missing saving of individual fields on widgets - somehow the components are not two way bound....
 - creation of new dashboards
 - more widgets?
 

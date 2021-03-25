@@ -4,9 +4,8 @@
 		{{ title }}
 		<div v-for="(settingValue, settingName) in settings" :key="`${settingName}:${settingValue}`">
 			{{ settingName }}:
-			<!-- <FormInput v-model="settings[settingName]" /> -->
 			<FormInput :value="settings[settingName]"
-				@input="updateValue(settingName, $event.target.value)" />
+				@input="updateValue(settingName, $event)" />
 		</div>
 	</div>
 </template>
@@ -25,7 +24,7 @@ export default class WidgetSettingEditor extends Vue {
 
 	@Prop() title!: string;
 
-	updateValue(key: string, value: string) {
+	updateValue(key: string, value: any) {
 		this.$emit('input', { ...this.settings, [key]: value });
 	}
 }

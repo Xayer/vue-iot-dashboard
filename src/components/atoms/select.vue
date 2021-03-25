@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<select v-model="value">
+		<select v-model="selectedValue">
 			<option
 				v-for="option in options"
 				v-text="option.text"
@@ -12,13 +12,13 @@
 </template>
 <script lang="ts">
 import {
-	Vue, Component, Prop, Model,
+	Vue, Component, Prop, VModel,
 } from 'vue-property-decorator';
 @Component({
 })
 export default class Select extends Vue {
 	@Prop() options!: { text: string; value: string}[];
 
-	@Model('input') readonly value!: string;
+	@VModel() readonly selectedValue!: string;
 }
 </script>
