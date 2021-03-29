@@ -22,6 +22,7 @@
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
+			:dragAllowFrom="'.drag'"
 		>
 			x: {{ item.x }}
 			y: {{ item.y }}
@@ -131,10 +132,6 @@ export default class EditableDashboard extends Vue {
 			width: 15px;
 			height: 15px;
 			padding: 0;
-			margin: {
-				block-end: 0.35rem;
-				inline-end: 0.35rem;
-			};
 			border: {
 				block-end: 0.125rem;
 				block-start: 0;
@@ -144,11 +141,21 @@ export default class EditableDashboard extends Vue {
 				style: solid;
 			}
 		}
-	}
+		.drag {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		.remove {
+			position: absolute;
+			top: 0;
+			right: 0;
+			cursor: pointer;
+		}
 
-	.vue-grid-item {
-		background-color: #2d3b42;
-		padding: 15px;
-		box-sizing: border-box;
+		.vue-resizable-handle, .drag, .remove {
+			margin: 0.35rem;
+			color: #fff;
+		}
 	}
 </style>

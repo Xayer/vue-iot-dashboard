@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<Button class="remove" @click="$emit('removeWidget')">X</Button>
+		<span class="drag">[+]</span>
+		<span class="remove" @click="$emit('removeWidget')">X</span>
 		{{ title }}
 		<div v-for="(settingValue, settingName) in settings" :key="`${settingName}:${settingValue}`">
 			{{ settingName }}:
