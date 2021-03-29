@@ -34,6 +34,7 @@ import TextWidget from '@/components/widgets/text.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
 import { defaultSettings } from '@/constants/dashboard';
+
 @Component({
 	components: {
 		GridItem: VueGridLayout.GridItem,

@@ -19,6 +19,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
 import HueLight from '@/components/widgets/hue/HueLight.vue';
+
 @Component({
 	components: { HueLight },
 	computed: {

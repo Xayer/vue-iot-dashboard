@@ -14,6 +14,7 @@
 import {
 	Vue, Component, Prop, VModel,
 } from 'vue-property-decorator';
+
 @Component({
 })
 export default class Select extends Vue {

@@ -14,6 +14,7 @@ import {
 	Component, Vue, VModel, Prop,
 } from 'vue-property-decorator';
 import { FormInput } from '@/components/molecules';
+
 @Component({
 	components: {
 		FormInput,

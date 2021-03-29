@@ -9,6 +9,7 @@
 <script lang="ts">
 import { Vue, Component, VModel } from 'vue-property-decorator';
 import { Input, Select } from '@/components/atoms';
+
 @Component({
 	components: {
 		Input,
