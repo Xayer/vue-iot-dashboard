@@ -24,6 +24,7 @@ import {
 import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
 import HueAPI from '@/modules/apis/hue';
+
 @Component({
 	computed: {
 		...mapGetters({

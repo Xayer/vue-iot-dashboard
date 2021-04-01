@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
-import API from './client';
 import { Devices } from '@/types/hue';
+import API from './client';
 
 const protocol: string = 'http://';
 const baseUrl: string = '/api';

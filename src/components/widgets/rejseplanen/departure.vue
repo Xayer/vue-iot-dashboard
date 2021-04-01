@@ -17,13 +17,11 @@ import { mapGetters } from 'vuex';
 })
 export default class RejseplanenDeparture extends Vue {
 	@Prop() private settings!: {
-		parameters: {
-			stationId: string;
-		}
+		stationId: string;
 	};
 
 	get departureBoardUrl() {
-		return `//www.rejseplanen.dk/bin/help.exe/mn?L=vs_tus.vs_new&tpl=monitor&station=${this.settings.parameters.stationId}&display=horizontal`;
+		return `//www.rejseplanen.dk/bin/help.exe/mn?L=vs_tus.vs_new&tpl=monitor&station=${this.settings.stationId}&display=horizontal`;
 	}
 }
 </script>
