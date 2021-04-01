@@ -30,16 +30,16 @@ export default class Button extends Vue {
 		// MUTED
 		background-color: var(--muted);
 		box-shadow: var(--muted) $box-shadow-specs;
-		color: var(--text-color);
+		color: var(--button-text-color);
 		&.primary {
 			background-color: var(--primary);
 			box-shadow: var(--primary) $box-shadow-specs;
-			color: var(--text-color);
+			color: var(--button-text-color);
 		}
 		&.danger {
 			background-color: var(--danger);
 			box-shadow: var(--danger) $box-shadow-specs;
-			color: var(--text-color);
+			color: var(--button-text-color);
 		}
 	}
 </style>

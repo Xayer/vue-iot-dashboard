@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
 import EditDashboard from '../views/EditDashboard.vue';
+import Integrations from '../views/Integrations.vue';
 
 Vue.use(VueRouter);
 
@@ -9,12 +10,18 @@ const routes = [
 	{
 		path: '/',
 		name: 'dashboard',
-		component: Dashboard,
+		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
 	},
 	{
 		path: '/edit',
 		name: 'dashboard-edit',
-		component: EditDashboard,
+		component: () => import(/* webpackChunkName: "edit-dashboard" */ '../views/EditDashboard.vue'),
+		hidden: true,
+	},
+	{
+		path: '/integrations',
+		name: 'integrations',
+		component: () => import(/* webpackChunkName: "integrations" */ '../views/Integrations.vue'),
 	},
 	/* {
 		path: '/:slug',

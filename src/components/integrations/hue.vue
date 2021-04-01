@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<span v-if="!bridgeAddress"><input type="text" v-model="bridgeAddress"></span>
+		<span v-if="bridgeAddressNotFound"><input type="text" v-model="bridgeAddress"></span>
 		<span>
 			<i :class="hueAvailable && online && token ? 'on': 'off'">&#9679;</i>Hue
-			<section
+			<Button class="primary"
 				v-if="hueAvailable
 				&& token
 				&& devices
 				&& devices.lights"
-			>{{ lightLabel }} Lights</section></span>
+			>{{ lightLabel }} Lights</Button></span>
 		<Button class="danger"
 			v-if="!hueAvailable || !token"
 			@click="registerToken()"
@@ -21,7 +21,6 @@
 import {
 	Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
-import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
 import { Button } from '@/components/atoms';
 
@@ -47,6 +46,8 @@ export default class HueIntegration extends Vue {
 
 	bridgeAddress: string = '';
 
+	bridgeAddressNotFound = false;
+
 	devices!: {
 		lights: Object,
 	};
@@ -58,14 +59,17 @@ export default class HueIntegration extends Vue {
 		if (localStorage.bridge_address) {
 			this.bridgeAddress = localStorage.bridge_address;
 			this.detectDevices();
+			setInterval(() => {
+				this.detectDevices();
+			}, 3000);
+		} else {
+			this.bridgeAddressNotFound = true;
 		}
-		setInterval(() => {
-			this.detectDevices();
-		}, 3000);
 	}
 
 	detectDevices() {
 		this.$store.dispatch('hue/getDevices').catch((error: any) => {
+			console.log(error);
 			this.errorMessage = error.description;
 		});
 	}
@@ -73,6 +77,7 @@ export default class HueIntegration extends Vue {
 	@Watch('bridgeAddress')
 	commitBridgeAddress(address: string) {
 		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
+		this.bridgeAddressNotFound = false;
 		this.detectDevices();
 	}
 
@@ -106,26 +111,21 @@ export default class HueIntegration extends Vue {
 		flex-direction: row;
 		text-align: left;
 		align-items: center;
-		section {
+		.btn {
 			margin-block: {
 				start: 0.25rem;
 			}
-			display: inline-block;
-			padding: 0.125rem 0.5rem;
-			background-color: lighten(#2d3b42, 2.5);
-			border-radius: 4px;
 		}
 	}
 
 	.error {
 		padding: 5px 7px;
 		margin: 0;
-		background-color: darken(#853838, 25);
-		color: #853838;
+		color: var(--danger);
 	}
 
-	.on { color: green; }
-	.off { color: red; }
+	.on { color: var(--success); }
+	.off { color: var(--danger); }
 
 	input {
 		display: block;

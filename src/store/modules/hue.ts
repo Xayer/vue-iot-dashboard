@@ -31,7 +31,7 @@ export default {
 					commit('SET_AVAILABILITY', true);
 					commit('SET_DEVICES', value);
 					commit('REFRESH_TOKEN');
-					resolve();
+					resolve('success');
 				}).catch((error: Error) => {
 					if (error.message === 'Network Error') {
 						commit('SET_AVAILABILITY', false);
@@ -41,6 +41,9 @@ export default {
 					reject(error);
 				});
 			} catch (error) {
+				commit('SET_AVAILABILITY', false);
+				commit('REFRESH_TOKEN');
+				commit('SET_DEVICES', []);
 				reject(error);
 			}
 		}),

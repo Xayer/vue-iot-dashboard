@@ -1,10 +1,8 @@
 <template>
-	<div id="app">
-		<navigation>
-			<Button class="btn toggle" @click="toggleIntegrations">=</Button>
-		</navigation>
+	<div id="app" :class="{ 'menu-open': menuShown }">
+		<Button @click="toggleMenu">Show Menu</Button>
 		<transition name="slide-fade">
-			<integrations v-if="integrationsShown"></integrations>
+			<navigation v-if="menuShown" />
 		</transition>
 		<router-view></router-view>
 	</div>
@@ -24,26 +22,26 @@ import Integrations from '@/components/integrations/index.vue';
 	},
 })
 export default class App extends Vue {
-	integrationsShown: boolean = false;
+	menuShown: boolean = false;
 
 	created() {
-		if (localStorage.integrationsBar) {
-			this.integrationsShown = localStorage.integrationsBar;
+		if (localStorage.menuShown) {
+			this.menuShown = localStorage.menuShown;
 		}
 	}
 
-	@Watch('integrationsShown')
+	@Watch('menuShown')
 	// eslint-disable-next-line class-methods-use-this
 	integrationsDisplayChange(isShown: boolean) {
 		if (isShown) {
-			localStorage.integrationsBar = isShown;
+			localStorage.menuShown = isShown;
 		} else {
-			localStorage.removeItem('integrationsBar');
+			localStorage.removeItem('menuShown');
 		}
 	}
 
-	toggleIntegrations() {
-		this.integrationsShown = !this.integrationsShown;
+	toggleMenu() {
+		this.menuShown = !this.menuShown;
 	}
 }
 </script>
@@ -53,15 +51,28 @@ export default class App extends Vue {
 	--bg-color: #f4f5f6;
 	--primary: #445eee;
 	--danger: #ee4444;
+	--warning: #ff7300;
+	--success: #04d442;
+	--info: #00a2ff;
 	--muted: #a4aabc;
 	--radius: 20px;
 	--padding: 15px;
 	--white: #fff;
 	--black: #000;
-	--text-color: #333;
+	--text-color: #444;
+	--widget-bg: var(--white);
+	--font-base: 'Work Sans', sans-serif;
+	--font-display: 'Poppins', sans-serif;
+	--button-text-color: var(--white);
+	--navbar-bg: var(--white);
+	--navbar-transition: all .3s ease;
+	--navbar-width: 15vw;
 	@media (prefers-color-scheme: dark) {
-		--bg-color: #263238;
-		--text-color: var(--white);
+		// --bg-color: #263238;
+		// --text-color: var(--white);
+		// --dark-bg-alt: #2f3d44;
+		// --navbar-bg: var(--dark-bg-alt);
+		// --widget-bg: var(--dark-bg-alt);
 	}
 
 }
@@ -72,26 +83,37 @@ body, html {
 	// DARK MODE BABY
 	background-color: var(--bg-color);
 	color: var(--text-color);
-}
-#app {
-	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	font-family: var(--font-base);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
+	font-weight: 400;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-display);
+}
+
+#app {
+	margin-left: 0;
+	transition: var(--navbar-transition);
+	width: 100%;
+	&.menu-open {
+		margin-left: calc(var(--navbar-width) + 15px);
+		width: calc(100% - var(--navbar-width) - 15px);
+	}
+}
 
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .slide-fade-enter-active {
-	transition: all .3s ease;
+	transition: var(--navbar-transition);
 }
 .slide-fade-leave-active {
-	transition: all .3s;
+	transition: var(--navbar-transition);
 }
 .slide-fade-enter, .slide-fade-leave-to
 	/* .slide-fade-leave-active below version 2.1.8 */ {
-	transform: translateX(25%);
+	transform: translateX(-var(--navbar-width));
 	opacity: 0;
 }
 </style>

@@ -18,9 +18,10 @@
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
-			class="widget"
 		>
-			<component :is="item.type" :settings="item.settings"></component>
+			<WidgetWrapper>
+				<component :is="item.type" :settings="item.settings"></component>
+			</WidgetWrapper>
 		</GridItem>
 	</GridLayout>
   </div>
@@ -29,8 +30,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import VueGridLayout from 'vue-grid-layout';
-import { Dictionary } from '@/types/dictionary';
 import TextWidget from '@/components/widgets/text.vue';
+import WidgetWrapper from '@/components/widgets/widget.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
 import { defaultSettings } from '@/constants/dashboard';
@@ -42,6 +43,7 @@ import { defaultSettings } from '@/constants/dashboard';
 		TextWidget,
 		HueBridges,
 		RejseplanenDeparture,
+		WidgetWrapper,
 	},
 })
 export default class Dashboard extends Vue {
@@ -78,30 +80,3 @@ export default class Dashboard extends Vue {
 	}
 }
 </script>
-<style lang="scss">
-
-	.vue-grid-item {
-		background-color: #2d3b42;
-		padding: 15px;
-		box-sizing: border-box;
-		overflow: hidden;
-		&>.vue-resizable-handle {
-			background: none;
-			width: 15px;
-			height: 15px;
-			padding: 0;
-			margin: {
-				block-end: 0.35rem;
-				inline-end: 0.35rem;
-			};
-			border: {
-				block-end: 0.125rem;
-				block-start: 0;
-				inline-start: 0;
-				inline-end: 0.125rem;
-				color: #eee;
-				style: solid;
-			}
-		}
-	}
-</style>

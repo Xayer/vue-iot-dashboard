@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<WidgetWrapper>
 		<span class="drag">[+]</span>
 		<span class="remove" @click="$emit('removeWidget')">X</span>
 		{{ title }}
@@ -8,17 +8,19 @@
 			<FormInput :value="settings[settingName]"
 				@input="updateValue(settingName, $event)" />
 		</div>
-	</div>
+	</WidgetWrapper>
 </template>
 <script lang="ts">
 import {
 	Component, Vue, VModel, Prop,
 } from 'vue-property-decorator';
 import { FormInput } from '@/components/molecules';
+import WidgetWrapper from '@/components/widgets/widget.vue';
 
 @Component({
 	components: {
 		FormInput,
+		WidgetWrapper,
 	},
 })
 export default class WidgetSettingEditor extends Vue {

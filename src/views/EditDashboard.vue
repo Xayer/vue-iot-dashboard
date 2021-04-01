@@ -124,9 +124,6 @@ export default class EditableDashboard extends Vue {
 		color: red;
 	}
 	.vue-grid-item{
-		background-color: #2d3b42;
-		padding: 15px;
-		box-sizing: border-box;
 		& > .vue-resizable-handle {
 			background: none;
 			width: 15px;

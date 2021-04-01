@@ -22,7 +22,7 @@ export default class Integrations extends Vue {
 
 <style lang="scss" scoped>
 	aside {
-		background-color: darken(#2d3b42,1.25);
+		background: var(--navbar-bg);
 		position: fixed;
 		top: 0;
 		right: 0;
