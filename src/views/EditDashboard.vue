@@ -1,9 +1,12 @@
 <template>
   <div>
-	<Button class="primary" @click="saveWidgetLayout">Save Dashboard</Button>
-	<span class="error" v-show="errorMessage">{{ errorMessage }}</span>
-	<Select :options="widgetOptions" v-model="selectedWidget" />
-	<Button @click="addWidget">Add Widget</Button>
+	<portal to="page-title">Edit Dashboard</portal>
+	<portal to="page-actions">
+		<span class="error" v-show="errorMessage">{{ errorMessage }}</span>
+		<Select :options="widgetOptions" v-model="selectedWidget" />
+		<Button class="m-l" @click="addWidget">Add Widget</Button>
+		<Button class="primary m-l" @click="saveWidgetLayout">Save Dashboard</Button>
+	</portal>
     <GridLayout v-if="DashboardWidgets"
 		:layout.sync="DashboardWidgets"
 		:cols="defaultSettings.columns"
@@ -24,8 +27,7 @@
 			:y="item.y"
 			:dragAllowFrom="'.drag'"
 		>
-			x: {{ item.x }}
-			y: {{ item.y }}
+			<span class="debug">x: {{ item.x }} y: {{ item.y }} w: {{ item.w }} h: {{ item.h }}</span>
 			<WidgetSettings
 				:title="item.type"
 				v-model="DashboardWidgets[itemIndex].settings"
@@ -123,36 +125,12 @@ export default class EditableDashboard extends Vue {
 	.error {
 		color: red;
 	}
-	.vue-grid-item{
-		& > .vue-resizable-handle {
-			background: none;
-			width: 15px;
-			height: 15px;
-			padding: 0;
-			border: {
-				block-end: 0.125rem;
-				block-start: 0;
-				inline-start: 0;
-				inline-end: 0.125rem;
-				color: #eee;
-				style: solid;
-			}
-		}
-		.drag {
-			position: absolute;
-			top: 0;
-			left: 0;
-		}
-		.remove {
-			position: absolute;
-			top: 0;
-			right: 0;
-			cursor: pointer;
-		}
-
-		.vue-resizable-handle, .drag, .remove {
-			margin: 0.35rem;
-			color: #fff;
-		}
+	.debug {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+		color: var(--muted);
 	}
 </style>

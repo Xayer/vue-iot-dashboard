@@ -55,6 +55,7 @@ export default class Navbar extends Vue {
 			&:hover {
 				border-bottom: 3px var(--info) solid;
 			}
+			&.router-link-active,
 			&.router-link-exact-active {
 				border-bottom: 3px var(--warning) solid;
 			}

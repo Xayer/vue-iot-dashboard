@@ -1,5 +1,8 @@
 <template>
-    <IntegrationsPanel />
+    <div>
+        <portal to="page-title">Integrations</portal>
+        <IntegrationsPanel />
+    </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';

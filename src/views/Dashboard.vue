@@ -1,5 +1,9 @@
 <template>
   <div>
+	<portal to="page-title">Dashboard</portal>
+	<portal to="page-actions">
+		<Button @click="editDashboard" class="primary">Edit</Button>
+	</portal>
     <GridLayout v-if="getDashboardWidgets"
 	:layout.sync="DashboardWidgets"
 	:cols="defaultSettings.columns"
@@ -35,6 +39,7 @@ import WidgetWrapper from '@/components/widgets/widget.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
 import { defaultSettings } from '@/constants/dashboard';
+import { Button } from '@/components/atoms';
 
 @Component({
 	components: {
@@ -44,6 +49,7 @@ import { defaultSettings } from '@/constants/dashboard';
 		HueBridges,
 		RejseplanenDeparture,
 		WidgetWrapper,
+		Button,
 	},
 })
 export default class Dashboard extends Vue {
@@ -77,6 +83,15 @@ export default class Dashboard extends Vue {
 	// eslint-disable-next-line class-methods-use-this
 	saveWidgetLayout(layout: Array<Object>) {
 		localStorage.widgets = JSON.stringify(layout);
+	}
+
+	editDashboard() {
+		this.$router.push({
+			name: 'dashboard-edit',
+			params: {
+				id: this.$route.params.id,
+			},
+		});
 	}
 }
 </script>
