@@ -1,9 +1,9 @@
 <template>
   <div>
-	<Button @click.native="saveWidgetLayout">Save Dashboard</Button>
+	<Button class="primary" @click="saveWidgetLayout">Save Dashboard</Button>
 	<span class="error" v-show="errorMessage">{{ errorMessage }}</span>
 	<Select :options="widgetOptions" v-model="selectedWidget" />
-	<Button @click.native="addWidget">Add Widget</Button>
+	<Button @click="addWidget">Add Widget</Button>
     <GridLayout v-if="DashboardWidgets"
 		:layout.sync="DashboardWidgets"
 		:cols="defaultSettings.columns"

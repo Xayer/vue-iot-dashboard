@@ -9,10 +9,10 @@
 				&& devices
 				&& devices.lights"
 			>{{ lightLabel }} Lights</section></span>
-		<button class="btn btn-danger"
+		<Button class="danger"
 			v-if="!hueAvailable || !token"
 			@click="registerToken()"
-		>!</button>
+		>!</Button>
 		<span class="loading" v-if="loading">Loading</span>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
@@ -23,9 +23,12 @@ import {
 } from 'vue-property-decorator';
 import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
-import HueAPI from '@/modules/apis/hue';
+import { Button } from '@/components/atoms';
 
 @Component({
+	components: {
+		Button,
+	},
 	computed: {
 		...mapGetters({
 			devices: 'hue/devices',

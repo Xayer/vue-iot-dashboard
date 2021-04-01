@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<navigation>
-			<button class="btn toggle" @click="toggleIntegrations">=</button>
+			<Button class="btn toggle" @click="toggleIntegrations">=</Button>
 		</navigation>
 		<transition name="slide-fade">
 			<integrations v-if="integrationsShown"></integrations>
@@ -12,6 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Button } from '@/components/atoms';
 import Navigation from '@/components/navbar.vue';
 import Integrations from '@/components/integrations/index.vue';
 
@@ -19,6 +20,7 @@ import Integrations from '@/components/integrations/index.vue';
 	components: {
 		Navigation,
 		Integrations,
+		Button,
 	},
 })
 export default class App extends Vue {
@@ -47,13 +49,37 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-body, html { padding: 0; margin: 0; background-color: #263238; color: #bbbbbb; }
+:root {
+	--bg-color: #f4f5f6;
+	--primary: #445eee;
+	--danger: #ee4444;
+	--muted: #a4aabc;
+	--radius: 20px;
+	--padding: 15px;
+	--white: #fff;
+	--black: #000;
+	--text-color: #333;
+	@media (prefers-color-scheme: dark) {
+		--bg-color: #263238;
+		--text-color: var(--white);
+	}
+
+}
+
+body, html {
+	padding: 0;
+	margin: 0;
+	// DARK MODE BABY
+	background-color: var(--bg-color);
+	color: var(--text-color);
+}
 #app {
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
 }
+
 
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
@@ -67,27 +93,5 @@ body, html { padding: 0; margin: 0; background-color: #263238; color: #bbbbbb; }
 	/* .slide-fade-leave-active below version 2.1.8 */ {
 	transform: translateX(25%);
 	opacity: 0;
-}
-
-.btn {
-	.toggle {
-		z-index: 9999;
-	}
-	margin: {
-		inline-start: 0.5rem;
-		inline-end: 0.5rem;
-	}
-	padding: 0.25rem 0.5rem;
-	background-color: transparent;
-	border-style: solid !important;
-	border: 2px solid #007acc;
-	color: #007acc !important;
-	box-shadow: 0px 0px 3px #007acc, inset 0px 0px 3px #007acc;
-	color: #bbbbbb;
-	&.btn-danger {
-		border-color: red;
-		color: red !important;
-		box-shadow: 0px 0px 3px red, inset 0px 0px 3px red;
-	}
 }
 </style>
