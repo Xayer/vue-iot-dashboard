@@ -1,8 +1,12 @@
 <template>
 	<WidgetWrapper>
-		<span class="drag">[+]</span>
-		<span class="remove" @click="$emit('removeWidget')">X</span>
-		<h2>{{ title }}</h2>
+		<div class="settings-header m-b">
+			<span class="drag m-r"><i class="bi bi-arrows-move"></i></span>
+			<h2>{{ title }}</h2>
+			<span class="remove m-l" @click="$emit('removeWidget')">
+				<i class="bi bi-x-circle"></i>
+			</span>
+		</div>
 		<form @submit.stop.prevent="">
 			<div
 				v-for="(settingValue, settingName) in settings"
@@ -42,35 +46,39 @@ export default class WidgetSettingEditor extends Vue {
 <style lang="scss">
 	.vue-grid-item {
 		& > .vue-resizable-handle {
-			background: none;
-			width: 15px;
-			height: 15px;
-			padding: 0;
-			border: {
-				block-end: 0.125rem;
-				block-start: 0;
-				inline-start: 0;
-				inline-end: 0.125rem;
-				color: #eee;
-				style: solid;
+			/* Styling from .bi-arrow-down-right */
+			&::before {
+				content: "\f123";
+				display: inline-block;
+				font-family: bootstrap-icons !important;
+				font-style: normal;
+				font-weight: normal !important;
+				font-variant: normal;
+				text-transform: none;
+				line-height: 1;
+				vertical-align: -.125em;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
 			}
-		}
-		.drag {
 			position: absolute;
-			top: 0;
-			left: 0;
-		}
-		.remove {
-			position: absolute;
-			top: 0;
-			right: 0;
-			cursor: pointer;
+			bottom: var(--padding);
+			right: var(--padding);
+			/** reset of the original styling from framework */
+			padding: 0;
+			background: none;
 		}
 
 		.vue-resizable-handle, .drag, .remove {
-			margin: 0.35rem;
 			color: #fff;
+			font-size: 20px;
 		}
+	}
+	.settings-header {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-rows: 1fr;
+		justify-content: center;
+		align-items: center;
 	}
 	form {
 		display: flex;
