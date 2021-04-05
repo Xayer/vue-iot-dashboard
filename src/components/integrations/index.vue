@@ -1,19 +1,19 @@
 <template>
-	<aside>
-		<h2>Integrations</h2>
-		<nav>
-			<hue></hue>
-		</nav>
-	</aside>
+	<div class="integrations">
+		<hue />
+		<network />
+	</div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Hue from '@/components/integrations/hue.vue';
+import Network from '@/components/integrations/internet.vue';
 
 @Component({
 	components: {
 		Hue,
+		Network,
 	},
 })
 export default class Integrations extends Vue {
@@ -21,26 +21,10 @@ export default class Integrations extends Vue {
 </script>
 
 <style lang="scss" scoped>
-	aside {
-		background: var(--navbar-bg);
-		position: fixed;
-		top: 0;
-		right: 0;
-		bottom: 0;
+	.integrations {
 		display: flex;
-		min-width: 15vw;
-		flex-direction: column;
-		height: 100vh;
-		z-index: 1;
-		align-items: center;
-		nav { align-items: flex-start; text-align: left; }
-		div {
-			padding: {
-				block-start: 0.5rem;
-				inline-start: 2rem;
-				inline-end: 2rem;
-				block-end: 0.5rem;
-			}
-		}
+		justify-content: flex-start;
+		margin: var(--navbar-margin);
+		padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
 	}
 </style>

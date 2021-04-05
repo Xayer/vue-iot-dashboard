@@ -6,7 +6,7 @@
 			<portal-target name="page-actions" />
 		</header>
 		<transition name="slide-fade">
-			<navigation v-if="menuShown" />
+			<navigation v-show="menuShown" />
 		</transition>
 		<router-view></router-view>
 	</div>
@@ -72,8 +72,9 @@ export default class App extends Vue {
 	--button-text-color: var(--white);
 	--navbar-bg: var(--white);
 	--transition-global: all .3s ease;
-	--navbar-transition: var(--navbar-transition);
+	--navbar-transition: var(--transition-global);
 	--navbar-width: 15vw;
+	--navbar-margin: var(--padding) var(--padding);
 	--app-padding: 15px;
 	--box-shadow-general: 0px 0px 25px -5px;
 	--button-box-shadow: var(--box-shadow-general);
@@ -82,6 +83,7 @@ export default class App extends Vue {
 	--input-text-color: var(--text-color);
 
 	@media (prefers-color-scheme: dark) {
+		// DARK MODE BABY
 		--bg-color: #263238;
 		--text-color: var(--white);
 		--dark-bg-alt: #2f3d44;
@@ -94,10 +96,10 @@ export default class App extends Vue {
 body, html {
 	padding: 0;
 	margin: 0;
-	// DARK MODE BABY
 	background-color: var(--bg-color);
 	color: var(--text-color);
 	font-family: var(--font-base);
+	overflow-x: hidden;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-weight: 400;

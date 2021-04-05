@@ -6,13 +6,19 @@
 			:to="navItem"
 			v-text="navItem.name"
 		></router-link>
+		<IntegrationsPanel />
 	</nav>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import IntegrationsPanel from '@/components/integrations/index.vue';
 
-@Component({})
+@Component({
+	components: {
+		IntegrationsPanel,
+	},
+})
 export default class Navbar extends Vue {
 	items: Array<{name: string, path: string}> = [];
 
@@ -51,7 +57,6 @@ export default class Navbar extends Vue {
 		flex-direction: column;
 		a {
 			display: block;
-			margin: 10px 20px;
 			&:hover {
 				border-bottom: 3px var(--info) solid;
 			}
@@ -65,10 +70,8 @@ export default class Navbar extends Vue {
 			color: var(--text-color);
 			text-decoration: none;
 			text-align: left;
-			padding-block-start: 0.5rem;
-			padding-block-end: 0.5rem;
-			padding-inline-start: 0.5rem;
-			padding-inline-end: 0.5rem;
+			margin: var(--navbar-margin);
+			padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
 		}
 	}
 </style>

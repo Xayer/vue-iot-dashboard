@@ -1,10 +1,15 @@
 <template>
 	<div>
 		<span v-if="bridgeAddressNotFound"><input type="text" v-model="bridgeAddress"></span>
-		<span :title="hueAvailable ? 'Connected' : 'Disconnected' ">
+		<span>
 			<i class="bi bi-lightbulb"
-				:class="hueAvailable && online && token ? 'on': 'off'"></i>
-		</span>
+				:class="hueAvailable && online && token ? 'on': 'off'"></i>Hue
+			<Button class="primary"
+				v-if="hueAvailable
+				&& token
+				&& devices
+				&& devices.lights"
+			>{{ lightLabel }} Lights</Button></span>
 		<Button class="danger"
 			v-if="!hueAvailable || !token"
 			@click="registerToken()"
@@ -101,6 +106,19 @@ export default class HueIntegration extends Vue {
 </script>
 
 <style lang="scss" scoped>
+	div {
+		display: flow-root;
+		padding: 0.5rem;
+		flex-direction: row;
+		text-align: left;
+		align-items: center;
+		.btn {
+			margin-block: {
+				start: 0.25rem;
+			}
+		}
+	}
+
 	.error {
 		padding: 5px 7px;
 		margin: 0;
@@ -109,4 +127,8 @@ export default class HueIntegration extends Vue {
 
 	.on { color: var(--success); }
 	.off { color: var(--danger); }
+
+	input {
+		display: block;
+	}
 </style>
