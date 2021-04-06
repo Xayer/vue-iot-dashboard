@@ -46,14 +46,12 @@ export default class HueIntegration extends Vue {
 
 	errorMessage: string = '';
 
+	devicesTimeout!: ReturnType<typeof setTimeout>;
+
 	// eslint-disable-next-line class-methods-use-this
 	created() {
 		if (localStorage.bridge_address) {
 			this.bridgeAddress = localStorage.bridge_address;
-			this.detectDevices();
-			setInterval(() => {
-				this.detectDevices();
-			}, 3000);
 		} else {
 			this.bridgeAddressNotFound = true;
 		}
@@ -71,6 +69,17 @@ export default class HueIntegration extends Vue {
 		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
 		this.bridgeAddressNotFound = false;
 		this.detectDevices();
+	}
+
+	@Watch('bridgeAddressNotFound')
+	bridgeAddressChanged(found: boolean) {
+		if (found) {
+			this.devicesTimeout = setInterval(() => {
+				this.detectDevices();
+			}, 3000);
+		} else {
+			clearInterval(this.devicesTimeout);
+		}
 	}
 
 	registerToken() {

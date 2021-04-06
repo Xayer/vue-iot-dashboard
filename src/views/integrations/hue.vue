@@ -4,9 +4,9 @@
 			<i class="bi bi-lightbulb"
 				:class="hueAvailable && online && token ? 'on': 'off'"></i>
 		</span>
-        <span v-if="bridgeAddressNotFound" class="m-r">
-            <input type="text" v-model="bridgeAddress" placeholder="Hue Bridge IP">
-        </span>
+		<span v-if="bridgeAddressNotFound" class="m-r">
+			<input type="text" v-model="bridgeAddress" placeholder="Hue Bridge IP">
+		</span>
 		<Button class="danger"
 			v-if="!hueAvailable || !token"
 			@click="registerToken()"
@@ -52,13 +52,26 @@ export default class HueIntegration extends Vue {
 
 	errorMessage: string = '';
 
+	devicesTimeout!: ReturnType<typeof setTimeout>;
+
 	// eslint-disable-next-line class-methods-use-this
 	created() {
 		if (localStorage.bridge_address) {
 			this.bridgeAddress = localStorage.bridge_address;
-			this.detectDevices();
+			this.bridgeAddressNotFound = false;
 		} else {
 			this.bridgeAddressNotFound = true;
+		}
+	}
+
+	@Watch('bridgeAddressNotFound')
+	bridgeAddressChanged(found: boolean) {
+		if (found) {
+			this.devicesTimeout = setInterval(() => {
+				this.detectDevices();
+			}, 3000);
+		} else {
+			clearInterval(this.devicesTimeout);
 		}
 	}
 
@@ -67,9 +80,6 @@ export default class HueIntegration extends Vue {
 			console.log(error);
 			this.errorMessage = error.description;
 		});
-		setInterval(() => {
-			this.detectDevices();
-		}, 3000);
 	}
 
 	registerToken() {

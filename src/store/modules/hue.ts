@@ -1,3 +1,4 @@
+import { Commit, Dispatch } from 'vuex';
 import HueAPI from '@/modules/apis/hue';
 import { Devices } from '@/types/hue';
 
@@ -7,6 +8,7 @@ export default {
 		available: false,
 		instance: false,
 		token: null,
+		callingDevices: false,
 	},
 
 	getters: {
@@ -19,8 +21,17 @@ export default {
 
 	actions: {
 		getDevices: (
-			{ commit, dispatch, rootGetters }: { commit: any, dispatch: any, rootGetters: any },
+			{
+				commit, dispatch,
+				rootGetters,
+				state,
+			}: { commit: Commit, dispatch: Dispatch, rootGetters: any, state: any },
 		) => new Promise(async (resolve, reject) => {
+			if (state.callingDevices) {
+				return;
+			}
+			state.callingDevices = true;
+
 			if (!rootGetters['hue/instance']) {
 				commit('SET_AVAILABILITY', false);
 				commit('SET_DEVICES', []);
@@ -46,6 +57,7 @@ export default {
 				commit('SET_DEVICES', []);
 				reject(error);
 			}
+			state.callingDevices = false;
 		}),
 		registerToken: (
 			{ commit, dispatch, rootGetters }: { commit: any, dispatch: any, rootGetters: any },
