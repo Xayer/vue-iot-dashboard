@@ -1,9 +1,16 @@
 <template>
 	<div>
-		<span :title="hueAvailable ? 'Connected' : 'Disconnected' ">
+		<h4 :title="hueAvailable ? 'Connected' : 'Disconnected' ">
 			<i class="bi bi-lightbulb"
 				:class="hueAvailable && online && token ? 'on': 'off'"></i>
-		</span>
+				Hue {{ hueAvailable ? 'Connected' : 'Disconnected' }}
+		</h4>
+		<Button class="m-t primary"
+			v-if="hueAvailable
+			&& token
+			&& devices
+			&& devices.lights"
+		>{{ lightLabel }} Lights</Button>
 		<span v-if="bridgeAddressNotFound" class="m-r">
 			<input type="text" v-model="bridgeAddress" placeholder="Hue Bridge IP">
 		</span>

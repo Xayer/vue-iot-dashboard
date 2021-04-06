@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="page-title">Integrations</portal>
-        <router-view />
+        <router-view class="m-t" />
     </div>
 </template>
 <script lang="ts">
