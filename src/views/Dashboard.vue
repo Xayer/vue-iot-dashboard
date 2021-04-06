@@ -37,6 +37,8 @@ import VueGridLayout from 'vue-grid-layout';
 import TextWidget from '@/components/widgets/text.vue';
 import WidgetWrapper from '@/components/widgets/widget.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
+import HueLight from '@/components/widgets/hue/light.vue';
+import HueGroup from '@/components/widgets/hue/group/group.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
 import { defaultSettings } from '@/constants/dashboard';
 import { Button } from '@/components/atoms';
@@ -47,6 +49,8 @@ import { Button } from '@/components/atoms';
 		GridLayout: VueGridLayout.GridLayout,
 		TextWidget,
 		HueBridges,
+		HueLight,
+		HueGroup,
 		RejseplanenDeparture,
 		WidgetWrapper,
 		Button,

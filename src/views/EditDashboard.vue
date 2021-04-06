@@ -34,11 +34,18 @@
 			:dragAllowFrom="'.drag'"
 		>
 			<span class="debug">x: {{ item.x }} y: {{ item.y }} w: {{ item.w }} h: {{ item.h }}</span>
-			<WidgetSettings
-				:title="item.type"
-				v-model="DashboardWidgets[itemIndex].settings"
-				@removeWidget="removeWidget(itemIndex)"
-			/>
+			<WidgetWrapper>
+				<div class="settings-header m-b">
+					<span class="drag m-r"><i class="bi bi-arrows-move"></i></span>
+					<h2>{{ item.type }}</h2>
+					<span class="remove m-l" @click="removeWidget(itemIndex)">
+						<i class="bi bi-x-circle"></i>
+					</span>
+				</div>
+				<component :is="widgetSettingsComponent(item.type)"
+					v-model="DashboardWidgets[itemIndex].settings"
+				/>
+			</WidgetWrapper>
 		</GridItem>
 	</GridLayout>
 	<p v-else>No Widgets added yet. Select a widget from the dropdown and click "Add Widget".</p>
@@ -50,8 +57,10 @@ import { Component, Vue } from 'vue-property-decorator';
 import VueGridLayout from 'vue-grid-layout';
 import { Select, Button } from '@/components/atoms';
 import WidgetSettings from '@/components/widgets/settings.vue';
+import HueGroupSettings from '@/components/widgets/hue/group/settings.vue';
 import { WidgetDefaultSettings, WidgetsAvailable } from '@/constants/widgets';
 import { defaultSettings } from '@/constants/dashboard';
+import WidgetWrapper from '@/components/widgets/widget.vue';
 
 @Component({
 	components: {
@@ -60,6 +69,8 @@ import { defaultSettings } from '@/constants/dashboard';
 		WidgetSettings,
 		Select,
 		Button,
+		HueGroup: HueGroupSettings,
+		WidgetWrapper,
 	},
 })
 export default class EditableDashboard extends Vue {
@@ -107,11 +118,10 @@ export default class EditableDashboard extends Vue {
 			0,
 		);
 
-		console.log(maxXCoords, maxYCoords);
 		this.DashboardWidgets.push({
 			...widgetSettings,
 			i: this.DashboardWidgets.length,
-			guid: new Date().toUTCString,
+			guid: Date.now(),
 			x: 0,
 			y: maxYCoords ? maxYCoords + 1 : 0,
 		});
@@ -133,6 +143,14 @@ export default class EditableDashboard extends Vue {
 				id: this.$route.params.id,
 			},
 		});
+	}
+	
+	widgetSettingsComponent(widget: string) {
+		if (this.$options.components && Object.keys(this!.$options!.components).includes(widget)) {
+			return widget;
+		}
+		return 'WidgetSettings';
+		
 	}
 }
 </script>

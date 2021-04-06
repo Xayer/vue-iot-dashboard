@@ -1,24 +1,15 @@
 <template>
-	<WidgetWrapper>
-		<div class="settings-header m-b">
-			<span class="drag m-r"><i class="bi bi-arrows-move"></i></span>
-			<h2>{{ title }}</h2>
-			<span class="remove m-l" @click="$emit('removeWidget')">
-				<i class="bi bi-x-circle"></i>
-			</span>
+	<form @submit.stop.prevent="">
+		<div
+			v-for="(settingValue, settingName) in settings"
+			:key="`${settingName}:${settingValue}`"
+		>
+			<label :for="settingName">{{ settingName }}:
+				<FormInput class="form-field" :value="settings[settingName]" :name="settingName"
+					@input="updateValue(settingName, $event)" />
+			</label>
 		</div>
-		<form @submit.stop.prevent="">
-			<div
-				v-for="(settingValue, settingName) in settings"
-				:key="`${settingName}:${settingValue}`"
-			>
-				<label :for="settingName">{{ settingName }}:
-					<FormInput class="form-field" :value="settings[settingName]" :name="settingName"
-						@input="updateValue(settingName, $event)" />
-				</label>
-			</div>
-		</form>
-	</WidgetWrapper>
+	</form>
 </template>
 <script lang="ts">
 import {
