@@ -6,15 +6,15 @@
 	</p>
 	<input
 	v-model="newTodo"
-	v-on:keyup.enter="addTodo"
+	@keyup.enter="addTodo"
 	placeholder="What needs to be done?"
 	autofocus
 	/>
 	<ol>
 	<li class="m-b" v-for="todo in todos" :key="todo.id">
-		<input type="checkbox" v-model="todo.done" v-on:click="toggleDoneState(todo)"/>
+		<input type="checkbox" v-model="todo.done" @click="toggleDoneState(todo)"/>
 		<label :class="{ done: todo.done }">{{ todo.title }}</label>
-		<Button class="danger m-l" v-on:click="removeTodo(todo)">Remove</Button>
+		<Button class="danger m-l" @click="removeTodo(todo)">Remove</Button>
 	</li>
 	</ol>
   </div>
@@ -37,7 +37,7 @@ export default {
 	methods: {
 		addTodo() {
 			this.todos.push({
-				id: this.todos.length,
+				id: Date.now(),
 				title: this.newTodo,
 				done: false,
 			});

@@ -50,7 +50,8 @@ export default class HuegroupNameWidget extends Vue {
 		if (!this.groupName || !this.devices.groups) {
 			return null;
 		}
-		return [...Object.values(this.devices.groups)].find((groupNameToSearchIn) => groupNameToSearchIn.name === this.groupName);
+		return [...Object.values(this.devices.groups)]
+			.find((groupNameToSearchIn) => groupNameToSearchIn.name === this.groupName);
 	}
 }
 </script>
