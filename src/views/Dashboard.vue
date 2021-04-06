@@ -46,6 +46,8 @@ import HueGroup from '@/components/widgets/hue/group/group.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
 import { defaultSettings } from '@/constants/dashboard';
 import { Button } from '@/components/atoms';
+import TodoList from '@/components/widgets/todo.vue';
+
 
 @Component({
 	components: {
@@ -58,6 +60,7 @@ import { Button } from '@/components/atoms';
 		RejseplanenDeparture,
 		WidgetWrapper,
 		Button,
+		TodoList,
 	},
 })
 export default class Dashboard extends Vue {

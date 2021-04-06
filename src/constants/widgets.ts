@@ -4,6 +4,7 @@ export const WidgetsAvailable = {
 	HueLight: "HueLight",
 	HueGroup: "HueGroup",
 	RejseplanenDeparture: "RejseplanenDeparture",
+	TodoList: 'TodoList',
 };
 
 export const WidgetTitles: { [key: string]: string } = {
@@ -12,6 +13,7 @@ export const WidgetTitles: { [key: string]: string } = {
 	[WidgetsAvailable.HueLight]: "HueLight",
 	[WidgetsAvailable.HueGroup]: "Hue Group",
 	[WidgetsAvailable.RejseplanenDeparture]: "Departure Board",
+	[WidgetsAvailable.TodoList]: 'Todo List',
 };
 
 export const WidgetDefaultSettings: { [key: string]: Widget } = {
@@ -74,5 +76,17 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		x: 0,
 		i: 1,
 		minH: 2,
+	},
+	[WidgetsAvailable.TodoList]: {
+		type: WidgetsAvailable.TodoList,
+		title: WidgetTitles[WidgetsAvailable.TodoList],
+		settings: {
+			todos: [],
+		},
+		w: 6,
+		h: 1,
+		y: 2,
+		x: 6,
+		i: 2,
 	},
 };
