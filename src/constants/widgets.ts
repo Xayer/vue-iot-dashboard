@@ -66,12 +66,13 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		title: WidgetTitles[WidgetsAvailable.RejseplanenDeparture],
 		settings: {
 			title: "Departures",
-			stationId: "461682600",
+			stationId: "461853100",
 		},
 		w: 6,
-		h: 1,
-		y: 2,
-		x: 6,
-		i: 2,
+		h: 2,
+		y: 0,
+		x: 0,
+		i: 1,
+		minH: 2,
 	},
 };
