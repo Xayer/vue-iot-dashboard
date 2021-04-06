@@ -1,10 +1,19 @@
 <template>
 	<div>
-		<span :title="hueAvailable ? 'Connected' : 'Disconnected' " @click="goToIntegration">
-			<i class="bi bi-lightbulb m-0"
-				:class="hueAvailable && online && token ? 'on': 'off'"></i>
-			<span class="off" v-if="!hueAvailable || !token">!</span>
-		</span>
+		<span v-if="bridgeAddressNotFound"><input type="text" v-model="bridgeAddress"></span>
+		<span>
+			<i class="bi bi-lightbulb"
+				:class="hueAvailable && online && token ? 'on': 'off'"></i>Hue
+			<Button class="primary"
+				v-if="hueAvailable
+				&& token
+				&& devices
+				&& devices.lights"
+			>{{ lightLabel }} Lights</Button></span>
+		<Button class="danger"
+			v-if="!hueAvailable || !token"
+			@click="registerToken()"
+		>!</Button>
 		<span class="loading" v-if="loading">Loading</span>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
@@ -46,12 +55,14 @@ export default class HueIntegration extends Vue {
 
 	errorMessage: string = '';
 
-	devicesTimeout!: ReturnType<typeof setTimeout>;
-
 	// eslint-disable-next-line class-methods-use-this
 	created() {
 		if (localStorage.bridge_address) {
 			this.bridgeAddress = localStorage.bridge_address;
+			this.detectDevices();
+			setInterval(() => {
+				this.detectDevices();
+			}, 3000);
 		} else {
 			this.bridgeAddressNotFound = true;
 		}
@@ -69,17 +80,6 @@ export default class HueIntegration extends Vue {
 		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
 		this.bridgeAddressNotFound = false;
 		this.detectDevices();
-	}
-
-	@Watch('bridgeAddressNotFound')
-	bridgeAddressChanged(found: boolean) {
-		if (found) {
-			this.devicesTimeout = setInterval(() => {
-				this.detectDevices();
-			}, 3000);
-		} else {
-			clearInterval(this.devicesTimeout);
-		}
 	}
 
 	registerToken() {
@@ -102,16 +102,23 @@ export default class HueIntegration extends Vue {
 	get lightLabel() {
 		return this.devices && this.devices.lights ? Object.keys(this.devices.lights).length : 'No';
 	}
-
-	goToIntegration() {
-		this.$router.push({
-			name: 'hue-integration',
-		});
-	}
 }
 </script>
 
 <style lang="scss" scoped>
+	div {
+		display: flow-root;
+		padding: 0.5rem;
+		flex-direction: row;
+		text-align: left;
+		align-items: center;
+		.btn {
+			margin-block: {
+				start: 0.25rem;
+			}
+		}
+	}
+
 	.error {
 		padding: 5px 7px;
 		margin: 0;
@@ -120,4 +127,8 @@ export default class HueIntegration extends Vue {
 
 	.on { color: var(--success); }
 	.off { color: var(--danger); }
+
+	input {
+		display: block;
+	}
 </style>

@@ -6,14 +6,19 @@
 			:to="navItem"
 			v-text="navItem.name"
 		></router-link>
-		<slot></slot>
+		<IntegrationsPanel />
 	</nav>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import IntegrationsPanel from '@/components/integrations/index.vue';
 
-@Component({})
+@Component({
+	components: {
+		IntegrationsPanel,
+	},
+})
 export default class Navbar extends Vue {
 	items: Array<{name: string, path: string}> = [];
 
@@ -22,40 +27,51 @@ export default class Navbar extends Vue {
 	}
 
 	created() {
-		(this.$router as any).options.routes.forEach((route: {name: string, path: string}) => {
-			this.items.push({
-				name: route.name,
-				path: route.path,
+		(this.$router as any).options.routes
+			.forEach((route: {name: string, path: string; hidden: boolean}) => {
+				if (route.hidden) {
+					return;
+				}
+				this.items.push({
+					name: route.name,
+					path: route.path,
+				});
 			});
-		});
 	}
 }
 </script>
 
 <style lang="scss" scoped>
 	nav {
-		background-color: #2d3b42;
-		width: 100%;
+		background: var(--navbar-bg);
+		font-family: var(--font-display);
+		width: var(--navbar-width);
 		z-index: 1;
-		display: flex;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
 		justify-content: center;
-		align-items: center;
+		overflow: auto;
+		box-sizing: border-box;
+		flex-direction: column;
 		a {
+			display: block;
 			&:hover {
-				background-color: rgba(invert($color: #ff7300), .125);
+				border-bottom: 3px var(--info) solid;
 			}
+			&.router-link-active,
 			&.router-link-exact-active {
-				border-bottom: 3px #ff7300 solid;
-				background-color: rgba(#ff7300, 0.25);
+				border-bottom: 3px var(--warning) solid;
 			}
 			border-bottom: 3px transparent solid;
-			text-transform: capitalize;
-			color: #eee;
+			transition: all .3s ease;
+			text-transform: uppercase;
+			color: var(--text-color);
 			text-decoration: none;
-			padding-block-start: 0.5rem;
-			padding-block-end: 0.5rem;
-			padding-inline-start: 0.5rem;
-			padding-inline-end: 0.5rem;
+			text-align: left;
+			margin: var(--navbar-margin);
+			padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
 		}
 	}
 </style>

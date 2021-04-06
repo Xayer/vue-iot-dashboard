@@ -1,5 +1,9 @@
 <template>
   <div>
+	<portal to="page-title">Dashboard</portal>
+	<portal to="page-actions">
+		<Button @click="editDashboard" class="primary m-b">Edit</Button>
+	</portal>
     <GridLayout v-if="getDashboardWidgets"
 	:layout.sync="DashboardWidgets"
 	:cols="defaultSettings.columns"
@@ -18,9 +22,14 @@
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
-			class="widget"
+			:min-w="item.minW || 1"
+			:min-h="item.minH || 1"
+			:max-w="item.maxW || Infinity"
+			:max-h="item.maxH || Infinity"
 		>
-			<component :is="item.type" :settings="item.settings"></component>
+			<WidgetWrapper>
+				<component :is="item.type" :settings="item.settings"></component>
+			</WidgetWrapper>
 		</GridItem>
 	</GridLayout>
   </div>
@@ -29,11 +38,16 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import VueGridLayout from 'vue-grid-layout';
-import { Dictionary } from '@/types/dictionary';
 import TextWidget from '@/components/widgets/text.vue';
+import WidgetWrapper from '@/components/widgets/widget.vue';
 import HueBridges from '@/components/widgets/hue/bridges.vue';
+import HueLight from '@/components/widgets/hue/light.vue';
+import HueGroup from '@/components/widgets/hue/group/group.vue';
 import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue';
 import { defaultSettings } from '@/constants/dashboard';
+import { Button } from '@/components/atoms';
+import TodoList from '@/components/widgets/todo.vue';
+
 
 @Component({
 	components: {
@@ -41,7 +55,12 @@ import { defaultSettings } from '@/constants/dashboard';
 		GridLayout: VueGridLayout.GridLayout,
 		TextWidget,
 		HueBridges,
+		HueLight,
+		HueGroup,
 		RejseplanenDeparture,
+		WidgetWrapper,
+		Button,
+		TodoList,
 	},
 })
 export default class Dashboard extends Vue {
@@ -76,32 +95,14 @@ export default class Dashboard extends Vue {
 	saveWidgetLayout(layout: Array<Object>) {
 		localStorage.widgets = JSON.stringify(layout);
 	}
+
+	editDashboard() {
+		this.$router.push({
+			name: 'dashboard-edit',
+			params: {
+				id: this.$route.params.id,
+			},
+		});
+	}
 }
 </script>
-<style lang="scss">
-
-	.vue-grid-item {
-		background-color: #2d3b42;
-		padding: 15px;
-		box-sizing: border-box;
-		overflow: hidden;
-		&>.vue-resizable-handle {
-			background: none;
-			width: 15px;
-			height: 15px;
-			padding: 0;
-			margin: {
-				block-end: 0.35rem;
-				inline-end: 0.35rem;
-			};
-			border: {
-				block-end: 0.125rem;
-				block-start: 0;
-				inline-start: 0;
-				inline-end: 0.125rem;
-				color: #eee;
-				style: solid;
-			}
-		}
-	}
-</style>

@@ -1,9 +1,18 @@
 <template>
   <div>
-	<Button @click.native="saveWidgetLayout">Save Dashboard</Button>
-	<span class="error" v-show="errorMessage">{{ errorMessage }}</span>
-	<Select :options="widgetOptions" v-model="selectedWidget" />
-	<Button @click.native="addWidget">Add Widget</Button>
+	<portal to="page-title">Edit Dashboard</portal>
+	<portal to="page-actions">
+		<Button class="m-r m-b" @click="viewDashboard" key="view-dashboard">View Dashboard</Button>
+		<span class="error m-b" v-show="errorMessage" key="dashboardErrors">{{ errorMessage }}</span>
+		<Select class="m-b"
+			:options="widgetOptions"
+			v-model="selectedWidget"
+			key="selectDashboardWidgets" />
+		<Button class="m-l m-b" @click="addWidget" key="addWidget">Add Widget</Button>
+		<Button class="primary m-l m-b"
+			@click="saveWidgetLayout"
+			key="saveDashboard">Save Dashboard</Button>
+	</portal>
     <GridLayout v-if="DashboardWidgets"
 		:layout.sync="DashboardWidgets"
 		:cols="defaultSettings.columns"
@@ -22,15 +31,25 @@
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
+			:min-w="item.minW || 1"
+			:min-h="item.minH || 1"
+			:max-w="item.maxW || Infinity"
+			:max-h="item.maxH || Infinity"
 			:dragAllowFrom="'.drag'"
 		>
-			x: {{ item.x }}
-			y: {{ item.y }}
-			<WidgetSettings
-				:title="item.type"
-				v-model="DashboardWidgets[itemIndex].settings"
-				@removeWidget="removeWidget(itemIndex)"
-			/>
+			<span class="debug">x: {{ item.x }} y: {{ item.y }} w: {{ item.w }} h: {{ item.h }}</span>
+			<WidgetWrapper>
+				<div class="settings-header m-b">
+					<span class="drag m-r"><i class="bi bi-arrows-move"></i></span>
+					<h2>{{ item.type }}</h2>
+					<span class="remove m-l" @click="removeWidget(itemIndex)">
+						<i class="bi bi-x-circle"></i>
+					</span>
+				</div>
+				<component :is="widgetSettingsComponent(item.type)"
+					v-model="DashboardWidgets[itemIndex].settings"
+				/>
+			</WidgetWrapper>
 		</GridItem>
 	</GridLayout>
 	<p v-else>No Widgets added yet. Select a widget from the dropdown and click "Add Widget".</p>
@@ -42,8 +61,10 @@ import { Component, Vue } from 'vue-property-decorator';
 import VueGridLayout from 'vue-grid-layout';
 import { Select, Button } from '@/components/atoms';
 import WidgetSettings from '@/components/widgets/settings.vue';
+import HueGroupSettings from '@/components/widgets/hue/group/settings.vue';
 import { WidgetDefaultSettings, WidgetsAvailable } from '@/constants/widgets';
 import { defaultSettings } from '@/constants/dashboard';
+import WidgetWrapper from '@/components/widgets/widget.vue';
 
 @Component({
 	components: {
@@ -52,6 +73,8 @@ import { defaultSettings } from '@/constants/dashboard';
 		WidgetSettings,
 		Select,
 		Button,
+		HueGroup: HueGroupSettings,
+		WidgetWrapper,
 	},
 })
 export default class EditableDashboard extends Vue {
@@ -99,11 +122,10 @@ export default class EditableDashboard extends Vue {
 			0,
 		);
 
-		console.log(maxXCoords, maxYCoords);
 		this.DashboardWidgets.push({
 			...widgetSettings,
 			i: this.DashboardWidgets.length,
-			guid: new Date().toUTCString,
+			guid: Date.now(),
 			x: 0,
 			y: maxYCoords ? maxYCoords + 1 : 0,
 		});
@@ -117,45 +139,35 @@ export default class EditableDashboard extends Vue {
 	removeWidget(widgetIndex: number) {
 		this.DashboardWidgets.splice(widgetIndex, 1);
 	}
+
+	viewDashboard() {
+		this.$router.push({
+			name: 'dashboard',
+			params: {
+				id: this.$route.params.id,
+			},
+		});
+	}
+	
+	widgetSettingsComponent(widget: string) {
+		if (this.$options.components && Object.keys(this!.$options!.components).includes(widget)) {
+			return widget;
+		}
+		return 'WidgetSettings';
+		
+	}
 }
 </script>
 <style lang="scss">
 	.error {
 		color: red;
 	}
-	.vue-grid-item{
-		background-color: #2d3b42;
-		padding: 15px;
-		box-sizing: border-box;
-		& > .vue-resizable-handle {
-			background: none;
-			width: 15px;
-			height: 15px;
-			padding: 0;
-			border: {
-				block-end: 0.125rem;
-				block-start: 0;
-				inline-start: 0;
-				inline-end: 0.125rem;
-				color: #eee;
-				style: solid;
-			}
-		}
-		.drag {
-			position: absolute;
-			top: 0;
-			left: 0;
-		}
-		.remove {
-			position: absolute;
-			top: 0;
-			right: 0;
-			cursor: pointer;
-		}
-
-		.vue-resizable-handle, .drag, .remove {
-			margin: 0.35rem;
-			color: #fff;
-		}
+	.debug {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+		color: var(--muted);
 	}
 </style>

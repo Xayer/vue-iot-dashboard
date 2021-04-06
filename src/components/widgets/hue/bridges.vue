@@ -18,24 +18,24 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
-import HueLight from '@/components/widgets/hue/HueLight.vue';
+import HueLight from '@/components/widgets/hue/light.vue';
 
 @Component({
 	components: { HueLight },
 	computed: {
 		...mapGetters({
 			devices: 'hue/devices',
+			token: 'hue/token',
 			hueAvailable: 'hue/available',
 		}),
 	},
 })
 export default class HueBridges extends Vue {
+	token!: string;
+
+	hueAvailable!: boolean;
+
 	@Prop() private settings!: string;
-
-	// eslint-disable-next-line class-methods-use-this
-	created() {
-
-	}
 }
 </script>
 

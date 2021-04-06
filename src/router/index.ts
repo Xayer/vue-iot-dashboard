@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
 import EditDashboard from '../views/EditDashboard.vue';
+import Integrations from '../views/Integrations.vue';
 
 Vue.use(VueRouter);
 
@@ -9,12 +10,26 @@ const routes = [
 	{
 		path: '/',
 		name: 'dashboard',
-		component: Dashboard,
+		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
 	},
 	{
 		path: '/edit',
 		name: 'dashboard-edit',
-		component: EditDashboard,
+		component: () => import(/* webpackChunkName: "edit-dashboard" */ '../views/EditDashboard.vue'),
+		hidden: true,
+	},
+	{
+		path: '/integrations',
+		name: 'integrations',
+		component: () => import(/* webpackChunkName: "integrations" */ '../views/Integrations.vue'),
+		children: [
+			{
+				path: '/integrations/hue',
+				name: 'hue-integration',
+				hidden: true,
+				component: () => import(/* webpackChunkName: "hue-integration" */ '../views/integrations/hue.vue'),
+			},
+		],
 	},
 	/* {
 		path: '/:slug',
@@ -29,6 +44,7 @@ const routes = [
 	{
 		path: '/about',
 		name: 'about',
+		hidden: true,
 		// route level code-splitting
 		// this generates a separate chunk (about.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.

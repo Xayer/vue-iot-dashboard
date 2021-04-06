@@ -1,17 +1,21 @@
 <template>
-	<div id="app">
-		<navigation>
-			<button class="btn toggle" @click="toggleIntegrations">=</button>
-		</navigation>
+	<div id="app" :class="{ 'menu-open': menuShown }">
+		<header>
+			<Button @click="toggleMenu">=</Button>
+			<h1 class="page-title"><portal-target name="page-title" /></h1>
+			<portal-target name="page-actions" />
+		</header>
 		<transition name="slide-fade">
-			<integrations v-if="integrationsShown"></integrations>
+			<navigation v-show="menuShown" />
 		</transition>
-		<router-view></router-view>
+		<router-view :key="this.$router.currentRoute.fullPath"></router-view>
 	</div>
 </template>
 
 <script lang="ts">
+import { PortalTarget } from 'portal-vue';
 import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Button } from '@/components/atoms';
 import Navigation from '@/components/navbar.vue';
 import Integrations from '@/components/integrations/index.vue';
 
@@ -19,75 +23,153 @@ import Integrations from '@/components/integrations/index.vue';
 	components: {
 		Navigation,
 		Integrations,
+		Button,
+		PortalTarget,
 	},
 })
 export default class App extends Vue {
-	integrationsShown: boolean = false;
+	menuShown: boolean = false;
 
 	created() {
-		if (localStorage.integrationsBar) {
-			this.integrationsShown = localStorage.integrationsBar;
+		if (localStorage.menuShown) {
+			this.menuShown = localStorage.menuShown;
 		}
 	}
 
-	@Watch('integrationsShown')
+	@Watch('menuShown')
 	// eslint-disable-next-line class-methods-use-this
 	integrationsDisplayChange(isShown: boolean) {
 		if (isShown) {
-			localStorage.integrationsBar = isShown;
+			localStorage.menuShown = isShown;
 		} else {
-			localStorage.removeItem('integrationsBar');
+			localStorage.removeItem('menuShown');
 		}
 	}
 
-	toggleIntegrations() {
-		this.integrationsShown = !this.integrationsShown;
+	toggleMenu() {
+		this.menuShown = !this.menuShown;
 	}
 }
 </script>
 
 <style lang="scss">
-body, html { padding: 0; margin: 0; background-color: #263238; color: #bbbbbb; }
-#app {
-	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+:root {
+	--bg-color: #f4f5f6;
+	--primary: #445eee;
+	--danger: #ee4444;
+	--warning: #ff7300;
+	--success: #04d442;
+	--info: #00a2ff;
+	--muted: #a4aabc;
+	--radius: 20px;
+	--padding: 15px;
+	--white: #fff;
+	--black: #000;
+	--text-color: #444;
+	--widget-bg: var(--white);
+	--font-base: 'Work Sans', sans-serif;
+	--font-display: 'Poppins', sans-serif;
+	--button-text-color: var(--white);
+	--navbar-bg: var(--white);
+	--transition-global: all .3s ease;
+	--navbar-transition: var(--transition-global);
+	--navbar-width: 15vw;
+	--navbar-margin: var(--padding) var(--padding);
+	--app-padding: 15px;
+	--box-shadow-general: 0px 0px 25px -5px;
+	--button-box-shadow: var(--box-shadow-general);
+	--input-box-shadow: var(--box-shadow-general);
+	--input-bg: var(--bg-color);
+	--input-text-color: var(--text-color);
+
+	@media (prefers-color-scheme: dark) {
+		// DARK MODE BABY
+		--bg-color: #263238;
+		--text-color: var(--white);
+		--dark-bg-alt: #2f3d44;
+		--navbar-bg: var(--dark-bg-alt);
+		--widget-bg: var(--dark-bg-alt);
+	}
+
+}
+
+body, html {
+	padding: 0;
+	margin: 0;
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	font-family: var(--font-base);
+	overflow-x: hidden;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
+	font-weight: 400;
+	min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-display);
+	font-weight: 600;
+	margin: 0;
+	padding: 0;
+}
+
+#app {
+	margin-left: 0;
+	transition: var(--navbar-transition);
+	width: 100%;
+	padding: 0 var(--app-padding);
+	box-sizing: border-box;
+	&.menu-open {
+		margin-left: calc(var(--navbar-width));
+		width: calc(100% - var(--navbar-width));
+	}
+
+	header {
+		padding-top: var(--app-padding);
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-rows: 1;
+		align-items: center;
+		.page-title {
+			margin-inline-start: var(--app-padding);
+		}
+	}
 }
 
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .slide-fade-enter-active {
-	transition: all .3s ease;
+	transition: var(--navbar-transition);
 }
 .slide-fade-leave-active {
-	transition: all .3s;
+	transition: var(--navbar-transition);
 }
 .slide-fade-enter, .slide-fade-leave-to
 	/* .slide-fade-leave-active below version 2.1.8 */ {
-	transform: translateX(25%);
+	transform: translateX(-var(--navbar-width));
 	opacity: 0;
 }
 
-.btn {
-	.toggle {
-		z-index: 9999;
+.vue-grid-layout {
+	margin-left: calc(var(--app-padding) - var(--app-padding) * 2);
+	margin-right: calc(var(--app-padding) - var(--app-padding) * 2);
+}
+
+.m {
+	&-r {
+		margin-right: var(--padding);
 	}
-	margin: {
-		inline-start: 0.5rem;
-		inline-end: 0.5rem;
+	&-l {
+		margin-left: var(--padding);
 	}
-	padding: 0.25rem 0.5rem;
-	background-color: transparent;
-	border-style: solid !important;
-	border: 2px solid #007acc;
-	color: #007acc !important;
-	box-shadow: 0px 0px 3px #007acc, inset 0px 0px 3px #007acc;
-	color: #bbbbbb;
-	&.btn-danger {
-		border-color: red;
-		color: red !important;
-		box-shadow: 0px 0px 3px red, inset 0px 0px 3px red;
+	&-b {
+		margin-bottom: var(--padding);
+	}
+	&-t {
+		margin-top: var(--padding);
+	}
+	&-0 {
+		margin: 0;
 	}
 }
 </style>

@@ -1,10 +1,23 @@
 <template>
 	<div>
-		<span :title="hueAvailable ? 'Connected' : 'Disconnected' " @click="goToIntegration">
-			<i class="bi bi-lightbulb m-0"
+		<h4 :title="hueAvailable ? 'Connected' : 'Disconnected' ">
+			<i class="bi bi-lightbulb"
 				:class="hueAvailable && online && token ? 'on': 'off'"></i>
-			<span class="off" v-if="!hueAvailable || !token">!</span>
+				Hue {{ hueAvailable ? 'Connected' : 'Disconnected' }}
+		</h4>
+		<Button class="m-t primary"
+			v-if="hueAvailable
+			&& token
+			&& devices
+			&& devices.lights"
+		>{{ lightLabel }} Lights</Button>
+		<span v-if="bridgeAddressNotFound" class="m-r">
+			<input type="text" v-model="bridgeAddress" placeholder="Hue Bridge IP">
 		</span>
+		<Button class="danger"
+			v-if="!hueAvailable || !token"
+			@click="registerToken()"
+		>!</Button>
 		<span class="loading" v-if="loading">Loading</span>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
@@ -52,23 +65,10 @@ export default class HueIntegration extends Vue {
 	created() {
 		if (localStorage.bridge_address) {
 			this.bridgeAddress = localStorage.bridge_address;
+			this.bridgeAddressNotFound = false;
 		} else {
 			this.bridgeAddressNotFound = true;
 		}
-	}
-
-	detectDevices() {
-		this.$store.dispatch('hue/getDevices').catch((error: any) => {
-			console.log(error);
-			this.errorMessage = error.description;
-		});
-	}
-
-	@Watch('bridgeAddress')
-	commitBridgeAddress(address: string) {
-		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
-		this.bridgeAddressNotFound = false;
-		this.detectDevices();
 	}
 
 	@Watch('bridgeAddressNotFound')
@@ -82,7 +82,19 @@ export default class HueIntegration extends Vue {
 		}
 	}
 
+	detectDevices() {
+		this.$store.dispatch('hue/getDevices').catch((error: any) => {
+			console.log(error);
+			this.errorMessage = error.description;
+		});
+	}
+
 	registerToken() {
+		if (this.bridgeAddressNotFound) {
+			this.$store.commit('hue/SET_BRIDGE_ADDRESS', this.bridgeAddress);
+			this.bridgeAddressNotFound = false;
+			this.detectDevices();
+		}
 		if (this.token) {
 			return;
 		}
@@ -101,12 +113,6 @@ export default class HueIntegration extends Vue {
 
 	get lightLabel() {
 		return this.devices && this.devices.lights ? Object.keys(this.devices.lights).length : 'No';
-	}
-
-	goToIntegration() {
-		this.$router.push({
-			name: 'hue-integration',
-		});
 	}
 }
 </script>
