@@ -1,7 +1,7 @@
 <template>
 	<form @submit.stop.prevent="">
         <label for="hueGroup">Hue Group
-            <Select class="form-field" :value="group" :options="options" name="hueGroup"
+            <Select class="m-t" :value="group" :options="options" name="hueGroup"
                 @input="updateValue('group', $event)" />
         </label>
     </form>
@@ -31,34 +31,34 @@ export default class HueGroupSettings extends Vue {
 
     group = '';
 
-	@VModel() readonly settings!: WidgetSetting[];
+	@VModel() readonly settings!: { [key: string]: WidgetSetting };
 
 	@Prop() title!: string;
 
 	get groupFromSettings() {
-		if (!this.settings) {
-			return '';
-		}
-		const settingIndex: number = Object.keys(this.settings).findIndex((setting) => setting === 'group');
-		if (settingIndex > -1) {
-			return this.settings[settingIndex] as unknown as string;
-		}
-		return null;
+		return this.settings.group ? this.settings.group : null;
 	}
 
 	get options() {
     	if (!this.devices.groups) {
     		return [];
     	}
-    	return Object.values(this.devices.groups).map((lightGroup) => ({
-    		text: lightGroup.name,
-    		value: lightGroup.name,
-    	}));
+    	return [
+			{
+				text: 'Select Group',
+				value: '',
+				disabled: true,
+			},
+			...Object.values(this.devices.groups).map((lightGroup) => ({
+				text: lightGroup.name,
+				value: lightGroup.name,
+    	    }))
+		];
 	}
 
 	mounted() {
 		if (this.groupFromSettings) {
-			this.group = this.groupFromSettings;
+			this.group = this.settings.group ? this.settings.group as unknown as string : '';
 		}
 	}
 
@@ -75,3 +75,10 @@ export default class HueGroupSettings extends Vue {
     }
 }
 </script>
+<style scoped>
+    form, label {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+</style>

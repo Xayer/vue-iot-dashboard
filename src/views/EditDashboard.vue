@@ -31,6 +31,10 @@
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
+			:min-w="item.minW || 1"
+			:min-h="item.minH || 1"
+			:max-w="item.maxW || Infinity"
+			:max-h="item.maxH || Infinity"
 			:dragAllowFrom="'.drag'"
 		>
 			<span class="debug">x: {{ item.x }} y: {{ item.y }} w: {{ item.w }} h: {{ item.h }}</span>

@@ -53,11 +53,13 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		settings: {
 			group: "",
 		},
-		w: 1,
-		h: 1,
+		w: 3,
+		h: 2,
 		y: 0,
 		x: 0,
 		i: 1,
+		minW: 3,
+		minH: 2,
 	},
 	[WidgetsAvailable.RejseplanenDeparture]: {
 		type: WidgetsAvailable.RejseplanenDeparture,

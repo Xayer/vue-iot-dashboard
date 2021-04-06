@@ -7,9 +7,13 @@ type Widget = {
 	x: number;
 	y: number;
 	i: number;
+	minW?: number;
+	minH?: number;
+	maxW?: number;
+	maxH?: number;
 	guid?: string;
-}
+};
 
 type WidgetSetting = {
 	[key: string]: any | null;
-}
+};

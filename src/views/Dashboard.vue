@@ -22,6 +22,10 @@
 			:h="item.h"
 			:x="item.x"
 			:y="item.y"
+			:min-w="item.minW || 1"
+			:min-h="item.minH || 1"
+			:max-w="item.maxW || Infinity"
+			:max-h="item.maxH || Infinity"
 		>
 			<WidgetWrapper>
 				<component :is="item.type" :settings="item.settings"></component>

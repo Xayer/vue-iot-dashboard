@@ -1,24 +1,23 @@
 <template>
 	<div>
-		<section v-if="hueAvailable && devices">
-			<article v-for="(group, index) in devices.groups" :key="index">
-				<h2 v-text="group.name"></h2>
-				<hue-light
-					:light="devices.lights[light]"
-					:hue-id="light"
-					v-for="(light, lightid) in group.lights"
-					:key="lightid"
-				/>
-			</article>
+		<section class="light-group" v-if="hueAvailable && devices && group">
+			<h2 v-text="group.name"></h2>
+			<HueLight
+				v-for="(light, lightid) in group.lights"
+				:key="lightid"
+				:light="devices.lights[light]"
+				:hue-id="light"
+			/>
 		</section>
-		<p v-else>no active connection to Hue Bridge</p>
+		<p v-if="!group">Group was not found.</p>
+		<p v-if="!hueAvailable || !devices">no active connection to Hue Bridge</p>
 	</div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { AxiosResponse } from 'axios';
 import { mapGetters } from 'vuex';
 import HueLight from '@/components/widgets/hue/light.vue';
+import { Devices } from '@/types/hue';
 
 @Component({
 	components: { HueLight },
@@ -30,12 +29,29 @@ import HueLight from '@/components/widgets/hue/light.vue';
 		}),
 	},
 })
-export default class HueBridges extends Vue {
+export default class HuegroupNameWidget extends Vue {
 	token!: string;
+
+	groupName = '';
+
+	devices!: Devices;
 
 	hueAvailable!: boolean;
 
-	@Prop() private settings!: string;
+	@Prop() private settings!: { [key: string]: WidgetSetting };
+
+	created() {
+		if (this.settings.group) {
+			this.groupName = this.settings.group as unknown as string;
+		}
+	}
+
+	get group() {
+		if (!this.groupName || !this.devices.groups) {
+			return null;
+		}
+		return [...Object.values(this.devices.groups)].find((groupNameToSearchIn) => groupNameToSearchIn.name === this.groupName);
+	}
 }
 </script>
 
@@ -58,5 +74,10 @@ export default class HueBridges extends Vue {
 		margin: 0;
 		background-color: darken(#853838, 25);
 		color: #853838;
+	}
+
+	.light-group {
+		display: flex;
+		flex-direction: column;
 	}
 </style>

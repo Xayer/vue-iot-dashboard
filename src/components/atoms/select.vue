@@ -5,6 +5,7 @@
 			v-text="option.text"
 			:key="`${option.text}:${option.value}`"
 			:value="option.value"
+			:disabled="option.disabled || false"
 		></option>
 	</select>
 </template>

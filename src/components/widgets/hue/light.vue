@@ -1,20 +1,23 @@
 <template>
 	<div
-		:class="{'hue-light':true, 'on': light.state.on}"
-		:style="{'background-color': (light.state.on && light.state.hue ? hexColor : '')}"
+		class="hue-light"
 		@click="toggle(!light.state.on)"
 	>
-		<h3>{{light.name}}</h3>
-		<template v-if="!isNaN(light.state.bri)">
+		<i class="bulb bi"
+			:class="light.state.on ? 'bi-lightbulb-fill': 'bi-lightbulb-off-fill'"
+			:style="{'color': (light.state.on && light.state.hue ? hexColor : '')}"
+		/>
+		<h3 class="name">{{light.name}}</h3>
+		<span v-if="!isNaN(light.state.bri)">
 			{{Math.round(light.state.bri/255*100)}} % <br/>
-		</template>
-		<input
+		</span>
+		<!-- <input
 			ref="color"
 			type="color"
 			@change="colour(!light.state.on)"
 			v-if="light.state.hue"
 			:value="hexColor"
-		>
+		> -->
 	</div>
 </template>
 
@@ -98,17 +101,20 @@ export default class HueBridges extends Vue {
 }
 </script>
 
-<style>
+<style lang="scss">
 .hue-light {
-	display: inline-block;
-	padding: 10px;
-	margin: 5px;
-	border-radius: 10px;
-	background-color: rgba(0,0,0,0.1);
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
+	border-radius: var(--radius);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	vertical-align: middle;
 	cursor: pointer;
+	&, .bulb {
+		transition: var(--transition-global);
+	}
 }
 h3 {
 	padding: 0;
