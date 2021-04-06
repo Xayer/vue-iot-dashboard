@@ -1,6 +1,6 @@
 <template>
 	<div class="integrations">
-		<hue />
+		<hue class="m-r" />
 		<network />
 	</div>
 </template>

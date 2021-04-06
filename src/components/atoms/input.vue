@@ -20,6 +20,9 @@ export default class Input extends Vue {
 		transition: var(--transition-global);
 		background-color: var(--input-bg);
 		color: var(--input-text-color);
+		&::placeholder {
+			color: var(--input-text-color);
+		}
 		&:focus {
 			outline: none;
 			box-shadow: var(--primary) var(--input-box-shadow);

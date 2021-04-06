@@ -8,7 +8,7 @@
 		<transition name="slide-fade">
 			<navigation v-show="menuShown" />
 		</transition>
-		<router-view></router-view>
+		<router-view :key="this.$router.currentRoute.fullPath"></router-view>
 	</div>
 </template>
 
@@ -167,6 +167,9 @@ h1, h2, h3, h4, h5, h6 {
 	}
 	&-t {
 		margin-top: var(--padding);
+	}
+	&-0 {
+		margin: 0;
 	}
 }
 </style>

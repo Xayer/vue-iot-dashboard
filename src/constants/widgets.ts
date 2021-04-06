@@ -1,12 +1,14 @@
 export const WidgetsAvailable = {
 	TextWidget: 'TextWidget',
 	HueBridges: 'HueBridges',
+	HueLight: 'Huelight',
 	RejseplanenDeparture: 'RejseplanenDeparture',
 };
 
 export const WidgetTitles: { [key: string]: string} = {
 	[WidgetsAvailable.TextWidget]: 'Text',
 	[WidgetsAvailable.HueBridges]: 'Hue',
+	[WidgetsAvailable.HueLight]: 'HueLight',
 	[WidgetsAvailable.RejseplanenDeparture]: 'Departure Board',
 };
 

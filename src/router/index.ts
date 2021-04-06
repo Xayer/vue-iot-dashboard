@@ -22,6 +22,14 @@ const routes = [
 		path: '/integrations',
 		name: 'integrations',
 		component: () => import(/* webpackChunkName: "integrations" */ '../views/Integrations.vue'),
+		children: [
+			{
+				path: '/integrations/hue',
+				name: 'hue-integration',
+				hidden: true,
+				component: () => import(/* webpackChunkName: "hue-integration" */ '../views/integrations/hue.vue'),
+			},
+		],
 	},
 	/* {
 		path: '/:slug',

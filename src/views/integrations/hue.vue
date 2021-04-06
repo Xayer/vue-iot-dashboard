@@ -1,10 +1,16 @@
 <template>
 	<div>
-		<span :title="hueAvailable ? 'Connected' : 'Disconnected' " @click="goToIntegration">
-			<i class="bi bi-lightbulb m-0"
+		<span :title="hueAvailable ? 'Connected' : 'Disconnected' ">
+			<i class="bi bi-lightbulb"
 				:class="hueAvailable && online && token ? 'on': 'off'"></i>
-			<span class="off" v-if="!hueAvailable || !token">!</span>
 		</span>
+        <span v-if="bridgeAddressNotFound" class="m-r">
+            <input type="text" v-model="bridgeAddress" placeholder="Hue Bridge IP">
+        </span>
+		<Button class="danger"
+			v-if="!hueAvailable || !token"
+			@click="registerToken()"
+		>!</Button>
 		<span class="loading" v-if="loading">Loading</span>
 		<span class="error" v-if="errorMessage" v-text="errorMessage"></span>
 	</div>
@@ -51,9 +57,6 @@ export default class HueIntegration extends Vue {
 		if (localStorage.bridge_address) {
 			this.bridgeAddress = localStorage.bridge_address;
 			this.detectDevices();
-			setInterval(() => {
-				this.detectDevices();
-			}, 3000);
 		} else {
 			this.bridgeAddressNotFound = true;
 		}
@@ -64,16 +67,17 @@ export default class HueIntegration extends Vue {
 			console.log(error);
 			this.errorMessage = error.description;
 		});
-	}
-
-	@Watch('bridgeAddress')
-	commitBridgeAddress(address: string) {
-		this.$store.commit('hue/SET_BRIDGE_ADDRESS', address);
-		this.bridgeAddressNotFound = false;
-		this.detectDevices();
+		setInterval(() => {
+			this.detectDevices();
+		}, 3000);
 	}
 
 	registerToken() {
+		if (this.bridgeAddressNotFound) {
+			this.$store.commit('hue/SET_BRIDGE_ADDRESS', this.bridgeAddress);
+			this.bridgeAddressNotFound = false;
+			this.detectDevices();
+		}
 		if (this.token) {
 			return;
 		}
@@ -92,12 +96,6 @@ export default class HueIntegration extends Vue {
 
 	get lightLabel() {
 		return this.devices && this.devices.lights ? Object.keys(this.devices.lights).length : 'No';
-	}
-
-	goToIntegration() {
-		this.$router.push({
-			name: 'hue-integration',
-		});
 	}
 }
 </script>
