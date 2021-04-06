@@ -12,7 +12,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.4.3",
-    "portal-vue": "^2.1.7",
     "push-dir": "^0.4.1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
@@ -34,8 +33,11 @@
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "eslint": "^5.16.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.13.1",
+    "portal-vue": "^2.1.7",
+    "prettier": "^2.2.1",
     "sass-loader": "^8.0.0",
     "typescript": "~3.5.3",
     "vue-template-compiler": "^2.6.10"
