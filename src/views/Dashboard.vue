@@ -2,7 +2,7 @@
   <div>
 	<portal to="page-title">Dashboard</portal>
 	<portal to="page-actions">
-		<Button @click="editDashboard" class="primary">Edit</Button>
+		<Button @click="editDashboard" class="primary m-b">Edit</Button>
 	</portal>
     <GridLayout v-if="getDashboardWidgets"
 	:layout.sync="DashboardWidgets"

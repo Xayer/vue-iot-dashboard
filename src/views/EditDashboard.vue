@@ -2,10 +2,16 @@
   <div>
 	<portal to="page-title">Edit Dashboard</portal>
 	<portal to="page-actions">
-		<span class="error" v-show="errorMessage">{{ errorMessage }}</span>
-		<Select :options="widgetOptions" v-model="selectedWidget" />
-		<Button class="m-l" @click="addWidget">Add Widget</Button>
-		<Button class="primary m-l" @click="saveWidgetLayout">Save Dashboard</Button>
+		<Button class="m-r m-b" @click="viewDashboard" key="view-dashboard">View Dashboard</Button>
+		<span class="error m-b" v-show="errorMessage" key="dashboardErrors">{{ errorMessage }}</span>
+		<Select class="m-b"
+			:options="widgetOptions"
+			v-model="selectedWidget"
+			key="selectDashboardWidgets" />
+		<Button class="m-l m-b" @click="addWidget" key="addWidget">Add Widget</Button>
+		<Button class="primary m-l m-b"
+			@click="saveWidgetLayout"
+			key="saveDashboard">Save Dashboard</Button>
 	</portal>
     <GridLayout v-if="DashboardWidgets"
 		:layout.sync="DashboardWidgets"
@@ -118,6 +124,15 @@ export default class EditableDashboard extends Vue {
 
 	removeWidget(widgetIndex: number) {
 		this.DashboardWidgets.splice(widgetIndex, 1);
+	}
+
+	viewDashboard() {
+		this.$router.push({
+			name: 'dashboard',
+			params: {
+				id: this.$route.params.id,
+			},
+		});
 	}
 }
 </script>
