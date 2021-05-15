@@ -5,8 +5,8 @@
 			<article v-for="topTrack in topTracks" :key="topTrack.id">
 				<img v-if="topTrack.album.images" :src="topTrack.album.images[2].url" :alt="`${topTrack.name } - ${topTrack.artists.concat(' ,')}`" />
 				<div class="titles">
-					<h2>{{ topTrack.name }}</h2>
-					<h3 v-for="artist in topTrack.artists" :key="artist.id">{{ artist.name }}</h3>
+					<h2><a :href="topTrack.href">{{ topTrack.name }}</a></h2>
+					<h3 v-for="artist in topTrack.artists" :key="artist.id"><a :href="artist.href">{{ artist.name }}</a></h3>
 				</div>
 			</article>
 		</section>
@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { authenticateToken, clientId, getAccessToken as spotifyGetAccessToken, getTopTracks, redirectUri, storageKey } from '@/modules/apis/spotify';
+import { authenticateToken, clientId, getAccessToken as spotifyGetAccessToken, getTopTracks, integrationActiveStorageKey, redirectUri, storageKey } from '@/modules/apis/spotify';
 
 @Component({})
 export default class SpotifyIntegrationPage extends Vue {
@@ -36,12 +36,14 @@ user-top-read`;
 		}
 		const existingToken = localStorage.getItem(storageKey);
 		if(!existingToken || existingToken === 'undefined') {
+			localStorage.setItem(integrationActiveStorageKey, JSON.stringify(false));
 			const response = await authenticateToken(this.$route.query.code as string);
-		    localStorage.setItem(storageKey, response.refresh_token);
+			localStorage.setItem(storageKey, response.refresh_token);
 		}
-		const topTracks = await getTopTracks();
-
-		this.topTracks = topTracks.items;
+		await getTopTracks().then((topTracks) => {
+			this.topTracks = topTracks.items;
+			localStorage.setItem(integrationActiveStorageKey, JSON.stringify(true));
+		});		
 	}
 }
 </script>
