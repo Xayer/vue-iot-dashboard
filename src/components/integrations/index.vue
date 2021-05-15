@@ -1,6 +1,6 @@
 <template>
 	<div class="integrations">
-		<hue class="m-r" />
+		<hue />
 		<network />
 		<spotify />
 	</div>
@@ -27,6 +27,7 @@ export default class Integrations extends Vue {
 	.integrations {
 		display: flex;
 		justify-content: flex-start;
+		gap: 10px;
 		margin: var(--navbar-margin);
 		padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
 	}

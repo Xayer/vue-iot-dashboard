@@ -4,6 +4,7 @@ export const clientId = process.env.VUE_APP_SPOTIFY_CLIENT_ID;
 export const clientSecret = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET;
 export const redirectUri = `${window.location.origin}/integrations/spotify`;
 export const storageKey = 'spotify-refresh-token';
+export const integrationActiveStorageKey = 'integration-spotify-active'
 
 const basic = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
