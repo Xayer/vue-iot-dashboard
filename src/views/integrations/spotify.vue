@@ -4,7 +4,13 @@
 		<a v-if="!$route.query.code && !integrationActive" :href="authUrl">Authenticate with Spotify</a>
 		<section v-if="topTracks">
 			<article v-for="topTrack in topTracks" :key="topTrack.id">
-				<img v-if="topTrack.album.images" :src="topTrack.album.images[2].url" :alt="`${topTrack.name } - ${topTrack.artists.concat(' ,')}`" />
+				<img
+					v-if="topTrack.album.images"
+					:src="topTrack.album.images[2].url"
+					:alt="`${topTrack.name } - ${topTrack.artists.concat(' ,')}`"
+					:width="topTrack.album.images[2].width"
+					:height="topTrack.album.images[2].height"
+				/>
 				<div class="titles">
 					<h2><a :href="topTrack.href">{{ topTrack.name }}</a></h2>
 					<h3 v-for="artist in topTrack.artists" :key="artist.id"><a :href="artist.href">{{ artist.name }}</a></h3>
@@ -57,10 +63,18 @@ user-top-read`;
 </script>
 <style lang="scss">
 	section {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
 		article {
 			display: flex;
+			justify-content: start;
+			align-items: center;
 			gap: 10px;
-			margin-bottom: 15px;
+			background-color: var(--dark-bg-alt);
+			.titles {
+				padding: 5px;
+			}
 		}
 	}
 </style>
