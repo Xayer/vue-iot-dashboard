@@ -11,7 +11,7 @@ import { clientId, integrationActiveStorageKey, redirectUri } from '@/modules/ap
 export default class SpotifyIntegration extends Vue {
 	// eslint-disable-next-line class-methods-use-this
 	get active() {
-		return JSON.stringify(localStorage.getItem(integrationActiveStorageKey));
+		return localStorage.getItem(integrationActiveStorageKey) === "true";
 	}
 }
 </script>
