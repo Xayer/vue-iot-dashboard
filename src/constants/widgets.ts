@@ -36,6 +36,7 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		title: WidgetTitles[WidgetsAvailable.Weather],
 		settings: {
 			city: 'Odense',
+			units: 'metric',
 		},
 		w: 6,
 		h: 1,

@@ -7,7 +7,7 @@
 				<img
 					v-if="topTrack.album.images"
 					:src="topTrack.album.images[2].url"
-					:alt="`${topTrack.name } - ${topTrack.artists.concat(' ,')}`"
+					:alt="`${topTrack.name } - ${topTrack.artists.join(', ')}`"
 					:width="topTrack.album.images[2].width"
 					:height="topTrack.album.images[2].height"
 				/>
