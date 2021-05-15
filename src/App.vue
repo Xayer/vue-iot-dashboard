@@ -90,6 +90,7 @@ export default class App extends Vue {
 		--navbar-bg: var(--dark-bg-alt);
 		--widget-bg: var(--dark-bg-alt);
 	}
+	--link-color: #3e798b;
 
 }
 
@@ -104,6 +105,10 @@ body, html {
 	-moz-osx-font-smoothing: grayscale;
 	font-weight: 400;
 	min-height: 100vh;
+}
+
+a {
+	color: var(--link-color);
 }
 
 h1, h2, h3, h4, h5, h6 {

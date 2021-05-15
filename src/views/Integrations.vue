@@ -1,6 +1,9 @@
 <template>
     <div>
         <portal to="page-title">Integrations</portal>
+        <portal to="page-actions">
+		    <IntegrationsPanel />
+	    </portal>
         <router-view class="m-t" />
     </div>
 </template>
