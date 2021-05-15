@@ -47,6 +47,7 @@ import RejseplanenDeparture from '@/components/widgets/rejseplanen/departure.vue
 import { defaultSettings } from '@/constants/dashboard';
 import { Button } from '@/components/atoms';
 import TodoList from '@/components/widgets/todo.vue';
+import Weather from '@/components/widgets/weather.vue';
 
 
 @Component({
@@ -61,6 +62,7 @@ import TodoList from '@/components/widgets/todo.vue';
 		WidgetWrapper,
 		Button,
 		TodoList,
+		Weather,
 	},
 })
 export default class Dashboard extends Vue {

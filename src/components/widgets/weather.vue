@@ -5,17 +5,15 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import WeatherAPI from '@/modules/apis/weather';
+import { currentWeather } from '@/modules/apis/weather';
 
 @Component
 export default class TextWidget extends Vue {
 	@Prop() private settings!: string;
 
-	weatherApiInstance!: WeatherAPI;
-
-	created() {
-		this.weatherApiInstance = new WeatherAPI();
-		console.log(this.weatherApiInstance.currentWeather('Odense'));
+	// eslint-disable-next-line class-methods-use-this
+	mounted() {
+		console.log(currentWeather('Odense'));
 	}
 }
 </script>
