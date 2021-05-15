@@ -10,8 +10,8 @@
 import {
 	Component, Vue, VModel, Prop, Watch,
 } from 'vue-property-decorator';
-import { Select } from '@/components/atoms';
 import { mapGetters } from 'vuex';
+import { Select } from '@/components/atoms';
 import { Devices as HueDevices } from '@/types/hue';
 
 @Component({
