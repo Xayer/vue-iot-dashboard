@@ -29,6 +29,12 @@ const routes = [
 				hidden: true,
 				component: () => import(/* webpackChunkName: "hue-integration" */ '../views/integrations/hue.vue'),
 			},
+			{
+				path: '/integrations/spotify',
+				name: 'spotify-integration',
+				component: () => import(/* webpackChunkName: "spotify-integration-page" */ '../views/integrations/spotify.vue'),
+				hidden: true,
+			}
 		],
 	},
 	/* {
