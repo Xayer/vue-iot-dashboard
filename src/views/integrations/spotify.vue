@@ -35,7 +35,7 @@ user-top-read`;
 
 	// eslint-disable-next-line class-methods-use-this
 	get integrationActive() {
-		return JSON.stringify(localStorage.getItem(integrationActiveStorageKey));
+		return JSON.stringify(localStorage.getItem(integrationActiveStorageKey)) === "true";
 	}
 
 	async mounted() {
