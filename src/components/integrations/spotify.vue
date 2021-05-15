@@ -1,6 +1,6 @@
 <template>
     <div class="spotify">
-        <router-link to="{ name: 'spotify-integration' }" ><i class="bi bi-music-note-beamed" :class="active ? 'on' : 'off'"></i></router-link>
+        <router-link :to="{ name: 'spotify-integration' }" ><i class="bi bi-music-note-beamed" :class="active ? 'on' : 'off'"></i></router-link>
     </div>
 </template>
 <script lang="ts">

@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<a v-if="!$route.query.code" :href="authUrl">Authenticate with Spotify</a>
+		<h3 class="m-b">Spotify</h3>
+		<a v-if="!$route.query.code && !integrationActive" :href="authUrl">Authenticate with Spotify</a>
 		<section v-if="topTracks">
 			<article v-for="topTrack in topTracks" :key="topTrack.id">
 				<img v-if="topTrack.album.images" :src="topTrack.album.images[2].url" :alt="`${topTrack.name } - ${topTrack.artists.concat(' ,')}`" />
@@ -26,12 +27,17 @@ export default class SpotifyIntegrationPage extends Vue {
 user-top-read`;
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	get integrationActive() {
+		return JSON.stringify(localStorage.getItem(integrationActiveStorageKey));
+	}
+
 	async mounted() {
 		this.getAccessToken();
 	}
     
 	async getAccessToken() {
-		if(!this.$route.query.code) {
+		if(!this.$route.query.code && !this.integrationActive) {
 			return;
 		}
 		const existingToken = localStorage.getItem(storageKey);
@@ -43,6 +49,8 @@ user-top-read`;
 		await getTopTracks().then((topTracks) => {
 			this.topTracks = topTracks.items;
 			localStorage.setItem(integrationActiveStorageKey, JSON.stringify(true));
+		}).catch(() => {
+			localStorage.setItem(integrationActiveStorageKey, JSON.stringify(false));
 		});		
 	}
 }
