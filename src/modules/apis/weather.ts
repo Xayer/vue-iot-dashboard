@@ -1,25 +1,20 @@
-import API from './client';
+import querystring from 'querystring';
 
-const protocol: string = 'http://';
-const { host } = (window.location as any);
-const baseUrl: string = '/weather-api/data';
+const corsBypass = 'https://cors-anywhere.herokuapp.com';
+const host = 'https://api.openweathermap.org';
 const version: string = '2.5';
+// const baseUrl: string = `${corsBypass}/${host}/data/${version}`;
+const baseUrl: string = `${host}/data/${version}`;
 const token: string = 'f7307576b27dd288a84c60daa3a4dcec';
+const CURRENT_WEATHER_ENDPOINT = `${baseUrl}/weather`;
 
-export default class WeatherAPI extends API {
-	constructor() {
-		super({
-			protocol,
-			host,
-			baseURL: baseUrl,
-			version,
-		});
-	}
-
-	currentWeather(city: string) {
-		this.get('weather', {
+export const currentWeather = async (city: string, units: string = 'metric') => {
+	const response = await fetch(`${CURRENT_WEATHER_ENDPOINT}/?${
+		querystring.stringify({
 			q: city,
 			appid: token,
-		});
-	}
+			units,
+		})
+	}`);
+	return response.json();
 }

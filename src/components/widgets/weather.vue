@@ -1,21 +1,36 @@
 <template>
-	<div>
-		Weather
+	<div v-if="weatherData">
+		<h3>{{ weatherData.name }} <span v-if="weatherData.main">{{ weatherData.main.temp }}</span> - {{ weatherDescriptions }}</h3>
+		<h4 v-if="weatherData.main">min {{ weatherData.main.temp_min }} - max {{ weatherData.main.temp_max }}</h4>
 	</div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import WeatherAPI from '@/modules/apis/weather';
+import { currentWeather } from '@/modules/apis/weather';
 
 @Component
-export default class TextWidget extends Vue {
-	@Prop() private settings!: string;
+export default class WeatherWidget extends Vue {
+	@Prop() private settings!: { city: string; units: string; };
 
-	weatherApiInstance!: WeatherAPI;
+	weatherData: {
+		main?: {
+			// eslint-disable-next-line camelcase
+			temp: number; temp_min: number; temp_max: number;
+		};
+		weather?: {
+			main: string; description: string}[]
+	} = {};
 
-	created() {
-		this.weatherApiInstance = new WeatherAPI();
-		console.log(this.weatherApiInstance.currentWeather('Odense'));
+	// eslint-disable-next-line class-methods-use-this
+	async mounted() {
+		this.weatherData = await currentWeather(this.settings.city, this.settings.units);
+	}
+
+	get weatherDescriptions() {
+		if(!this.weatherData || !this.weatherData.weather) {
+			return '';
+		}
+		return this.weatherData.weather.map(weatherItem => weatherItem.main).join(', ');
 	}
 }
 </script>
