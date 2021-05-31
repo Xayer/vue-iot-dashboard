@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"@types/jest": "^24.0.19",
-		"@types/node": "^15.3.0",
+		"@types/node": "12.12.70",
 		"@vue/cli-plugin-babel": "^4.1.0",
 		"@vue/cli-plugin-eslint": "^4.1.0",
 		"@vue/cli-plugin-pwa": "^4.1.0",
