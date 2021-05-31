@@ -70,7 +70,6 @@ export default class HueIntegration extends Vue {
 
 	detectDevices() {
 		this.$store.dispatch('hue/getDevices').catch((error: any) => {
-			console.log(error);
 			this.errorMessage = error.description;
 		});
 	}
