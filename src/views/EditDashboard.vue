@@ -62,6 +62,7 @@ import VueGridLayout from 'vue-grid-layout';
 import { Select, Button } from '@/components/atoms';
 import WidgetSettings from '@/components/widgets/settings.vue';
 import HueGroupSettings from '@/components/widgets/hue/group/settings.vue';
+import WeatherSettings from '@/components/widgets/weather/settings.vue';
 import { WidgetDefaultSettings, WidgetsAvailable } from '@/constants/widgets';
 import { defaultSettings } from '@/constants/dashboard';
 import WidgetWrapper from '@/components/widgets/widget.vue';
@@ -73,6 +74,7 @@ import WidgetWrapper from '@/components/widgets/widget.vue';
 		WidgetSettings,
 		Select,
 		Button,
+		Weather: WeatherSettings,
 		HueGroup: HueGroupSettings,
 		WidgetWrapper,
 	},
@@ -124,7 +126,7 @@ export default class EditableDashboard extends Vue {
 
 		this.DashboardWidgets.push({
 			...widgetSettings,
-			i: this.DashboardWidgets.length,
+			i: Date.now(),
 			guid: Date.now(),
 			x: 0,
 			y: maxYCoords ? maxYCoords + 1 : 0,

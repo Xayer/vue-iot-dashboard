@@ -10,6 +10,9 @@ export default class Widget extends Vue {
 }
 </script>
 <style lang="scss">
+	.widget {
+		height: 100%;
+	}
     .vue-grid-item {
 		background-color: var(--widget-bg);
 		padding: 15px;
