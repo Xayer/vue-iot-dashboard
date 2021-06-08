@@ -1,6 +1,6 @@
 <template>
 	<div v-if="weatherData">
-		<h3>{{ weatherData.name }} <span v-if="weatherData.main">{{ weatherData.main.temp }}</span> - {{ weatherDescriptions }}</h3>
+		<h3>{{ weatherData.name }} <span v-if="weatherData.main">{{ weatherData.main.temp }}{{ temperatureUnit }}</span> - {{ weatherDescriptions }}</h3>
 		<h4 v-if="weatherData.main">min {{ weatherData.main.temp_min }} - max {{ weatherData.main.temp_max }}</h4>
 	</div>
 </template>
@@ -24,6 +24,10 @@ export default class WeatherWidget extends Vue {
 	// eslint-disable-next-line class-methods-use-this
 	async mounted() {
 		this.weatherData = await currentWeather(this.settings.city, this.settings.units);
+	}
+
+	get temperatureUnit() {
+		return this.settings.units === 'metric' ? '°C' : '°F';
 	}
 
 	get weatherDescriptions() {
