@@ -1,21 +1,23 @@
 export const WidgetsAvailable = {
-	TextWidget: 'TextWidget',
-	HueBridges: 'HueBridges',
-	HueLight: 'HueLight',
-	HueGroup: 'HueGroup',
-	RejseplanenDeparture: 'RejseplanenDeparture',
-	TodoList: 'TodoList',
-	Weather: 'Weather',
+	TextWidget: "TextWidget",
+	HueBridges: "HueBridges",
+	HueLight: "HueLight",
+	HueGroup: "HueGroup",
+	RejseplanenDeparture: "RejseplanenDeparture",
+	TodoList: "TodoList",
+	Weather: "Weather",
+	Forecast: "Forecast",
 };
 
 export const WidgetTitles: { [key: string]: string } = {
-	[WidgetsAvailable.TextWidget]: 'Text',
-	[WidgetsAvailable.HueBridges]: 'Hue',
-	[WidgetsAvailable.HueLight]: 'HueLight',
-	[WidgetsAvailable.HueGroup]: 'Hue Group',
-	[WidgetsAvailable.RejseplanenDeparture]: 'Departure Board',
-	[WidgetsAvailable.TodoList]: 'Todo List',
-	[WidgetsAvailable.Weather]: 'Weather',
+	[WidgetsAvailable.TextWidget]: "Text",
+	[WidgetsAvailable.HueBridges]: "Hue",
+	[WidgetsAvailable.HueLight]: "HueLight",
+	[WidgetsAvailable.HueGroup]: "Hue Group",
+	[WidgetsAvailable.RejseplanenDeparture]: "Departure Board",
+	[WidgetsAvailable.TodoList]: "Todo List",
+	[WidgetsAvailable.Weather]: "Weather",
+	[WidgetsAvailable.Forecast]: "Forecast",
 };
 
 export const WidgetDefaultSettings: { [key: string]: Widget } = {
@@ -23,7 +25,7 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		type: WidgetsAvailable.TextWidget,
 		title: WidgetTitles[WidgetsAvailable.TextWidget],
 		settings: {
-			message: 'Foo',
+			message: "Foo",
 		},
 		w: 6,
 		h: 1,
@@ -35,8 +37,21 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		type: WidgetsAvailable.Weather,
 		title: WidgetTitles[WidgetsAvailable.Weather],
 		settings: {
-			city: 'Odense',
-			units: 'metric',
+			city: "Odense",
+			units: "metric",
+		},
+		w: 6,
+		h: 1,
+		y: 1,
+		x: 0,
+		i: 0,
+	},
+	[WidgetsAvailable.Forecast]: {
+		type: WidgetsAvailable.Forecast,
+		title: WidgetTitles[WidgetsAvailable.Forecast],
+		settings: {
+			city: "Odense",
+			units: "metric",
 		},
 		w: 6,
 		h: 1,
@@ -68,7 +83,7 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		type: WidgetsAvailable.HueGroup,
 		title: WidgetTitles[WidgetsAvailable.HueGroup],
 		settings: {
-			group: '',
+			group: "",
 		},
 		w: 3,
 		h: 2,
@@ -82,8 +97,8 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		type: WidgetsAvailable.RejseplanenDeparture,
 		title: WidgetTitles[WidgetsAvailable.RejseplanenDeparture],
 		settings: {
-			title: 'Departures',
-			stationId: '461853100',
+			title: "Departures",
+			stationId: "461853100",
 		},
 		w: 6,
 		h: 2,

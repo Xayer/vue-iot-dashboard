@@ -48,7 +48,7 @@ import { defaultSettings } from '@/constants/dashboard';
 import { Button } from '@/components/atoms';
 import TodoList from '@/components/widgets/todo.vue';
 import Weather from '@/components/widgets/weather/weather.vue';
-
+import ForecastWidget from '@/components/widgets/weather/forecast.vue';
 
 @Component({
 	components: {
@@ -63,6 +63,7 @@ import Weather from '@/components/widgets/weather/weather.vue';
 		Button,
 		TodoList,
 		Weather,
+		Forecast: ForecastWidget,
 	},
 })
 export default class Dashboard extends Vue {

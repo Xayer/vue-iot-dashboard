@@ -77,6 +77,7 @@ import WidgetWrapper from '@/components/widgets/widget.vue';
 		Weather: WeatherSettings,
 		HueGroup: HueGroupSettings,
 		WidgetWrapper,
+		Forecast: WeatherSettings,
 	},
 })
 export default class EditableDashboard extends Vue {
