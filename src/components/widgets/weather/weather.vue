@@ -1,7 +1,15 @@
 <template>
-	<div v-if="weatherData">
-		<h3>{{ weatherData.name }} <span v-if="weatherData.main">{{ weatherData.main.temp }}{{ temperatureUnit }}</span> - {{ weatherDescriptions }}</h3>
-		<h4 v-if="weatherData.main">min {{ weatherData.main.temp_min }} - max {{ weatherData.main.temp_max }}</h4>
+	<div class="wrapper">
+		<div v-if="weatherData" class="weather">
+			<div class="temps" v-if="weatherData.main">
+				<h1 v-if="weatherData.main">{{ weatherData.main.temp }}{{ temperatureUnit }}</h1>
+				<div class="min-max">
+					<span>min {{ weatherData.main.temp_min }}{{ temperatureUnit }}</span>
+					<span>max {{ weatherData.main.temp_max }}{{ temperatureUnit }}</span>
+				</div>
+			</div>
+			<h3>{{ weatherData.name }} - {{ weatherDescriptions }}</h3>
+		</div>
 	</div>
 </template>
 <script lang="ts">
@@ -39,11 +47,33 @@ export default class WeatherWidget extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-	div {
-		display: grid;
+	.wrapper { display: flex;
 		height: 100%;
+		width: 100%;
 		align-items: center;
-		justify-items: center;
+		justify-content: center;
+	}
+	.weather {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--app-padding);
+		.temps {
+			height: auto;
+			display: flex;
+			justify-items: center;
+			align-items: center;
+			gap: var(--app-padding);
+			.min-max {
+				height: inherit;
+				display: flex;
+				flex-direction: column;
+				> * {
+					display: block;
+				}
+			}
+		}
 		h1 {
 			margin: 0;
 			padding: 0;
