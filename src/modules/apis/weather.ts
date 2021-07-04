@@ -1,4 +1,5 @@
 import querystring from "querystring";
+import { ForecastsResponse, ForecastsOnDate } from '@/types/weather';
 
 const corsBypass = "https://cors-anywhere.herokuapp.com";
 const host = "https://api.openweathermap.org";
@@ -26,8 +27,30 @@ export const forecast = async (city: string, units: string = "metric") => {
 			q: city,
 			appid: token,
 			units,
-			cnt: 5,
 		})}`
 	);
-	return response.json();
+	const responseData: ForecastsResponse = await response.json();
+	return {
+		...responseData,
+		list: responseData.list ? responseData.list.reduce((acc: { [key: string]: ForecastsOnDate; }, currentForecast) => {
+			const timestamp = new Date(currentForecast.dt_txt);
+			const forecastKey = `${timestamp.getFullYear()}-${timestamp.getMonth()}-${timestamp.getDate()}`;
+			
+			if(!acc[forecastKey]) {
+				acc[forecastKey] = {
+					date: timestamp, hours: []
+				}
+			};
+
+			acc[forecastKey].hours = [
+				...acc[forecastKey].hours,
+				{
+					...currentForecast,
+					date: timestamp,
+				}
+			]
+
+			return acc;
+		}, {}) : [],
+	};
 };
