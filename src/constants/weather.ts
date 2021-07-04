@@ -1,5 +1,4 @@
 export const getWeatherIcon = (weatherDescription: string) => {
-	console.log(weatherDescription);
 	switch(weatherDescription) {
 	case 'Thunderstorm': return 'cloud-lightning-rain'
 	case 'Drizzle': return 'cloud-drizzle'
