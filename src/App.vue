@@ -15,6 +15,7 @@
 <script lang="ts">
 import { PortalTarget } from 'portal-vue';
 import { Component, Vue, Watch } from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
 import { Button } from '@/components/atoms';
 import Navigation from '@/components/navbar.vue';
 import Integrations from '@/components/integrations/index.vue';
@@ -26,11 +27,22 @@ import Integrations from '@/components/integrations/index.vue';
 		Button,
 		PortalTarget,
 	},
+	computed: {
+		...mapGetters({
+			theme: 'themes/theme',
+		})
+	}
 })
 export default class App extends Vue {
 	menuShown: boolean = false;
 
 	created() {
+		let theme : string | null = localStorage.getItem('theme') || null;
+		if(theme === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			theme = 'dark';
+		}
+		this.$store.dispatch('themes/setTheme', theme);
+
 		if (localStorage.menuShown) {
 			this.menuShown = localStorage.menuShown;
 		}
@@ -82,11 +94,25 @@ export default class App extends Vue {
 	--input-bg: var(--bg-color);
 	--input-text-color: var(--text-color);
 
-	@media (prefers-color-scheme: dark) {
+	.dark {
 		// DARK MODE BABY
 		--bg-color: #263238;
 		--text-color: var(--white);
 		--dark-bg-alt: #2f3d44;
+		--navbar-bg: var(--dark-bg-alt);
+		--widget-bg: var(--dark-bg-alt);
+	}
+	.red {
+		--bg-color: #475c7a;
+		--text-color: var(--white);
+		--dark-bg-alt: #685d79;
+		--navbar-bg: var(--dark-bg-alt);
+		--widget-bg: var(--dark-bg-alt);
+	}
+	.green {
+		--bg-color: #305f72;
+		--text-color: var(--white);
+		--dark-bg-alt: #568ea6;
 		--navbar-bg: var(--dark-bg-alt);
 		--widget-bg: var(--dark-bg-alt);
 	}
