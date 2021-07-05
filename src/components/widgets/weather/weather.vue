@@ -1,20 +1,24 @@
 <template>
 	<div class="wrapper">
 		<div v-if="weatherData" class="weather">
+			<h3>{{ weatherData.name }}</h3>
 			<div class="temps" v-if="weatherData.main">
-				<h1 v-if="weatherData.main">{{ weatherData.main.temp }}{{ temperatureUnit }}</h1>
+				<h1 v-if="weatherData.main">
+					{{ weatherData.main.temp }}{{ temperatureUnit }}
+					<i :class="`weather-icon bi bi-${weatherIcon(weatherData.weather)}`"></i>
+				</h1>
 				<div class="min-max">
 					<span>min {{ weatherData.main.temp_min }}{{ temperatureUnit }}</span>
 					<span>max {{ weatherData.main.temp_max }}{{ temperatureUnit }}</span>
 				</div>
 			</div>
-			<h3>{{ weatherData.name }} - {{ weatherDescriptions }}</h3>
 		</div>
 	</div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { currentWeather } from '@/modules/apis/weather';
+import { getWeatherIcon } from '@/constants/weather';
 
 @Component
 export default class WeatherWidget extends Vue {
@@ -38,11 +42,9 @@ export default class WeatherWidget extends Vue {
 		return this.settings.units === 'metric' ? '°C' : '°F';
 	}
 
-	get weatherDescriptions() {
-		if(!this.weatherData || !this.weatherData.weather) {
-			return '';
-		}
-		return this.weatherData.weather.map(weatherItem => weatherItem.main).join(', ');
+	// eslint-disable-next-line class-methods-use-this
+	weatherIcon(weather: { main: string}[]) {
+		return weather ? getWeatherIcon(weather[0].main) : '';
 	}
 }
 </script>

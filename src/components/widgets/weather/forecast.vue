@@ -9,7 +9,7 @@
 						<div class="forecast">
 							<span class="time">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}</span>
 							<b class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }}{{ temperatureUnit }}</b>
-							<i v-for="weatherIcon in weatherIcons(hourlyForecast.weather)" :key="weatherIcon" :class="`weather-icon bi bi-${weatherIcon}`"></i>
+							<i :class="`weather-icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
 						</div>
 						<!-- <span v-if="hourlyForecast.main.temp_min">min {{ hourlyForecast.main.temp_min }}{{ temperatureUnit }}</span>
 						<span v-if="hourlyForecast.main.temp_max">max {{ hourlyForecast.main.temp_max }}{{ temperatureUnit }}</span> -->
@@ -50,8 +50,8 @@ export default class ForecastWidget extends Vue {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	weatherIcons(weather: { main: string}[]) {
-		return weather.map(weatherItem => getWeatherIcon(weatherItem.main));
+	weatherIcon(weather: { main: string}[]) {
+		return weather ? getWeatherIcon(weather[0].main) : '';
 	}
 }
 </script>
@@ -69,7 +69,7 @@ export default class ForecastWidget extends Vue {
 		overflow: scroll;
 		border: 5px solid var(--bg-color);
 		.forecast {
-			display: grid;
+			display: flex;
 			grid-template-columns: 1fr auto 1fr;
 			grid-template-rows: none;
 			gap: 10px;
