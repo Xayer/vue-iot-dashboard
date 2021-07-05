@@ -132,7 +132,6 @@ export default class EditableDashboard extends Vue {
 			x: 0,
 			y: maxYCoords ? maxYCoords + 1 : 0,
 		};
-		console.log(newSettings);
 		this.DashboardWidgets.push(newSettings);
 	}
 
