@@ -85,7 +85,7 @@ export default class App extends Vue {
 	--navbar-bg: var(--white);
 	--transition-global: all .3s ease;
 	--navbar-transition: var(--transition-global);
-	--navbar-width: 15vw;
+	--navbar-width: 60px;
 	--navbar-margin: var(--padding) var(--padding);
 	--app-padding: 15px;
 	--box-shadow-general: 0px 0px 25px -5px;

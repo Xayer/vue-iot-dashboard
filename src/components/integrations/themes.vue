@@ -1,6 +1,6 @@
 <template>
 	<div class="theme" @click="toggleTheme">
-		<i class="bi" :class="`bi-${theme.icon}`">{{theme.name}}</i>
+		<i class="bi" :class="`bi-${theme.icon}`"></i>
 	</div>
 </template>
 <script lang="ts">

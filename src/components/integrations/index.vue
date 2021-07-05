@@ -29,6 +29,7 @@ export default class Integrations extends Vue {
 <style lang="scss" scoped>
 	.integrations {
 		display: flex;
+		flex-direction: column;
 		justify-content: flex-start;
 		gap: 10px;
 		margin: var(--navbar-margin);

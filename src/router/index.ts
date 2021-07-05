@@ -1,8 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Dashboard from '../views/Dashboard.vue';
-import EditDashboard from '../views/EditDashboard.vue';
-import Integrations from '../views/Integrations.vue';
+
+export interface Route {
+	path: string;
+	name: string;
+	hidden: boolean;
+	icon: string;
+}
 
 Vue.use(VueRouter);
 
@@ -10,6 +14,7 @@ const routes = [
 	{
 		path: '/',
 		name: 'dashboard',
+		icon: 'grid-1x2',
 		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
 	},
 	{
@@ -21,6 +26,7 @@ const routes = [
 	{
 		path: '/integrations',
 		name: 'integrations',
+		icon: 'gear',
 		component: () => import(/* webpackChunkName: "integrations" */ '../views/Integrations.vue'),
 		children: [
 			{

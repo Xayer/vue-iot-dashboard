@@ -4,8 +4,9 @@
 			v-for="navItem in items"
 			:key="navItem.name"
 			:to="navItem"
-			v-text="navItem.name"
-		></router-link>
+		>
+			<i class="bi" :class="`bi-${navItem.icon}`"></i>
+		</router-link>
 		<IntegrationsPanel />
 	</nav>
 </template>
@@ -13,14 +14,16 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import IntegrationsPanel from '@/components/integrations/index.vue';
+import { Route } from '@/router';
 
 @Component({
 	components: {
 		IntegrationsPanel,
 	},
 })
+
 export default class Navbar extends Vue {
-	items: Array<{name: string, path: string}> = [];
+	items: Omit<Route,'hidden'>[] = [];
 
 	get currentRoute() {
 		return this.$router.currentRoute;
@@ -28,13 +31,14 @@ export default class Navbar extends Vue {
 
 	created() {
 		(this.$router as any).options.routes
-			.forEach((route: {name: string, path: string; hidden: boolean}) => {
-				if (route.hidden) {
+			.forEach(({ name, path, hidden, icon }: Route) => {
+				if (hidden) {
 					return;
 				}
 				this.items.push({
-					name: route.name,
-					path: route.path,
+					name,
+					path,
+					icon,
 				});
 			});
 	}
