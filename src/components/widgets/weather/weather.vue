@@ -1,16 +1,12 @@
 <template>
 	<div class="wrapper">
 		<div v-if="weatherData" class="weather">
-			<h3>{{ weatherData.name }}</h3>
-			<div class="temps" v-if="weatherData.main">
-				<h1 v-if="weatherData.main">
-					{{ weatherData.main.temp }}{{ temperatureUnit }}
+			<div v-if="weatherData.main">
+				<h1 v-if="weatherData.main" class="temp">
 					<i :class="`weather-icon bi bi-${weatherIcon(weatherData.weather)}`"></i>
+					{{ weatherData.main.temp }}{{ temperatureUnit }}
 				</h1>
-				<div class="min-max">
-					<span>min {{ weatherData.main.temp_min }}{{ temperatureUnit }}</span>
-					<span>max {{ weatherData.main.temp_max }}{{ temperatureUnit }}</span>
-				</div>
+				<h3>{{ weatherData.name }}</h3>
 			</div>
 		</div>
 	</div>
@@ -76,9 +72,14 @@ export default class WeatherWidget extends Vue {
 				}
 			}
 		}
+		
 		h1 {
 			margin: 0;
 			padding: 0;
+			&, .weather-icon {
+				display: flex;
+				align-items: flex-start;	
+			}
 		}
 	}
 </style>

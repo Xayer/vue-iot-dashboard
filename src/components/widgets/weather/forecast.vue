@@ -1,14 +1,14 @@
 <template>
 	<div class="wrapper" v-if="weatherData">
-        <h1 v-if="weatherData.city">{{ weatherData.city.name }}</h1>
+        <h2 v-if="weatherData.city">{{ weatherData.city.name }}</h2>
         <div class="forecasts" v-if="weatherData.list">
-            <div class="date" v-for="forecastDate in weatherData.list" :key="forecastDate.date.toString()">
-				<h4>{{ forecastDate.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }}</h4>
-				<div class="temps" v-for="hourlyForecast in forecastDate.hours" :key="hourlyForecast.dt">
-					<div class="min-max" v-if="hourlyForecast.main">
-						<div class="forecast">
-							<span class="time">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}</span>
-							<b class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }}{{ temperatureUnit }}</b>
+            <div class="day" v-for="forecastDate in weatherData.list" :key="forecastDate.date.toString()">
+				<h4 class="date">{{ forecastDate.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }}</h4>
+				<div class="timestamps">
+					<div class="timestamp" v-for="hourlyForecast in forecastDate.hours" :key="hourlyForecast.dt">
+						<div class="forecast" v-if="hourlyForecast.main">
+							<b class="time">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}:</b>
+							<span class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }}{{ temperatureUnit }}</span>
 							<i :class="`weather-icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
 						</div>
 						<!-- <span v-if="hourlyForecast.main.temp_min">min {{ hourlyForecast.main.temp_min }}{{ temperatureUnit }}</span>
@@ -65,22 +65,28 @@ export default class ForecastWidget extends Vue {
 	}
     .forecasts {
         display: flex;
-        gap: var(--app-padding);
 		overflow: scroll;
-		border: 5px solid var(--bg-color);
-		.forecast {
+		.timestamps {
 			display: flex;
-			grid-template-columns: 1fr auto 1fr;
-			grid-template-rows: none;
-			gap: 10px;
+			flex-direction: column;
+			.forecast {
+				display: grid;
+				grid-template-columns: 24px auto 19px;
+				grid-template-rows: none;
+			}
+		}
+		.day {
+			padding: 0 var(--app-padding);
 			.weather-icon { margin: 0; text-align: right;}
 			.temp, .time {
 				text-align: right;
 			}
 		}
-		.date:nth-child(odd) {
+		.date {
+			margin: 0 calc(var(--app-padding) * -0.5);
+		}
+		.day:nth-child(odd) {
 			background-color: var(--bg-color);
-			padding: 0 10px;
 		}
     }
 	.forecastDate {

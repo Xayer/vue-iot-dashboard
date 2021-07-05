@@ -125,13 +125,15 @@ export default class EditableDashboard extends Vue {
 			0,
 		);
 
-		this.DashboardWidgets.push({
+		const newSettings = {
 			...widgetSettings,
 			i: Date.now(),
 			guid: Date.now(),
 			x: 0,
 			y: maxYCoords ? maxYCoords + 1 : 0,
-		});
+		};
+		console.log(newSettings);
+		this.DashboardWidgets.push(newSettings);
 	}
 
 	// eslint-disable-next-line class-methods-use-this
