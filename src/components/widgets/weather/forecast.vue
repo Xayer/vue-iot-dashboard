@@ -93,6 +93,9 @@ export default class ForecastWidget extends Vue {
 		width: 100%;
 		justify-content: space-between;
 		align-items: center;
+		.day-name {
+			text-transform: capitalize;
+		}
 		&.columns {
 			display: flex;
 			justify-content: center;
@@ -100,7 +103,7 @@ export default class ForecastWidget extends Vue {
 			.day {
 				height: 100%;
 				width: 75%;
-				padding: 0 2%;
+				padding: 0 1%;
 				text-align: center;
 				box-shadow: inset -1px 0px 0px var(--bg-color), 1px 0px 0px var(--bg-color);
 				&:last-of-type {
@@ -112,12 +115,26 @@ export default class ForecastWidget extends Vue {
 					justify-content: center;
 					align-items: center;
 					.icon {
-						font-size: 64px;
+						font-size: 48px;
 						margin: 0;
 					}
 					.temp {
+						font-size: 25px;
+						margin-left: 10px;
+					}
+				}
+				.day-name {
+					font-size: 14px;
+				}
+
+				@media screen and (min-width: 1400px) {
+					padding: 0 2%;
+					.temp {
 						font-size: 32px;
 						margin-left: 12px;
+					}
+					.icon {
+						font-size: 32px;
 					}
 				}
 			}
@@ -143,7 +160,6 @@ export default class ForecastWidget extends Vue {
 				}
 				.day-name {
 					flex-grow: 1;
-					text-transform: capitalize;
 				}
 				.temp {
 					font-weight: bold;
