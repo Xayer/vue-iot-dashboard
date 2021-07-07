@@ -56,7 +56,7 @@ export default class ForecastWidget extends Vue {
 
 	get layout() {
 		const { w, h} = this.dimensions;
-		return !(w === h) && w % h <= 0 ? '' : 'rows';
+		return !(w === h) && (w > 3 || w % h === 0) ? 'columns' : 'rows';
 	}
 
 	get showTitle() {
@@ -93,9 +93,37 @@ export default class ForecastWidget extends Vue {
 		width: 100%;
 		justify-content: space-between;
 		align-items: center;
+		&.columns {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.day {
+				height: 100%;
+				width: 75%;
+				padding: 0 2%;
+				text-align: center;
+				box-shadow: inset -1px 0px 0px var(--bg-color), 1px 0px 0px var(--bg-color);
+				&:last-of-type {
+					box-shadow: none;
+				}
+				.icon-temp {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					.icon {
+						font-size: 64px;
+						margin: 0;
+					}
+					.temp {
+						font-size: 32px;
+						margin-left: 12px;
+					}
+				}
+			}
+		}
 		&.rows {
 			flex-direction: column;
-			justify-content: stretch;
 			height: 100%;
 			.day {
 				display: grid;
@@ -104,27 +132,33 @@ export default class ForecastWidget extends Vue {
 				align-items: center;
 				gap: calc(var(--app-padding));
 				width: 100%;
+				height: 100%;
+				box-sizing: border-box;
+				box-shadow: inset 0px -1px 0px var(--bg-color);
+				&:last-of-type {
+					box-shadow: none;
+				}
+				.date {
+					text-align: left;
+				}
+				.day-name {
+					flex-grow: 1;
+					text-transform: capitalize;
+				}
+				.temp {
+					font-weight: bold;
+				}
+				.icon-temp {
+					display: flex;
+					justify-content: space-between;
+					font-size: 23px;
+					text-align: right;
+				}
+				.day-date {
+					display: flex;
+					justify-content: space-between;
+				}
 			}
-		}
-		.date {
-			text-align: left;
-		}
-		.day-name {
-			flex-grow: 1;
-			text-transform: capitalize;
-		}
-		.temp {
-			font-weight: bold;
-		}
-		.icon-temp {
-			display: flex;
-			justify-content: space-between;
-			font-size: 23px;
-			text-align: right;
-		}
-		.day-date {
-			display: flex;
-			justify-content: space-between;
 		}
 	}
 </style>
