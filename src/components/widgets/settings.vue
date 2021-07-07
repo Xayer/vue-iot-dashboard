@@ -60,7 +60,7 @@ export default class WidgetSettingEditor extends Vue {
 		}
 
 		.vue-resizable-handle, .drag, .remove {
-			color: #fff;
+			color: var(--text-color);
 			font-size: 20px;
 		}
 	}

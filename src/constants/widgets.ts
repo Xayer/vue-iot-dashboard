@@ -60,7 +60,7 @@ export const WidgetDefaultSettings: { [key: string]: Widget } = {
 		y: 1,
 		x: 0,
 		i: 0,
-		minW: 6,
+		minW: 2,
 		minH: 2,
 	},
 	[WidgetsAvailable.HueBridges]: {

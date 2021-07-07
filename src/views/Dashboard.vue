@@ -28,7 +28,7 @@
 			:max-h="item.maxH || Infinity"
 		>
 			<WidgetWrapper>
-				<component :is="item.type" :settings="item.settings"></component>
+				<component :is="item.type" :settings="item.settings" :dimensions="{w: item.w, h: item.h }"></component>
 			</WidgetWrapper>
 		</GridItem>
 	</GridLayout>

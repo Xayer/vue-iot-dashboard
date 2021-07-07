@@ -1,22 +1,31 @@
 <template>
 	<div class="wrapper" v-if="weatherData">
-        <h2 v-if="weatherData.city">{{ weatherData.city.name }}</h2>
-        <div class="forecasts" v-if="weatherData.list">
-            <div class="day" v-for="forecastDate in weatherData.list" :key="forecastDate.date.toString()">
-				<h4 class="date">{{ forecastDate.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }}</h4>
-				<div class="timestamps">
-					<div class="timestamp" v-for="hourlyForecast in forecastDate.hours" :key="hourlyForecast.dt">
-						<div class="forecast" v-if="hourlyForecast.main">
-							<b class="time">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}:</b>
-							<span class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }}{{ temperatureUnit }}</span>
-							<i :class="`weather-icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
-						</div>
-						<!-- <span v-if="hourlyForecast.main.temp_min">min {{ hourlyForecast.main.temp_min }}{{ temperatureUnit }}</span>
-						<span v-if="hourlyForecast.main.temp_max">max {{ hourlyForecast.main.temp_max }}{{ temperatureUnit }}</span> -->
-					</div>
+        <h2 v-if="weatherData.city && showTitle">{{ weatherData.city.name }}</h2>
+        <div class="forecasts" :class="layout" v-if="weatherData.list">
+            <div class="day" v-for="(forecastDate, forecastDateIndex) in weatherData.list" :key="forecastDate.date.toString()">
+				<div class="icon-temp">
+					<i :class="`icon bi bi-${weatherIcon(forecastDate.weather)}`"></i>
+					<span class="temp" v-if="forecastDate.main">{{ Math.round(forecastDate.main.temp) }}{{ temperatureUnit }}</span>
+				</div>
+
+				<div class="day-date">
+					<h4 @click.prevent="selectedDayIndex = forecastDateIndex;" class="day-name">{{ forecastDate.date.toLocaleString('default', { weekday: 'long' }) }}</h4>
+					<span class="date">{{ forecastDate.date.toLocaleString('default', { month: 'long', day: 'numeric'} ) }}</span>
 				</div>
             </div>
         </div>
+		<div v-if="selectedDay">
+			<h4 class="date">{{ selectedDay.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }}</h4>
+			<div class="timestamps">
+				<div class="timestamp" v-for="hourlyForecast in selectedDay.hours" :key="hourlyForecast.dt">
+					<div class="forecast" v-if="hourlyForecast.main">
+						<b class="time">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}:</b>
+						<span class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }} {{ temperatureUnit }}</span>
+						<i :class="`weather-icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script lang="ts">
@@ -29,6 +38,10 @@ import { getWeatherIcon } from '@/constants/weather';
 export default class ForecastWidget extends Vue {
 	@Prop() private settings!: { city: string; units: string; };
 
+	@Prop() private dimensions!: WidgetDimensions;
+
+	selectedDayIndex: number | null = null;
+
 	weatherData?: mappedForecasts | null = null;
 
 	// eslint-disable-next-line class-methods-use-this
@@ -38,81 +51,80 @@ export default class ForecastWidget extends Vue {
 	}
 
 	get temperatureUnit() {
-		return this.settings.units === 'metric' ? '°C' : '°F';
+		return this.settings.units === 'metric' ? '°' : '°F';
 	}
 
-	// eslint-disable-next-line class-methods-use-this
-	weatherDescriptions(weather: { main: string; }[]) {
-		if(!weather) {
-			return '';
-		}
-		return weather.map(weatherItem => weatherItem.main).join(', ');
+	get layout() {
+		const { w, h} = this.dimensions;
+		return !(w === h) && w % h <= 0 ? '' : 'rows';
+	}
+
+	get showTitle() {
+		const { w, h} = this.dimensions;
+		return h >= 3 || w >= 3;
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	weatherIcon(weather: { main: string}[]) {
 		return weather ? getWeatherIcon(weather[0].main) : '';
 	}
+
+	get selectedDay() {
+		if(this.selectedDayIndex === null || !this.weatherData) {
+			return null;
+		}
+
+		return this.weatherData.list[this.selectedDayIndex];
+	}
 }
 </script>
 <style lang="scss" scoped>
-	.wrapper { display: flex;
+	.wrapper {
+		display: flex;
 		height: 100%;
 		width: 100%;
 		align-items: center;
 		justify-content: center;
         flex-direction: column;
 	}
-    .forecasts {
-        display: flex;
-		overflow: scroll;
-		.timestamps {
-			display: flex;
+
+	.forecasts {
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+		align-items: center;
+		&.rows {
 			flex-direction: column;
-			.forecast {
+			justify-content: stretch;
+			height: 100%;
+			.day {
 				display: grid;
-				grid-template-columns: 24px auto 19px;
-				grid-template-rows: none;
-			}
-		}
-		.day {
-			padding: 0 var(--app-padding);
-			.weather-icon { margin: 0; text-align: right;}
-			.temp, .time {
-				text-align: right;
+				grid-template-columns: 70px 1fr;
+				justify-content: space-between;
+				align-items: center;
+				gap: calc(var(--app-padding));
+				width: 100%;
 			}
 		}
 		.date {
-			margin: 0 calc(var(--app-padding) * -0.5);
+			text-align: left;
 		}
-		.day:nth-child(odd) {
-			background-color: var(--bg-color);
+		.day-name {
+			flex-grow: 1;
+			text-transform: capitalize;
 		}
-    }
-	.forecastDate {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: var(--app-padding);
-		.temps {
-			height: auto;
+		.temp {
+			font-weight: bold;
+		}
+		.icon-temp {
 			display: flex;
-			justify-items: center;
-			align-items: center;
-			gap: var(--app-padding);
-			.min-max {
-				height: inherit;
-				display: flex;
-				flex-direction: column;
-				> * {
-					display: block;
-				}
-			}
+			justify-content: space-between;
+			font-size: 23px;
+			text-align: right;
 		}
-		h1 {
-			margin: 0;
-			padding: 0;
+		.day-date {
+			display: flex;
+			justify-content: space-between;
 		}
 	}
 </style>
