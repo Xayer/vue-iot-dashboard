@@ -1,7 +1,8 @@
 <template>
 	<div class="wrapper" v-if="weatherData">
-		<template v-if="selectedDay" @click="selectedDayIndex = null">
-			<h2>{{ selectedDay.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }} <i class="bi bi-x-circle" @click="selectedDayIndex = null"></i></h2>
+		<transition-group name="fade">
+		<div class="wrapper" v-if="selectedDay" @click="selectedDayIndex = null" key="hours">
+			<h2 >{{ selectedDay.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }} <i class="bi bi-x-circle" @click="selectedDayIndex = null"></i></h2>
 			<div class="forecasts hours" :class="layout">
 				<div class="day" v-for="hourlyForecast in selectedDay.hours" :key="hourlyForecast.dt">
 					<div class="icon-temp">
@@ -14,8 +15,8 @@
 					</div>
 				</div>
 			</div>
-		</template>
-		<template v-else>
+		</div>
+		<div class="wrapper" v-show="!selectedDay" key="forecasts">
 			<h2 v-if="weatherData.city && showTitle">{{ weatherData.city.name }}</h2>
 			<div class="forecasts" :class="layout" v-if="weatherData.list">
 				<div class="day" v-for="(forecastDate, forecastDateIndex) in weatherData.list" @click.prevent="selectedDayIndex = forecastDateIndex;" :key="forecastDate.date.toString()">
@@ -30,7 +31,8 @@
 					</div>
 				</div>
 			</div>
-		</template>
+		</div>
+		</transition-group>
 	</div>
 </template>
 <script lang="ts">
@@ -96,6 +98,7 @@ export default class ForecastWidget extends Vue {
 		align-items: center;
 		justify-content: center;
         flex-direction: column;
+		position: relative;
 	}
 	.open, .close { cursor: pointer; }
 
