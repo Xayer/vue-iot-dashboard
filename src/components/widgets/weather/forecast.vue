@@ -1,31 +1,36 @@
 <template>
 	<div class="wrapper" v-if="weatherData">
-        <h2 v-if="weatherData.city && showTitle">{{ weatherData.city.name }}</h2>
-        <div class="forecasts" :class="layout" v-if="weatherData.list">
-            <div class="day" v-for="(forecastDate, forecastDateIndex) in weatherData.list" :key="forecastDate.date.toString()">
-				<div class="icon-temp">
-					<i :class="`icon bi bi-${weatherIcon(forecastDate.weather)}`"></i>
-					<span class="temp" v-if="forecastDate.main">{{ Math.round(forecastDate.main.temp) }}{{ temperatureUnit }}</span>
-				</div>
+		<template v-if="selectedDay" @click="selectedDayIndex = null">
+			<h2>{{ selectedDay.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }} <i class="bi bi-x-circle" @click="selectedDayIndex = null"></i></h2>
+			<div class="forecasts hours" :class="layout">
+				<div class="day" v-for="hourlyForecast in selectedDay.hours" :key="hourlyForecast.dt">
+					<div class="icon-temp">
+						<i :class="`icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
+						<span class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }}{{ temperatureUnit }}</span>
+					</div>
 
-				<div class="day-date">
-					<h4 @click.prevent="selectedDayIndex = forecastDateIndex;" class="day-name">{{ forecastDate.date.toLocaleString('default', { weekday: 'long' }) }}</h4>
-					<span class="date">{{ forecastDate.date.toLocaleString('default', { month: 'long', day: 'numeric'} ) }}</span>
-				</div>
-            </div>
-        </div>
-		<div v-if="selectedDay">
-			<h4 class="date">{{ selectedDay.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }}</h4>
-			<div class="timestamps">
-				<div class="timestamp" v-for="hourlyForecast in selectedDay.hours" :key="hourlyForecast.dt">
-					<div class="forecast" v-if="hourlyForecast.main">
-						<b class="time">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}:</b>
-						<span class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }} {{ temperatureUnit }}</span>
-						<i :class="`weather-icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
+					<div class="day-date">
+						<h4 class="day-name">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}</h4>
 					</div>
 				</div>
 			</div>
-		</div>
+		</template>
+		<template v-else>
+			<h2 v-if="weatherData.city && showTitle">{{ weatherData.city.name }}</h2>
+			<div class="forecasts" :class="layout" v-if="weatherData.list">
+				<div class="day" v-for="(forecastDate, forecastDateIndex) in weatherData.list" @click.prevent="selectedDayIndex = forecastDateIndex;" :key="forecastDate.date.toString()">
+					<div class="icon-temp">
+						<i :class="`icon bi bi-${weatherIcon(forecastDate.weather)}`"></i>
+						<span class="temp" v-if="forecastDate.main">{{ Math.round(forecastDate.main.temp) }}{{ temperatureUnit }}</span>
+					</div>
+
+					<div class="day-date">
+						<h4 class="day-name">{{ forecastDate.date.toLocaleString('default', { weekday: 'long' }) }}</h4>
+						<span class="date">{{ forecastDate.date.toLocaleString('default', { month: 'long', day: 'numeric'} ) }}</span>
+					</div>
+				</div>
+			</div>
+		</template>
 	</div>
 </template>
 <script lang="ts">
@@ -33,8 +38,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { forecast } from '@/modules/apis/weather';
 import { mappedForecasts } from '@/types/weather';
 import { getWeatherIcon } from '@/constants/weather';
+import { Button } from '@/components/atoms';
 
-@Component
+@Component({
+	components: {
+		Button
+	}
+})
 export default class ForecastWidget extends Vue {
 	@Prop() private settings!: { city: string; units: string; };
 
@@ -87,6 +97,7 @@ export default class ForecastWidget extends Vue {
 		justify-content: center;
         flex-direction: column;
 	}
+	.open, .close { cursor: pointer; }
 
 	.forecasts {
 		display: flex;
@@ -173,6 +184,20 @@ export default class ForecastWidget extends Vue {
 				.day-date {
 					display: flex;
 					justify-content: space-between;
+				}
+			}
+		}
+		&.hours {
+			display: grid !important;
+			grid-template-columns: 1fr 1fr;
+			&.columns {
+				grid-template-columns: repeat(8, 1fr);
+				width: 100%;
+				.day {
+					width: 100%;
+				}
+				.icon {
+					font-size: 25px !important;
 				}
 			}
 		}
