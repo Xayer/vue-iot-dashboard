@@ -26,7 +26,7 @@ export interface mappedForecasts extends Omit<ForecastsResponse,'list'> {
       }
   }
 
-export interface ForecastsOnDate {
+export interface ForecastsOnDate extends Forecast {
     date: Date,
     hours: Forecast[]  
   }

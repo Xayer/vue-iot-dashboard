@@ -181,6 +181,26 @@ h1, h2, h3, h4, h5, h6 {
 	opacity: 0;
 }
 
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.fade-enter-active {
+	transition: var(--transition-global);
+	opacity: 1;
+}
+.fade-leave-active {
+	transition: var(--transition-global);
+	display: none;
+	opacity: 0 !important;
+}
+.fade-leave-to {
+	display: none;
+	opacity: 0 !important;
+	height: 0 !important;
+}
+.fade-enter, .slide-fade-leave-to {
+	opacity: 0;
+}
+
 .vue-grid-layout {
 	margin-left: calc(var(--app-padding) - var(--app-padding) * 2);
 	margin-right: calc(var(--app-padding) - var(--app-padding) * 2);

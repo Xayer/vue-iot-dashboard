@@ -38,10 +38,17 @@ export const forecast = async (city: string, units: string = "metric") => {
 			
 			if(!acc[forecastKey]) {
 				acc[forecastKey] = {
+					...currentForecast,
 					date: timestamp, hours: []
 				}
 			};
-
+			// if the current temp is larger than the existing one, replace the data - we want to see the warmest part of the day! :D
+			if (currentForecast.main.temp > acc[forecastKey].main.temp ) {
+				acc[forecastKey] = {
+					...acc[forecastKey],
+					...currentForecast,
+				}
+			}
 			acc[forecastKey].hours = [
 				...acc[forecastKey].hours,
 				{

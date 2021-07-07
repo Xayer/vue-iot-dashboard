@@ -1,22 +1,38 @@
 <template>
 	<div class="wrapper" v-if="weatherData">
-        <h2 v-if="weatherData.city">{{ weatherData.city.name }}</h2>
-        <div class="forecasts" v-if="weatherData.list">
-            <div class="day" v-for="forecastDate in weatherData.list" :key="forecastDate.date.toString()">
-				<h4 class="date">{{ forecastDate.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }}</h4>
-				<div class="timestamps">
-					<div class="timestamp" v-for="hourlyForecast in forecastDate.hours" :key="hourlyForecast.dt">
-						<div class="forecast" v-if="hourlyForecast.main">
-							<b class="time">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}:</b>
-							<span class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }}{{ temperatureUnit }}</span>
-							<i :class="`weather-icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
-						</div>
-						<!-- <span v-if="hourlyForecast.main.temp_min">min {{ hourlyForecast.main.temp_min }}{{ temperatureUnit }}</span>
-						<span v-if="hourlyForecast.main.temp_max">max {{ hourlyForecast.main.temp_max }}{{ temperatureUnit }}</span> -->
+		<transition-group name="fade">
+		<div class="wrapper" v-if="selectedDay" @click="selectedDayIndex = null" key="hours">
+			<h2 >{{ selectedDay.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }} <i class="bi bi-x-circle" @click="selectedDayIndex = null"></i></h2>
+			<div class="forecasts hours" :class="layout">
+				<div class="day" v-for="hourlyForecast in selectedDay.hours" :key="hourlyForecast.dt">
+					<div class="icon-temp">
+						<i :class="`icon bi bi-${weatherIcon(hourlyForecast.weather)}`"></i>
+						<span class="temp" v-if="hourlyForecast.main">{{ Math.round(hourlyForecast.main.temp) }}{{ temperatureUnit }}</span>
+					</div>
+
+					<div class="day-date">
+						<h4 class="day-name">{{ hourlyForecast.date.toLocaleTimeString([], {hour: '2-digit'}) }}</h4>
 					</div>
 				</div>
-            </div>
-        </div>
+			</div>
+		</div>
+		<div class="wrapper" v-show="!selectedDay" key="forecasts">
+			<h2 v-if="weatherData.city && showTitle">{{ weatherData.city.name }}</h2>
+			<div class="forecasts" :class="layout" v-if="weatherData.list">
+				<div class="day" v-for="(forecastDate, forecastDateIndex) in weatherData.list" @click.prevent="selectedDayIndex = forecastDateIndex;" :key="forecastDate.date.toString()">
+					<div class="icon-temp">
+						<i :class="`icon bi bi-${weatherIcon(forecastDate.weather)}`"></i>
+						<span class="temp" v-if="forecastDate.main">{{ Math.round(forecastDate.main.temp) }}{{ temperatureUnit }}</span>
+					</div>
+
+					<div class="day-date">
+						<h4 class="day-name">{{ forecastDate.date.toLocaleString('default', { weekday: 'long' }) }}</h4>
+						<span class="date">{{ forecastDate.date.toLocaleString('default', { month: 'long', day: 'numeric'} ) }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		</transition-group>
 	</div>
 </template>
 <script lang="ts">
@@ -24,10 +40,19 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { forecast } from '@/modules/apis/weather';
 import { mappedForecasts } from '@/types/weather';
 import { getWeatherIcon } from '@/constants/weather';
+import { Button } from '@/components/atoms';
 
-@Component
+@Component({
+	components: {
+		Button
+	}
+})
 export default class ForecastWidget extends Vue {
 	@Prop() private settings!: { city: string; units: string; };
+
+	@Prop() private dimensions!: WidgetDimensions;
+
+	selectedDayIndex: number | null = null;
 
 	weatherData?: mappedForecasts | null = null;
 
@@ -38,81 +63,146 @@ export default class ForecastWidget extends Vue {
 	}
 
 	get temperatureUnit() {
-		return this.settings.units === 'metric' ? '°C' : '°F';
+		return this.settings.units === 'metric' ? '°' : '°F';
 	}
 
-	// eslint-disable-next-line class-methods-use-this
-	weatherDescriptions(weather: { main: string; }[]) {
-		if(!weather) {
-			return '';
-		}
-		return weather.map(weatherItem => weatherItem.main).join(', ');
+	get layout() {
+		const { w, h} = this.dimensions;
+		return !(w === h) && (w > 3 || w % h === 0) ? 'columns' : 'rows';
+	}
+
+	get showTitle() {
+		const { w, h} = this.dimensions;
+		return h >= 3 || w >= 3;
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	weatherIcon(weather: { main: string}[]) {
 		return weather ? getWeatherIcon(weather[0].main) : '';
 	}
+
+	get selectedDay() {
+		if(this.selectedDayIndex === null || !this.weatherData) {
+			return null;
+		}
+
+		return this.weatherData.list[this.selectedDayIndex];
+	}
 }
 </script>
 <style lang="scss" scoped>
-	.wrapper { display: flex;
+	.wrapper {
+		display: flex;
 		height: 100%;
 		width: 100%;
 		align-items: center;
 		justify-content: center;
         flex-direction: column;
+		position: relative;
 	}
-    .forecasts {
-        display: flex;
-		overflow: scroll;
-		.timestamps {
-			display: flex;
-			flex-direction: column;
-			.forecast {
-				display: grid;
-				grid-template-columns: 24px auto 19px;
-				grid-template-rows: none;
-			}
-		}
-		.day {
-			padding: 0 var(--app-padding);
-			.weather-icon { margin: 0; text-align: right;}
-			.temp, .time {
-				text-align: right;
-			}
-		}
-		.date {
-			margin: 0 calc(var(--app-padding) * -0.5);
-		}
-		.day:nth-child(odd) {
-			background-color: var(--bg-color);
-		}
-    }
-	.forecastDate {
+	.open, .close { cursor: pointer; }
+
+	.forecasts {
 		display: flex;
-		flex-direction: column;
+		width: 100%;
+		justify-content: space-between;
 		align-items: center;
-		justify-content: center;
-		gap: var(--app-padding);
-		.temps {
-			height: auto;
+		.day-name {
+			text-transform: capitalize;
+		}
+		&.columns {
 			display: flex;
-			justify-items: center;
+			justify-content: center;
 			align-items: center;
-			gap: var(--app-padding);
-			.min-max {
-				height: inherit;
-				display: flex;
-				flex-direction: column;
-				> * {
-					display: block;
+			.day {
+				height: 100%;
+				width: 75%;
+				padding: 0 1%;
+				text-align: center;
+				box-shadow: inset -1px 0px 0px var(--bg-color), 1px 0px 0px var(--bg-color);
+				&:last-of-type {
+					box-shadow: none;
+				}
+				.icon-temp {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					.icon {
+						font-size: 48px;
+						margin: 0;
+					}
+					.temp {
+						font-size: 25px;
+						margin-left: 10px;
+					}
+				}
+				.day-name {
+					font-size: 14px;
+				}
+
+				@media screen and (min-width: 1400px) {
+					padding: 0 2%;
+					.temp {
+						font-size: 32px;
+						margin-left: 12px;
+					}
+					.icon {
+						font-size: 32px;
+					}
 				}
 			}
 		}
-		h1 {
-			margin: 0;
-			padding: 0;
+		&.rows {
+			flex-direction: column;
+			height: 100%;
+			.day {
+				display: grid;
+				grid-template-columns: 70px 1fr;
+				justify-content: space-between;
+				align-items: center;
+				gap: calc(var(--app-padding));
+				width: 100%;
+				height: 100%;
+				box-sizing: border-box;
+				box-shadow: inset 0px -1px 0px var(--bg-color);
+				&:last-of-type {
+					box-shadow: none;
+				}
+				.date {
+					text-align: left;
+				}
+				.day-name {
+					flex-grow: 1;
+				}
+				.temp {
+					font-weight: bold;
+				}
+				.icon-temp {
+					display: flex;
+					justify-content: space-between;
+					font-size: 23px;
+					text-align: right;
+				}
+				.day-date {
+					display: flex;
+					justify-content: space-between;
+				}
+			}
+		}
+		&.hours {
+			display: grid !important;
+			grid-template-columns: 1fr 1fr;
+			&.columns {
+				grid-template-columns: repeat(8, 1fr);
+				width: 100%;
+				.day {
+					width: 100%;
+				}
+				.icon {
+					font-size: 25px !important;
+				}
+			}
 		}
 	}
 </style>

@@ -4,7 +4,7 @@
 			<div v-if="weatherData.main">
 				<h1 v-if="weatherData.main" class="temp">
 					<i :class="`weather-icon bi bi-${weatherIcon(weatherData.weather)}`"></i>
-					{{ weatherData.main.temp }}{{ temperatureUnit }}
+					{{ Math.round(weatherData.main.temp) }} {{ temperatureUnit }}
 				</h1>
 				<h3>{{ weatherData.name }}</h3>
 			</div>
