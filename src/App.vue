@@ -66,13 +66,37 @@ export default class App extends Vue {
 
 <style lang="scss">
 :root {
-	--bg-color: #f4f5f6;
+	.dark {
+		// DARK MODE BABY
+		--bg-color: #263238;
+		--text-color: var(--white);
+		--bg-alt: #2f3d44;
+	}
+	.red {
+		--bg-color: #475c7a;
+		--text-color: var(--white);
+		--bg-alt: #685d79;
+	}
+	.green {
+		--bg-color: #305f72;
+		--text-color: var(--white);
+		--bg-alt: #568ea6;
+	}
+	.tornado {
+		--bg-color: #292929;
+		--primary: #c0184d;
+		--secondary: #5a9f9e;
+		--text-color: var(--white);
+		--bg-alt: #232323;
+	}
+	--bg-color: #f5f5f7;
+	--bg-alt: #ffffff;
 	--primary: #445eee;
 	--danger: #ee4444;
 	--warning: #ff7300;
 	--success: #04d442;
 	--info: #00a2ff;
-	--muted: #a4aabc;
+	--secondary: #a4aabc;
 	--radius: 20px;
 	--padding: 15px;
 	--white: #fff;
@@ -93,34 +117,13 @@ export default class App extends Vue {
 	--input-box-shadow: var(--box-shadow-general);
 	--input-bg: var(--bg-color);
 	--input-text-color: var(--text-color);
-
-	.dark {
-		// DARK MODE BABY
-		--bg-color: #263238;
-		--text-color: var(--white);
-		--dark-bg-alt: #2f3d44;
-		--navbar-bg: var(--dark-bg-alt);
-		--widget-bg: var(--dark-bg-alt);
-	}
-	.red {
-		--bg-color: #475c7a;
-		--text-color: var(--white);
-		--dark-bg-alt: #685d79;
-		--navbar-bg: var(--dark-bg-alt);
-		--widget-bg: var(--dark-bg-alt);
-	}
-	.green {
-		--bg-color: #305f72;
-		--text-color: var(--white);
-		--dark-bg-alt: #568ea6;
-		--navbar-bg: var(--dark-bg-alt);
-		--widget-bg: var(--dark-bg-alt);
-	}
 	--link-color: #3e798b;
 
 }
 
 body, html {
+	--navbar-bg: var(--bg-alt);
+	--widget-bg: var(--bg-alt);
 	padding: 0;
 	margin: 0;
 	background-color: var(--bg-color);

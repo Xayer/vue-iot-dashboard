@@ -23,8 +23,8 @@ export default class Button extends Vue {
 		text-transform: uppercase;
 		letter-spacing: 0.05rem;
 		// MUTED
-		background-color: var(--muted);
-		box-shadow: var(--muted) var(--button-box-shadow);
+		background-color: var(--secondary);
+		box-shadow: var(--secondary) var(--button-box-shadow);
 		color: var(--button-text-color);
 		&.primary {
 			background-color: var(--primary);

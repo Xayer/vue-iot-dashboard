@@ -1,8 +1,8 @@
-import { Commit } from 'vuex';
+import { Commit } from "vuex";
 
 interface State {
 	theme: string;
-	themes: { name: string; icon: string; }[];
+	themes: { name: string; icon: string }[];
 }
 
 export interface Theme {
@@ -12,35 +12,34 @@ export interface Theme {
 
 export default {
 	state: {
-		theme: 'light',
+		theme: "light",
 		themes: [
-			{ name: 'dark', icon: 'moon' },
-			{ name: 'light', icon: 'sun' },
-			{ name: 'red', icon: 'star' },
-			{ name: 'green', icon: 'tree' },
-		]
+			{ name: "dark", icon: "moon" },
+			{ name: "light", icon: "sun" },
+			{ name: "red", icon: "star" },
+			{ name: "green", icon: "tree" },
+			{ name: "tornado", icon: "tornado" },
+		],
 	} as State,
 
 	getters: {
 		theme: (state: State) => {
 			const foundTheme = state.themes.find((theme) => theme.name === state.theme);
-			return foundTheme || '';
+			return foundTheme || "";
 		},
-		themes: (state:State) => state.themes,
+		themes: (state: State) => state.themes,
 	},
 
 	actions: {
-		setTheme: ({
-			commit
-		}: { commit: Commit }, theme: string) => {
-			commit('SET_THEME', theme);
-		}
+		setTheme: ({ commit }: { commit: Commit }, theme: string) => {
+			commit("SET_THEME", theme);
+		},
 	},
 
 	mutations: {
 		SET_THEME: (state: State, theme: string) => {
 			state.theme = theme;
-			localStorage.setItem('theme', theme);
+			localStorage.setItem("theme", theme);
 		},
 	},
 };

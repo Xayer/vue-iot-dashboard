@@ -172,6 +172,6 @@ export default class EditableDashboard extends Vue {
 		left: 0;
 		right: 0;
 		text-align: center;
-		color: var(--muted);
+		color: var(--secondary);
 	}
 </style>

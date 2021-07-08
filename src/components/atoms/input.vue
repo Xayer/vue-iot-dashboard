@@ -14,7 +14,7 @@ export default class Input extends Vue {
 </script>
 <style lang="scss">
 	input, textarea {
-		border: 1px solid var(--muted);
+		border: 1px solid var(--secondary);
 		border-radius: var(--radius);
 		padding: calc(var(--padding) * 0.75) calc(var(--padding) * 1.5);
 		transition: var(--transition-global);
