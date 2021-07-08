@@ -88,6 +88,7 @@ export default class App extends Vue {
 		--secondary: #5a9f9e;
 		--text-color: var(--white);
 		--bg-alt: #232323;
+		--success: var(--primary);
 	}
 	--bg-color: #f5f5f7;
 	--bg-alt: #ffffff;
