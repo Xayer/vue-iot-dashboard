@@ -42,6 +42,7 @@ export default class App extends Vue {
 			theme = 'dark';
 		}
 		this.$store.dispatch('themes/setTheme', theme);
+		this.$store.dispatch('settings/validate');
 
 		if (localStorage.menuShown) {
 			this.menuShown = localStorage.menuShown;

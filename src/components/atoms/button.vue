@@ -36,5 +36,9 @@ export default class Button extends Vue {
 			box-shadow: var(--danger) var(--button-box-shadow);
 			color: var(--button-text-color);
 		}
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
 	}
 </style>
