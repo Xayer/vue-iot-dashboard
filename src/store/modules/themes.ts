@@ -1,4 +1,5 @@
 import { Commit } from "vuex";
+import { themeStorageKey } from "@/constants/settings";
 
 interface State {
 	theme: string;
@@ -39,7 +40,7 @@ export default {
 	mutations: {
 		SET_THEME: (state: State, theme: string) => {
 			state.theme = theme;
-			localStorage.setItem("theme", theme);
+			localStorage.setItem(themeStorageKey, theme);
 		},
 	},
 };
