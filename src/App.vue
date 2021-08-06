@@ -38,11 +38,7 @@ export default class App extends Vue {
 	menuShown: boolean = false;
 
 	created() {
-		let theme : string | null = localStorage.getItem(themeStorageKey) || null;
-		if(theme === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			theme = 'dark';
-		}
-		this.$store.dispatch('themes/setTheme', theme);
+		this.$store.dispatch('themes/loadTheme');
 		this.$store.dispatch('settings/validate');
 
 		if (localStorage.getItem(menuShownStorageKey)) {

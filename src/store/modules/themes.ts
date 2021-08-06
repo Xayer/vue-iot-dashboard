@@ -1,4 +1,4 @@
-import { Commit } from "vuex";
+import { Commit, Dispatch } from "vuex";
 import { themeStorageKey } from "@/constants/settings";
 
 interface State {
@@ -24,9 +24,10 @@ export default {
 	} as State,
 
 	getters: {
-		theme: (state: State) => {
+		theme: (state: State) => state.theme,
+		themeIcon: (state: State) => {
 			const foundTheme = state.themes.find((theme) => theme.name === state.theme);
-			return foundTheme || "";
+			return foundTheme ? foundTheme.icon : "";
 		},
 		themes: (state: State) => state.themes,
 	},
@@ -35,6 +36,16 @@ export default {
 		setTheme: ({ commit }: { commit: Commit }, theme: string) => {
 			commit("SET_THEME", theme);
 		},
+		loadTheme: ({ dispatch }: { dispatch: Dispatch }) => {
+			let theme = localStorage.getItem(themeStorageKey);
+			if(theme === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				theme = 'dark';
+			}
+			if(theme === null ) {
+				theme = 'light';
+			}
+			dispatch('setTheme', theme);
+		}
 	},
 
 	mutations: {

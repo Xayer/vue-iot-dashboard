@@ -2,15 +2,19 @@ export type SettingsResponse = {
 	meta: {
 		settings: {
 			boards: BoardResponse[];
+			settings: SettingKeyValue[];
 		};
 	};
 };
 
-export type Settings = {
-	settings: {
-		boards: BoardResponse[];
-		settings: Record<string, string>;
-	};
+export type SettingKeyValue = {
+	key: string;
+	value: string;
+}
+
+export type UserSettings = {
+	boards: BoardResponse[];
+	settings: SettingKeyValue[];
 };
 
 export type BoardResponse = {

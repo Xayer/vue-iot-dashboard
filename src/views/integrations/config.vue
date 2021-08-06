@@ -1,8 +1,8 @@
 <template>
 	<div>
 	<template v-if="isAuthenticated">
-		<Button  class="m-l" :class="isAuthenticated ? 'primary' : 'danger'" :disabled="!isAuthenticated" @click="fetchSettings">Fetch Settings</Button>
-		<Button  class="m-l" :class="isAuthenticated ? 'primary' : 'danger'" :disabled="!isAuthenticated" @click="updateSettings">update Settings</Button>
+		<Button  class="m-l" :class="isAuthenticated ? 'primary' : 'danger'" :disabled="!isAuthenticated" @click="downloadSettings">Download Settings</Button>
+		<Button  class="m-l" :class="isAuthenticated ? 'primary' : 'danger'" :disabled="!isAuthenticated" @click="uploadSettings">Upload Settings</Button>
 		<Button  class="m-l" :class="isAuthenticated ? 'primary' : 'danger'" :disabled="!isAuthenticated" @click="signOut">sign out</Button>
 	</template>
 	<form v-else ref='form' @submit.stop.prevent="submitForm">
@@ -21,6 +21,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { FormInput } from '@/components/molecules';
 import { Button } from '@/components/atoms';
+import { themeStorageKey } from '@/constants/settings';
 
 @Component({
 	components: {
@@ -48,12 +49,21 @@ export default class Config extends Vue {
 		this.$store.dispatch('settings/authenticate', { username, password });
 	}
 
-	fetchSettings() {
-		this.$store.dispatch('settings/fetch');
+	downloadSettings() {
+		this.$store.dispatch('settings/download').then(() => {
+			this.updateLocalSettings();
+		});
 	}
 
-	updateSettings() {
-		this.$store.dispatch('settings/update');
+	uploadSettings() {
+		this.$store.dispatch('settings/upload').then(() => {
+			this.updateLocalSettings();
+		});
+	}
+
+	updateLocalSettings() {
+		console.log('called');
+		this.$store.dispatch('themes/setTheme', localStorage.getItem(themeStorageKey));
 	}
 
 	signOut() {
