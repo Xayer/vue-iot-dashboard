@@ -62,7 +62,6 @@ export default class Config extends Vue {
 	}
 
 	updateLocalSettings() {
-		console.log('called');
 		this.$store.dispatch('themes/setTheme', localStorage.getItem(themeStorageKey));
 	}
 

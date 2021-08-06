@@ -214,9 +214,7 @@ const mutations = {
 		const { boards, settings} = newSettings;
 		// TODO: change to have multiple boards, rather than just saving the widgets of the first board
 		localStorage.setItem(widgetsLocalStorageKey, boards[0].widgets);
-		console.log(settings);
 		settings.forEach(({ key, value}) => {
-			console.log(key, value);
 			localStorage.setItem(key, value);
 		});
 	}
