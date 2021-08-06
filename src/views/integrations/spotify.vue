@@ -50,7 +50,7 @@ user-top-read`;
 		if(!existingToken || existingToken === 'undefined') {
 			localStorage.setItem(integrationActiveStorageKey, JSON.stringify(false));
 			const response = await authenticateToken(this.$route.query.code as string);
-			localStorage.setItem(storageKey, response.refresh_token);
+			localStorage.setItem(storageKey, JSON.stringify(response.refresh_token));
 		}
 		await getTopTracks().then((topTracks) => {
 			this.topTracks = topTracks.items;

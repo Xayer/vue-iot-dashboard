@@ -37,7 +37,8 @@ export default {
 			commit("SET_THEME", theme);
 		},
 		loadTheme: ({ dispatch }: { dispatch: Dispatch }) => {
-			let theme = localStorage.getItem(themeStorageKey);
+			const localTheme = localStorage.getItem(themeStorageKey);
+			let theme: string | null = localTheme ? JSON.parse(localTheme) : null;
 			if(theme === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 				theme = 'dark';
 			}
@@ -51,7 +52,7 @@ export default {
 	mutations: {
 		SET_THEME: (state: State, theme: string) => {
 			state.theme = theme;
-			localStorage.setItem(themeStorageKey, theme);
+			localStorage.setItem(themeStorageKey, JSON.stringify(theme));
 		},
 	},
 };

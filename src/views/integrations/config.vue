@@ -12,6 +12,7 @@
 		<label for="password">Password:
 			<FormInput name="password" type="password" class="form-field m-b" v-model="password" />
 		</label>
+		<div v-if="error" class="error m-b">{{error}}</div>
 		<Button :class="isAuthenticated ? 'danger' : 'primary'" :disabled="isAuthenticated" @submit="submitForm">Authenticate</Button>
 	</form>
 	</div>
@@ -37,7 +38,9 @@ import { themeStorageKey } from '@/constants/settings';
 export default class Config extends Vue {
 	password = '';
 
-    username = '';
+	username = '';
+	
+	error = '';
 
 	$ref!: {
 		form: typeof HTMLFormElement
@@ -45,8 +48,11 @@ export default class Config extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	submitForm() {
-    	const { username, password} = this;
-		this.$store.dispatch('settings/authenticate', { username, password });
+		const { username, password} = this;
+		this.error = '';
+		this.$store.dispatch('settings/authenticate', { username, password }).catch((error) => {
+			this.error = error;
+		});
 	}
 
 	downloadSettings() {
@@ -62,7 +68,7 @@ export default class Config extends Vue {
 	}
 
 	updateLocalSettings() {
-		this.$store.dispatch('themes/setTheme', localStorage.getItem(themeStorageKey));
+		this.$store.dispatch('themes/setTheme', JSON.parse(localStorage.getItem(themeStorageKey) || ""));
 	}
 
 	signOut() {
@@ -70,3 +76,8 @@ export default class Config extends Vue {
 	}
 }
 </script>
+<style lang="scss" scoped>
+.error {
+	color: var(--danger);
+}
+</style>

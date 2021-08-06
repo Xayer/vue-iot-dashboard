@@ -13,3 +13,5 @@ export const jwtTokenStorageKey = "settings_token";
 export const menuShownStorageKey = "menuShown";
 
 export const themeStorageKey = "theme";
+
+export const userInfoStorageKey = 'user-info';

@@ -40,6 +40,7 @@ export default class App extends Vue {
 	created() {
 		this.$store.dispatch('themes/loadTheme');
 		this.$store.dispatch('settings/validate');
+		this.$store.dispatch('settings/loadExistingSettings');
 
 		if (localStorage.getItem(menuShownStorageKey)) {
 			this.menuShown = JSON.parse(localStorage.getItem(menuShownStorageKey) || 'false');

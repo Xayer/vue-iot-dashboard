@@ -8,22 +8,24 @@ import {
 	jwtInvalidateEndpoint,
 	menuShownStorageKey,
 	themeStorageKey,
+	userInfoStorageKey,
 } from "@/constants/settings";
 import { widgetsLocalStorageKey } from "@/constants/widgets";
-import { SettingsResponse, UserSettings } from "@/types/settings";
+import { SettingsResponse, UserSettings, UserInfo } from "@/types/settings";
 import { storageKey as spotifyStorageKey } from "@/modules/apis/spotify";
 
 type StateType = {
 	isAuthenticated: boolean,
-	userId: number | null,
-	userName: string | null,
 	userSettings: UserSettings,
+	userInfo: UserInfo,
 }
 
 const SettingsState: StateType = {
 	isAuthenticated: false,
-	userId: null,
-	userName: null,
+	userInfo: {
+		id: undefined,
+		name: undefined,
+	},
 	userSettings: {
 		boards: [],
 		settings: []
@@ -32,25 +34,26 @@ const SettingsState: StateType = {
 
 const SettingsGetters = {
 	isAuthenticated: (state: StateType) => state.isAuthenticated,
+	user: (state: StateType) => state.userInfo,
 	settings: (state: StateType ) => ({
 		boards: [
 			{
 				name: "Dashboard",
-				widgets: localStorage.getItem(JSON.parse(widgetsLocalStorageKey)),
+				widgets: JSON.parse(localStorage.getItem(widgetsLocalStorageKey) || JSON.stringify([])),
 			},
 		],
 		settings: [
 			{
 				key: menuShownStorageKey,
-				value: localStorage.getItem(JSON.parse(menuShownStorageKey)) || true,
+				value: JSON.parse(localStorage.getItem(menuShownStorageKey) || "true"),
 			},
 			{
 				key: themeStorageKey,
-				value: localStorage.getItem(JSON.parse(themeStorageKey)) || true,
+				value: JSON.parse(localStorage.getItem(themeStorageKey) || ""),
 			},
 			{
 				key: spotifyStorageKey,
-				value: localStorage.getItem(JSON.parse(spotifyStorageKey)) || true,
+				value: JSON.parse(localStorage.getItem(spotifyStorageKey) || ""),
 			},
 		],
 	}),
@@ -82,20 +85,46 @@ const actions = {
 			localStorage.removeItem(jwtTokenStorageKey);
 		}
 	},
-	authenticate: (
+	loadExistingSettings: ({ commit } : { commit: Commit }) => {
+
+		const settings = {
+			boards: [
+				{
+					name: "Dashboard",
+					widgets: JSON.parse(localStorage.getItem(widgetsLocalStorageKey) || "[]"),
+				},
+			],
+			settings: [
+				{
+					key: menuShownStorageKey,
+					value: JSON.parse(localStorage.getItem(menuShownStorageKey) || '"true"'),
+				},
+				{
+					key: themeStorageKey,
+					value: JSON.parse(localStorage.getItem(themeStorageKey) || '"true"'),
+				},
+				{
+					key: spotifyStorageKey,
+					value: JSON.parse(localStorage.getItem(spotifyStorageKey) || '""'),
+				},
+			],
+		};
+		const userInfo = JSON.parse(localStorage.getItem(userInfoStorageKey) || "{}");
+	},
+	authenticate: async (
 		{ commit, dispatch }: { commit: Commit; dispatch: Dispatch },
 		{ username, password }: { username: string; password: string }
 	) => {
 		const formdata = new FormData();
 		formdata.append("username", username);
 		formdata.append("password", password);
-		axios.post(jwtTokenEndpoint, formdata).then((response) => {
+		await axios.post(jwtTokenEndpoint, formdata).then(async (response) => {
 			const {
 				data: { token },
 			} = response;
 			localStorage.setItem(jwtTokenStorageKey, token);
 			commit("SET_IS_AUTHENTICATED", true);
-			dispatch("userInfo");
+			
 		});
 	},
 	signOut: ({ commit }: { commit: Commit }) => {
@@ -106,16 +135,11 @@ const actions = {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
-				})
-				.then(() => {
-					commit("SET_IS_AUTHENTICATED", false);
-				})
-				.catch(() => {
-					commit("SET_IS_AUTHENTICATED", false);
 				});
 		} else {
 			commit("SET_IS_AUTHENTICATED", false);
 			localStorage.removeItem(jwtTokenStorageKey);
+			localStorage.removeItem(userInfoStorageKey);
 		}
 	},
 	download: async ({
@@ -152,21 +176,21 @@ const actions = {
 			boards: [
 				{
 					name: "Dashboard",
-					widgets: localStorage.getItem(widgetsLocalStorageKey),
+					widgets: JSON.parse(localStorage.getItem(widgetsLocalStorageKey) || JSON.stringify([])),
 				},
 			],
 			settings: [
 				{
 					key: menuShownStorageKey,
-					value: localStorage.getItem(menuShownStorageKey) || true,
+					value: JSON.parse(localStorage.getItem(menuShownStorageKey) || 'true'),
 				},
 				{
 					key: themeStorageKey,
-					value: localStorage.getItem(themeStorageKey) || true,
+					value: JSON.parse(localStorage.getItem(themeStorageKey) || 'true'),
 				},
 				{
 					key: spotifyStorageKey,
-					value: localStorage.getItem(spotifyStorageKey) || true,
+					value: JSON.parse(localStorage.getItem(spotifyStorageKey) || '""'),
 				},
 			],
 		};
@@ -187,8 +211,8 @@ const actions = {
 				},
 			}
 		)
-			.then(({ data: { meta: { settings }}}: AxiosResponse<SettingsResponse>) => {
-				commit('SET_SETTINGS', settings);
+			.then((response: {}) => {
+				dispatch('loadExistingSettings');
 			})
 			.catch((response) => {
 				console.error(response);
@@ -202,10 +226,10 @@ const mutations = {
 	},
 	SET_USER_DATA: (
 		state: StateType,
-		{ userId, userName }: { userName: string; userId: number }
+		userInfo: UserInfo
 	) => {
-		state.userId = userId;
-		state.userName = userName;
+		state.userInfo = userInfo;
+		localStorage.setItem(userInfoStorageKey, JSON.stringify(userInfo));
 	},
 	SET_SETTINGS: (
 		state: StateType,
@@ -213,9 +237,9 @@ const mutations = {
 	) => {
 		const { boards, settings} = newSettings;
 		// TODO: change to have multiple boards, rather than just saving the widgets of the first board
-		localStorage.setItem(widgetsLocalStorageKey, boards[0].widgets);
+		localStorage.setItem(widgetsLocalStorageKey, JSON.stringify(boards[0].widgets));
 		settings.forEach(({ key, value}) => {
-			localStorage.setItem(key, value);
+			localStorage.setItem(key, JSON.stringify(value));
 		});
 	}
 };

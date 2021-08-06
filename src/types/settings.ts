@@ -1,4 +1,6 @@
 export type SettingsResponse = {
+	id: number;
+	name: string;
 	meta: {
 		settings: {
 			boards: BoardResponse[];
@@ -21,3 +23,8 @@ export type BoardResponse = {
 	name: string;
 	widgets: string;
 };
+
+export type UserInfo = {
+	id?: number;
+	name?: string;
+}
