@@ -13,6 +13,7 @@ import {
 import { widgetsLocalStorageKey } from "@/constants/widgets";
 import { SettingsResponse, UserSettings, UserInfo } from "@/types/settings";
 import { storageKey as spotifyStorageKey } from "@/modules/apis/spotify";
+import { todosStorageKey } from '@/constants/todo';
 
 type StateType = {
 	isAuthenticated: boolean,
@@ -107,6 +108,10 @@ const actions = {
 					key: spotifyStorageKey,
 					value: JSON.parse(localStorage.getItem(spotifyStorageKey) || '""'),
 				},
+				{
+					key: todosStorageKey,
+					value: JSON.parse(localStorage.getItem(todosStorageKey) || JSON.stringify([])),
+				},
 			],
 		};
 		const userInfo = JSON.parse(localStorage.getItem(userInfoStorageKey) || "{}");
@@ -149,8 +154,10 @@ const actions = {
 		commit: Commit;
 		dispatch: Dispatch;
 	}) => {
-		await dispatch("fetch").then(({ data: { meta: { settings }}}: AxiosResponse<SettingsResponse>) => {
+		await dispatch("fetch").then(({ data: { meta: { settings }, id, name}}: AxiosResponse<SettingsResponse>) => {
 			commit('SET_SETTINGS', settings);
+			commit('SET_USER_DATA', { id, name });
+			dispatch('loadExistingSettings');
 		});
 	},
 	fetch: ({
@@ -192,6 +199,10 @@ const actions = {
 					key: spotifyStorageKey,
 					value: JSON.parse(localStorage.getItem(spotifyStorageKey) || '""'),
 				},
+				{
+					key: todosStorageKey,
+					value: JSON.parse(localStorage.getItem(todosStorageKey) || JSON.stringify([])),
+				},
 			],
 		};
 			
@@ -211,7 +222,9 @@ const actions = {
 				},
 			}
 		)
-			.then((response: {}) => {
+			.then(({ data: { meta: { settings }, id, name}}: AxiosResponse<SettingsResponse>) => {
+				commit('SET_SETTINGS', settings);
+				commit('SET_USER_DATA', { id, name });
 				dispatch('loadExistingSettings');
 			})
 			.catch((response) => {

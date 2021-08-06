@@ -21,8 +21,8 @@
 </template>
 <script>
 import { Button } from '@/components/atoms';
+import { todosStorageKey } from '@/constants/todo';
 
-const STORAGE_KEY = 'todos';
 export default {
 	components: { Button },
 	data() {
@@ -32,7 +32,7 @@ export default {
 		};
 	},
 	created() {
-		this.todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+		this.todos = JSON.parse(localStorage.getItem(todosStorageKey) || '[]');
 	},
 	methods: {
 		addTodo() {
@@ -42,18 +42,18 @@ export default {
 				done: false,
 			});
 			this.newTodo = '';
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos));
+			localStorage.setItem(todosStorageKey, JSON.stringify(this.todos));
 		},
 		toggleDoneState(todo) {
 			this.todos.splice(this.todos.indexOf(todo), 1, {
 				...todo,
 				done: !todo.done,
 			});
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos));
+			localStorage.setItem(todosStorageKey, JSON.stringify(this.todos));
 		},
 		removeTodo(todo) {
 			this.todos.splice(this.todos.indexOf(todo), 1);
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos));
+			localStorage.setItem(todosStorageKey, JSON.stringify(this.todos));
 		},
 	},
 };
