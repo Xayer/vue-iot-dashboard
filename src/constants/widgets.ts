@@ -1,3 +1,4 @@
+export const widgetsLocalStorageKey = "widgets";
 export const WidgetsAvailable = {
 	TextWidget: "TextWidget",
 	HueBridges: "HueBridges",

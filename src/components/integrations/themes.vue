@@ -1,6 +1,6 @@
 <template>
 	<div class="theme" @click="toggleTheme">
-		<i class="bi" :class="`bi-${theme.icon}`"></i>
+		<i class="bi" :class="`bi-${themeIcon}`"></i>
 	</div>
 </template>
 <script lang="ts">
@@ -12,6 +12,7 @@ import { Theme } from '@/store/modules/themes';
 	computed: {
 		...mapGetters({
 			theme: 'themes/theme',
+			themeIcon: 'themes/themeIcon',
 			availableThemes: 'themes/themes',
 		}),
 	},
@@ -19,14 +20,16 @@ import { Theme } from '@/store/modules/themes';
 export default class ThemesWidget extends Vue {
 	availableThemes!: Theme[];
 
-	theme!: Theme;
+	theme!: string;
+
+	themeIcon!: string;
 
   	setTheme(theme: string) {
   		this.$store.dispatch('themes/setTheme', theme);
 	}
 
 	toggleTheme() {
-		const currentTheme = this.availableThemes.findIndex((theme) => theme === this.theme);
+		const currentTheme = this.availableThemes.findIndex((theme) => theme.name === this.theme);
 		let nextThemeIndex: number = currentTheme + 1;
 		if(nextThemeIndex >= this.availableThemes.length) { nextThemeIndex = 0; }
 		this.setTheme(this.availableThemes[nextThemeIndex].name);
@@ -38,8 +41,8 @@ export default class ThemesWidget extends Vue {
 	  
 	@Watch('theme')
   	// eslint-disable-next-line class-methods-use-this
-  	updateTheme (theme: Theme) {
-  		document.body.className = theme.name;
+  	updateTheme (theme: string) {
+  		document.body.className = theme;
   	}
 
 }

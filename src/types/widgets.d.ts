@@ -18,4 +18,4 @@ type WidgetSetting = {
 	[key: string]: any | null;
 };
 
-type WidgetDimensions = { w: number; h: number; };
+type WidgetDimensions = { w: number; h: number };

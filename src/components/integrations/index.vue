@@ -4,6 +4,7 @@
 		<network />
 		<spotify />
 		<themes />
+		<settings />
 	</div>
 </template>
 
@@ -13,6 +14,7 @@ import Hue from '@/components/integrations/hue.vue';
 import Network from '@/components/integrations/internet.vue';
 import Spotify from '@/components/integrations/spotify.vue';
 import Themes from '@/components/integrations/themes.vue';
+import Settings from '@/components/integrations/settings.vue';
 
 @Component({
 	components: {
@@ -20,6 +22,7 @@ import Themes from '@/components/integrations/themes.vue';
 		Network,
 		Spotify,
 		Themes,
+		Settings,
 	},
 })
 export default class Integrations extends Vue {

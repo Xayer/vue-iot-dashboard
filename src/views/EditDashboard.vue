@@ -63,7 +63,7 @@ import { Select, Button } from '@/components/atoms';
 import WidgetSettings from '@/components/widgets/settings.vue';
 import HueGroupSettings from '@/components/widgets/hue/group/settings.vue';
 import WeatherSettings from '@/components/widgets/weather/settings.vue';
-import { WidgetDefaultSettings, WidgetsAvailable } from '@/constants/widgets';
+import { WidgetDefaultSettings, WidgetsAvailable, widgetsLocalStorageKey } from '@/constants/widgets';
 import { defaultSettings } from '@/constants/dashboard';
 import WidgetWrapper from '@/components/widgets/widget.vue';
 
@@ -101,8 +101,8 @@ export default class EditableDashboard extends Vue {
 	// eslint-disable-next-line class-methods-use-this
 	getDashboardWidgets() {
 		let widgets = [];
-		if (localStorage.widgets) {
-			const parsedWidgets = JSON.parse(localStorage.widgets);
+		if (localStorage.getItem(widgetsLocalStorageKey)) {
+			const parsedWidgets = JSON.parse(localStorage.getItem(widgetsLocalStorageKey) || '');
 			if (parsedWidgets && typeof parsedWidgets === 'object') {
 				widgets = parsedWidgets;
 			}
@@ -137,7 +137,7 @@ export default class EditableDashboard extends Vue {
 
 	// eslint-disable-next-line class-methods-use-this
 	saveWidgetLayout() {
-		localStorage.widgets = JSON.stringify(this.DashboardWidgets);
+		localStorage.setItem(widgetsLocalStorageKey, JSON.stringify(this.DashboardWidgets));
 	}
 
 	removeWidget(widgetIndex: number) {

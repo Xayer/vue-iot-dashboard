@@ -49,6 +49,7 @@ import { Button } from '@/components/atoms';
 import TodoList from '@/components/widgets/todo.vue';
 import Weather from '@/components/widgets/weather/weather.vue';
 import ForecastWidget from '@/components/widgets/weather/forecast.vue';
+import { widgetsLocalStorageKey } from '@/constants/widgets';
 
 @Component({
 	components: {
@@ -78,8 +79,8 @@ export default class Dashboard extends Vue {
 	// eslint-disable-next-line class-methods-use-this
 	getDashboardWidgets() {
 		let widgets = [];
-		if (localStorage.widgets) {
-			const parsedWidgets = JSON.parse(localStorage.widgets);
+		if (localStorage.getItem(widgetsLocalStorageKey)) {
+			const parsedWidgets = JSON.parse(localStorage.getItem(widgetsLocalStorageKey) || '');
 			if (typeof parsedWidgets === 'object') {
 				widgets = parsedWidgets;
 				widgets.map((widget: Widget) => {
@@ -92,11 +93,6 @@ export default class Dashboard extends Vue {
 			}
 		}
 		return widgets;
-	}
-
-	// eslint-disable-next-line class-methods-use-this
-	saveWidgetLayout(layout: Array<Object>) {
-		localStorage.widgets = JSON.stringify(layout);
 	}
 
 	editDashboard() {

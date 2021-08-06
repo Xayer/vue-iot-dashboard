@@ -19,6 +19,7 @@ import { mapGetters } from 'vuex';
 import { Button } from '@/components/atoms';
 import Navigation from '@/components/navbar.vue';
 import Integrations from '@/components/integrations/index.vue';
+import { menuShownStorageKey, themeStorageKey } from './constants/settings';
 
 @Component({
 	components: {
@@ -37,14 +38,11 @@ export default class App extends Vue {
 	menuShown: boolean = false;
 
 	created() {
-		let theme : string | null = localStorage.getItem('theme') || null;
-		if(theme === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			theme = 'dark';
-		}
-		this.$store.dispatch('themes/setTheme', theme);
+		this.$store.dispatch('themes/loadTheme');
+		this.$store.dispatch('settings/validate');
 
-		if (localStorage.menuShown) {
-			this.menuShown = localStorage.menuShown;
+		if (localStorage.getItem(menuShownStorageKey)) {
+			this.menuShown = JSON.parse(localStorage.getItem(menuShownStorageKey) || 'false');
 		}
 	}
 
@@ -52,9 +50,9 @@ export default class App extends Vue {
 	// eslint-disable-next-line class-methods-use-this
 	integrationsDisplayChange(isShown: boolean) {
 		if (isShown) {
-			localStorage.menuShown = isShown;
+			localStorage.setItem(menuShownStorageKey, isShown.toString());
 		} else {
-			localStorage.removeItem('menuShown');
+			localStorage.removeItem(menuShownStorageKey);
 		}
 	}
 
