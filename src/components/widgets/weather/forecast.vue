@@ -1,7 +1,7 @@
 <template>
 	<div class="wrapper" v-if="weatherData">
 		<transition-group name="fade">
-		<div class="wrapper" v-if="selectedDay" @click="selectedDayIndex = null" key="hours">
+		<div class="overlay" v-if="selectedDay" @click="selectedDayIndex = null" key="hours">
 			<h2 >{{ selectedDay.date.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric' }) }} <i class="bi bi-x-circle" @click="selectedDayIndex = null"></i></h2>
 			<div class="forecasts hours" :class="layout">
 				<div class="day" v-for="hourlyForecast in selectedDay.hours" :key="hourlyForecast.dt">
@@ -16,7 +16,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="wrapper" v-show="!selectedDay" key="forecasts">
+		<div class="wrapper" key="forecasts">
 			<h2 v-if="weatherData.city && showTitle">{{ weatherData.city.name }}</h2>
 			<div class="forecasts" :class="layout" v-if="weatherData.list">
 				<div class="day" v-for="(forecastDate, forecastDateIndex) in weatherData.list" @click.prevent="selectedDayIndex = forecastDateIndex;" :key="forecastDate.date.toString()">
@@ -99,6 +99,34 @@ export default class ForecastWidget extends Vue {
 		justify-content: center;
         flex-direction: column;
 		position: relative;
+		z-index: 1;
+	}
+
+	.overlay {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+        flex-direction: column;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		transition: var(--transition-global);
+		backdrop-filter: blur(var(--app-blur));
+		background-color: var(--widget-bg);
+		opacity: 0.85;
+		&:before {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+
+			content: '';
+			transition: var(--transition-global);
+		}
+		z-index: 2 !important;
 	}
 	.open, .close { cursor: pointer; }
 

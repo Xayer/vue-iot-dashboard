@@ -112,12 +112,14 @@ export default class App extends Vue {
 	--navbar-width: 60px;
 	--navbar-margin: var(--padding) var(--padding);
 	--app-padding: 15px;
+	--app-blur: 4px;
 	--box-shadow-general: 0px 0px 25px -5px;
 	--button-box-shadow: var(--box-shadow-general);
 	--input-box-shadow: var(--box-shadow-general);
 	--input-bg: var(--bg-color);
 	--input-text-color: var(--text-color);
 	--link-color: #3e798b;
+	
 
 }
 
@@ -192,16 +194,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 .fade-leave-active {
 	transition: var(--transition-global);
-	display: none;
 	opacity: 0 !important;
 }
 .fade-leave-to {
-	display: none;
+	transition: var(--transition-global);
 	opacity: 0 !important;
-	height: 0 !important;
 }
-.fade-enter, .slide-fade-leave-to {
-	opacity: 0;
+.fade-enter, .fade-leave-to {
+	transition: var(--transition-global);
+	opacity: 0 !important;
 }
 
 .vue-grid-layout {
