@@ -56,13 +56,13 @@ export default class WeatherWidget extends Vue {
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: var(--app-padding);
+		gap: var(--padding);
 		.temps {
 			height: auto;
 			display: flex;
 			justify-items: center;
 			align-items: center;
-			gap: var(--app-padding);
+			gap: var(--padding);
 			.min-max {
 				height: inherit;
 				display: flex;

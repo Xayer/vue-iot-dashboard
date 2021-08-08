@@ -111,7 +111,7 @@ export default class App extends Vue {
 	--navbar-transition: var(--transition-global);
 	--navbar-width: 60px;
 	--navbar-margin: var(--padding) var(--padding);
-	--app-padding: 15px;
+	--padding: 15px;
 	--app-blur: 4px;
 	--box-shadow-general: 0px 0px 25px -5px;
 	--button-box-shadow: var(--box-shadow-general);
@@ -153,7 +153,7 @@ h1, h2, h3, h4, h5, h6 {
 	margin-left: 0;
 	transition: var(--navbar-transition);
 	width: 100%;
-	padding: 0 var(--app-padding);
+	padding: 0 var(--padding);
 	box-sizing: border-box;
 	&.menu-open {
 		margin-left: calc(var(--navbar-width));
@@ -161,13 +161,13 @@ h1, h2, h3, h4, h5, h6 {
 	}
 
 	header {
-		padding-top: var(--app-padding);
+		padding-top: var(--padding);
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 		grid-template-rows: 1;
 		align-items: center;
 		.page-title {
-			margin-inline-start: var(--app-padding);
+			margin-inline-start: var(--padding);
 		}
 	}
 }
@@ -206,8 +206,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .vue-grid-layout {
-	margin-left: calc(var(--app-padding) - var(--app-padding) * 2);
-	margin-right: calc(var(--app-padding) - var(--app-padding) * 2);
+	margin-left: calc(var(--padding) - var(--padding) * 2);
+	margin-right: calc(var(--padding) - var(--padding) * 2);
 }
 
 .m {

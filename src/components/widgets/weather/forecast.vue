@@ -189,7 +189,7 @@ export default class ForecastWidget extends Vue {
 				grid-template-columns: 70px 1fr;
 				justify-content: space-between;
 				align-items: center;
-				gap: calc(var(--app-padding));
+				gap: calc(var(--padding));
 				width: 100%;
 				height: 100%;
 				box-sizing: border-box;
