@@ -1,0 +1,1 @@
+section{display:grid;grid-template-columns:1fr 1fr;gap:10px}section article{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:start;-webkit-box-align:center;-ms-flex-align:center;align-items:center;gap:10px;background-color:var(--dark-bg-alt)}section article .titles{padding:5px}
